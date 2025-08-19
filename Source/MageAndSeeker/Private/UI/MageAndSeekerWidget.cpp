@@ -7,12 +7,4 @@
 void UMageAndSeekerWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
-
-	if (USaveLoadSubsystem* SaveLoadSubsystem = GetGameInstance()->GetSubsystem<USaveLoadSubsystem>())
-	{
-		if (SaveLoadSubsystem)
-		{
-			BP_OnSaveLoadSubsystemInitalized(SaveLoadSubsystem);
-		}
-	}
 }

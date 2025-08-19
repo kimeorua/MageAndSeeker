@@ -15,7 +15,4 @@ class MAGEANDSEEKER_API UMageAndSeekerWidget : public UUserWidget
 	
 protected:
 	virtual void NativeOnInitialized() override;
-
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On SaveLoad Subsystem Initalized"))
-	void BP_OnSaveLoadSubsystemInitalized(USaveLoadSubsystem* SaveLoadSubsystem);
 };
