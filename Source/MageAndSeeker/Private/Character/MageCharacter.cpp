@@ -10,6 +10,9 @@
 #include "DataAsset/DataAsset_InputConfig.h"
 #include "Component/MageAndSeekerInputComponent.h"
 #include "MageAndSeekerGameplayTag.h"
+#include "Kismet/KismetSystemLibrary.h"
+
+#include "DebugHelper.h"
 
 AMageCharacter::AMageCharacter()
 {
@@ -69,6 +72,41 @@ void AMageCharacter::Input_Look(const FInputActionValue& InputActionValue)
 	}
 }
 
+void AMageCharacter::Input_Interactive()
+{
+	FHitResult HitResult;
+	FVector Start = GetActorLocation();
+	FVector End = Start;
+
+	float Radius = 300.0f;
+
+	ETraceTypeQuery TraceType = UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1);
+
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(Cast<AActor>(this));
+
+	FHitResult Hit;
+
+	bool bHit = UKismetSystemLibrary::SphereTraceSingle
+	(
+		this, 
+		Start, 
+		End, 
+		Radius, 
+		TraceType,
+		false,
+		ActorsToIgnore,
+		EDrawDebugTrace::Persistent,
+		Hit,
+		true
+	);
+
+	if (bHit && Hit.GetActor())
+	{
+		DebugHelper::Print("Hit!");
+	}
+}
+
 void AMageCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -92,4 +130,5 @@ void AMageCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Interection, ETriggerEvent::Started, this, &ThisClass::Input_Interactive);
 }
