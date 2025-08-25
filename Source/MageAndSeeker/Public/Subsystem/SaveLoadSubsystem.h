@@ -6,9 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "SaveLoadSubsystem.generated.h"
 
-/**
- * 
- */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFinshedSvaeGameDelegate);
+
 UCLASS()
 class MAGEANDSEEKER_API USaveLoadSubsystem : public UGameInstanceSubsystem
 {
@@ -29,6 +28,12 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE int32 GetCurrentSaveSloat() const { return CurrentSlot; }
+
+	UFUNCTION()
+	void OnSaveGameCompleted(const FString& SlotName, int32 SlotNum, bool bSuccess);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnFinshedSvaeGameDelegate OnFinshedSvaeGame;
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "SaveData")

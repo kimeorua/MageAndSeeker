@@ -30,6 +30,7 @@ void UMageAndSeekerFunctionLibrary::ToggleInputMode(const UObject* WorldContextO
 		break;
 	case EMASInputMode::UIOnly:
 		PlayerController->SetInputMode(UIOnly);
+		PlayerController->FlushPressedKeys();
 		PlayerController->SetShowMouseCursor(true);
 		break;
 	default:

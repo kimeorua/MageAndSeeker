@@ -13,19 +13,21 @@ AActivatedProps::AActivatedProps()
 
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	BoxCollision->SetupAttachment(Mesh);
+
+	BoxCollision->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);
 }
 
 void AActivatedProps::OnBeginOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (IsValid(OtherActor) && CastChecked<AMageCharacter>(OtherActor))
 	{
-		bIsinteractable = true;
+		BoxCollision->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Block);
 	}
 }
 
 void AActivatedProps::OnEndCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	bIsinteractable = false;
+	BoxCollision->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);
 }
 
 void AActivatedProps::BeginPlay()

@@ -11,6 +11,7 @@
 #include "Component/MageAndSeekerInputComponent.h"
 #include "MageAndSeekerGameplayTag.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Props/ActivatedProps.h"
 
 #include "DebugHelper.h"
 
@@ -96,14 +97,15 @@ void AMageCharacter::Input_Interactive()
 		TraceType,
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::Persistent,
+		bIsTraceShow ? EDrawDebugTrace::Persistent : EDrawDebugTrace::None,
 		Hit,
 		true
 	);
 
 	if (bHit && Hit.GetActor())
 	{
-		DebugHelper::Print("Hit!");
+		AActivatedProps* ActivatedProp = Cast<AActivatedProps>(Hit.GetActor());
+		ActivatedProp->ActivateProp();
 	}
 }
 

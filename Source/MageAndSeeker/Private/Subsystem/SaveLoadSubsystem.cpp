@@ -1,6 +1,7 @@
 #include "Subsystem/SaveLoadSubsystem.h"
 #include "SaveGame/MageAndSeekerSaveGame.h"
 #include "Kismet/GameplayStatics.h"
+
 #include "DebugHelper.h"
 
 void USaveLoadSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -22,15 +23,20 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 		if (bIsNewGame) 
 		{
 			SaveGameInstance->CurrentCycle = 1;
+			CurrentSlot = Slot;
 		}
 		else
 		{	
 			// 테스트용
-			SaveGameInstance->CurrentCycle = ++this->CurrentCycle;
+			CurrentCycle++;
+			SaveGameInstance->CurrentCycle = CurrentCycle;
 			//SaveGameInstance->CurrentCycle = this->CurrentCycle;
 		}
 		FString SlotName = TEXT("SaveSlot") + FString::FromInt(Slot);
-		UGameplayStatics::SaveGameToSlot(SaveGameInstance, SlotName, 0);
+
+		FAsyncSaveGameToSlotDelegate SaveFinishedDelegate;
+		SaveFinishedDelegate.BindUObject(this, &ThisClass::OnSaveGameCompleted);
+		UGameplayStatics::AsyncSaveGameToSlot(SaveGameInstance, SlotName, 0, SaveFinishedDelegate);
 	}
 }
 
@@ -39,12 +45,11 @@ void USaveLoadSubsystem::LoadGame(int32 Slot)
 	FString SlotName = TEXT("SaveSlot") + FString::FromInt(Slot);
 	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
 	{
-		UMageAndSeekerSaveGame* LoadGameInstance = Cast<UMageAndSeekerSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("SaveSlot01"), 0));
+		UMageAndSeekerSaveGame* LoadGameInstance = Cast<UMageAndSeekerSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
 
 		if (LoadGameInstance)
 		{
 			CurrentCycle = LoadGameInstance->CurrentCycle;
-
 			CurrentSlot = Slot;
 		}
 	}
@@ -64,4 +69,12 @@ bool USaveLoadSubsystem::GetSaveInfo(int32 Slot, FString& CycleInfo)
 		}
 	}
 	return false;
+}
+
+void USaveLoadSubsystem::OnSaveGameCompleted(const FString& SlotName, int32 SlotNum, bool bSuccess)
+{
+	if (bSuccess)
+	{
+		OnFinshedSvaeGame.Broadcast();
+	}
 }

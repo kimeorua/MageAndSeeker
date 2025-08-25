@@ -36,6 +36,4 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* BoxCollision;
-
-	bool bIsinteractable = false;
 };

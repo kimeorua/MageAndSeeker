@@ -42,6 +42,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data Asset", meta = (AllowPrivateAccess = "true"))
 	UDataAsset_InputConfig* DataAsset_InputConfig;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Trace | Interaction", meta = (AllowPrivateAccess = "true"))
+	bool bIsTraceShow = false;
+
 #pragma endregion
 
 protected:
