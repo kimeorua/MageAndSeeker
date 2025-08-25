@@ -39,4 +39,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UMASBaseAttributeSet* MASBaseAttributeSet;
+
+#pragma endregion
 };
