@@ -15,8 +15,9 @@ public class MageAndSeeker : ModuleRules
 			"Engine", 
 			"InputCore", 
 			"EnhancedInput",
-			"GameplayTags"
-		});
+			"GameplayTags",
+            "GameplayTasks"
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
