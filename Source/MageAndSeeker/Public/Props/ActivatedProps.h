@@ -9,6 +9,7 @@
 class UStaticMeshComponent;
 class UBoxComponent;
 class AMageCharacter;
+class UWidgetComponent;
 
 UCLASS()
 class MAGEANDSEEKER_API AActivatedProps : public AActor
@@ -36,4 +37,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* BoxCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UWidgetComponent* WidgetComponent;
 };
