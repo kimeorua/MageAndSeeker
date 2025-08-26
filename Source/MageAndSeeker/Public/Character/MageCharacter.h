@@ -10,6 +10,8 @@ class USpringArmComponent;
 class UCameraComponent;
 class UDataAsset_InputConfig;
 struct FInputActionValue;
+class UMageAttributeSet;
+class UArtifactAttributeSet;
 
 UCLASS()
 class MAGEANDSEEKER_API AMageCharacter : public ABaseCharacter
@@ -18,6 +20,9 @@ class MAGEANDSEEKER_API AMageCharacter : public ABaseCharacter
 	
 public:
 	AMageCharacter();
+
+	FORCEINLINE UMageAttributeSet* GetMageAttributeSet() const { return MageAttributeSet; }
+	FORCEINLINE UArtifactAttributeSet* GetArtifactAttributeSet() const { return ArtifactAttributeSet; }
 
 private:
 #pragma region Components
@@ -55,4 +60,14 @@ protected:
 	//~ End APawn Interface
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)override;
+
+#pragma region AbilitySystem
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
+	UMageAttributeSet* MageAttributeSet;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
+	UArtifactAttributeSet* ArtifactAttributeSet;
+
+#pragma endregion
 };

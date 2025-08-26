@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE int32 GetCurrentSaveSloat() const { return CurrentSlot; }
 
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE int32 GetCurrentCycle() const { return CurrentCycle; }
+
 	UFUNCTION()
 	void OnSaveGameCompleted(const FString& SlotName, int32 SlotNum, bool bSuccess);
 

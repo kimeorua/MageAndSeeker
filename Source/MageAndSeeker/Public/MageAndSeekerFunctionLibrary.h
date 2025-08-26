@@ -18,4 +18,7 @@ class MAGEANDSEEKER_API UMageAndSeekerFunctionLibrary : public UBlueprintFunctio
 public:
 	UFUNCTION(BlueprintCallable, Category = "TurnBasedGame | Function Library", meta = (WorldContext = "WorldContextObject"))
 	static void ToggleInputMode(const UObject* WorldContextObject, EMASInputMode InInputMode);
+
+	UFUNCTION(BlueprintCallable, Category = "TurnBasedGame | Function Library", meta = (WorldContext = "WorldContextObject"))
+	static int32 GetCurrentCycle(const UObject* WorldContextObject);
 };

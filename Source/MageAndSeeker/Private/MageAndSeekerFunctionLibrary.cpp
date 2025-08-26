@@ -2,6 +2,7 @@
 
 
 #include "MageAndSeekerFunctionLibrary.h"
+#include "Subsystem/SaveLoadSubsystem.h"
 
 void UMageAndSeekerFunctionLibrary::ToggleInputMode(const UObject* WorldContextObject, EMASInputMode InInputMode)
 {
@@ -35,5 +36,20 @@ void UMageAndSeekerFunctionLibrary::ToggleInputMode(const UObject* WorldContextO
 		break;
 	default:
 		break;
+	}
+}
+int32 UMageAndSeekerFunctionLibrary::GetCurrentCycle(const UObject* WorldContextObject)
+{
+	if (GEngine)
+	{
+		UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+
+		USaveLoadSubsystem* SaveLoadSubsystem = World->GetGameInstance()->GetSubsystem<USaveLoadSubsystem>();
+
+		return SaveLoadSubsystem->GetCurrentCycle();
+	}
+	else 
+	{
+		return 0;
 	}
 }

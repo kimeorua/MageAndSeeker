@@ -12,6 +12,8 @@
 #include "MageAndSeekerGameplayTag.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Props/ActivatedProps.h"
+#include "GAS/AttributeSet/MageAttributeSet.h"
+#include "GAS/AttributeSet/ArtifactAttributeSet.h"
 
 #include "DebugHelper.h"
 
@@ -37,6 +39,9 @@ AMageCharacter::AMageCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.0f;
+
+	MageAttributeSet = CreateDefaultSubobject<UMageAttributeSet>(TEXT("MageAttributeSet"));
+	ArtifactAttributeSet = CreateDefaultSubobject<UArtifactAttributeSet>(TEXT("ArtifactAttributeSet"));
 }
 
 void AMageCharacter::Input_Move(const FInputActionValue& InputActionValue)
