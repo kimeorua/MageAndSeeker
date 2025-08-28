@@ -9,6 +9,7 @@
 
 class UMASAbilitySystemComponent;
 class UMASBaseAttributeSet;
+class UDataAsset_StartUp;
 
 UCLASS()
 class MAGEANDSEEKER_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
@@ -25,6 +26,9 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	// ~End IAbilitySystemInterface
 
+	UFUNCTION(BlueprintCallable)
+	void InitCharacterStatAndAbility();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -39,6 +43,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UMASBaseAttributeSet* MASBaseAttributeSet;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data")
+	TSoftObjectPtr<UDataAsset_StartUp> CharacterStartUpData;
 
 #pragma endregion
 };

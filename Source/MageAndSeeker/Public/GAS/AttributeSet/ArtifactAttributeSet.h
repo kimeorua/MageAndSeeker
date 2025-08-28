@@ -18,7 +18,7 @@ class MAGEANDSEEKER_API UArtifactAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 
-private:
+protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Artifact", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData CurrentAP;
 	UPROPERTY(BlueprintReadOnly, Category = "Artifact", meta = (AllowPrivateAccess = "true"))

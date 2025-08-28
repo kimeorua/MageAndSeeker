@@ -12,8 +12,6 @@ UMASBaseAttributeSet::UMASBaseAttributeSet()
 	InitMaxHP(1.0f);
 	InitAttackPower(1.0f);
 	InitDefensivePower(1.0f);
-
-	DebugHelper::Print("BaseAttributeSet Init");
 }
 
 void UMASBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)

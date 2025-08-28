@@ -14,8 +14,6 @@ UMageAttributeSet::UMageAttributeSet()
 	InitCurrentMP(1.0f);
 	InitMaxMP(1.0f);
 	InitMaxLevel(1.0f);
-
-	DebugHelper::Print("Mage AttributeSet Init");
 }
 
 void UMageAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)

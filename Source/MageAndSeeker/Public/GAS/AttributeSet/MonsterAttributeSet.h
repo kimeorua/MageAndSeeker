@@ -18,7 +18,7 @@ class MAGEANDSEEKER_API UMonsterAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 	
-private:
+protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Resistance", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData FireResistance;
 	UPROPERTY(BlueprintReadOnly, Category = "Resistance", meta = (AllowPrivateAccess = "true"))

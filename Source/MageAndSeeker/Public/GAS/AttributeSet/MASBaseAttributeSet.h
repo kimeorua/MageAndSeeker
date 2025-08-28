@@ -18,7 +18,7 @@ class MAGEANDSEEKER_API UMASBaseAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 	
-private:
+protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData CurrentHP;
 	UPROPERTY(BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))

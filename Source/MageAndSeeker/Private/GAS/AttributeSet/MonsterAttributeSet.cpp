@@ -13,8 +13,6 @@ UMonsterAttributeSet::UMonsterAttributeSet()
 	InitIceResistance(0.0f);
 	InitLightningResistance(0.0f);
     InitLevel(1.0f);
-
-	DebugHelper::Print("Monster Attribute Set Init");
 }
 
 void UMonsterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)

@@ -4,6 +4,7 @@
 #include "Character/BaseCharacter.h"
 #include "GAS/MASAbilitySystemComponent.h"
 #include "GAS/AttributeSet/MASBaseAttributeSet.h"
+#include "DataAsset/StartUp/DataAsset_StartUp.h"
 
 #include "DebugHelper.h"
 
@@ -21,6 +22,19 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 	return GetMASAbilitySystemComponent();
 }
 
+void ABaseCharacter::InitCharacterStatAndAbility()
+{
+	if (!CharacterStartUpData.IsNull())
+	{
+		if (UDataAsset_StartUp* LodedData = CharacterStartUpData.LoadSynchronous())
+		{
+			int32 AbilityApplyLevel = 1;
+
+			LodedData->GiveToAbilitySystemComponent(MASAbilitySystemComponent, AbilityApplyLevel);
+		}
+	}
+}
+
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -34,7 +48,5 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 	if (MASAbilitySystemComponent && MASBaseAttributeSet)
 	{
 		MASAbilitySystemComponent->InitAbilityActorInfo(this, this);
-
-		DebugHelper::Print("Ability System And Base Attribute Set Is Ready");
 	}
 }
