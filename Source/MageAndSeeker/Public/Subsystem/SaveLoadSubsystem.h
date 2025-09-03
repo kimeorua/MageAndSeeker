@@ -24,13 +24,17 @@ public:
 	void LoadGame(int32 Slot);
 
 	UFUNCTION(BlueprintPure)
-	bool GetSaveInfo(int32 Slot, FString& CycleInfo);
+	bool GetSaveInfo(int32 Slot, FString& CycleInfo, FString& HPLV, FString& AttackLV);
 
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE int32 GetCurrentSaveSloat() const { return CurrentSlot; }
 
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE int32 GetCurrentCycle() const { return CurrentCycle; }
+
+	FORCEINLINE int32 GetHPLevel() const { return HPLevel; }
+
+	FORCEINLINE int32 GetAttackLevel() const { return AttackLevel; }
 
 	UFUNCTION()
 	void OnSaveGameCompleted(const FString& SlotName, int32 SlotNum, bool bSuccess);
@@ -41,6 +45,12 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere, Category = "SaveData")
 	int32 CurrentCycle = 1;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	float HPLevel = 0;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	float AttackLevel = 0;
 
 	UPROPERTY()
 	int32 CurrentSlot = 0;

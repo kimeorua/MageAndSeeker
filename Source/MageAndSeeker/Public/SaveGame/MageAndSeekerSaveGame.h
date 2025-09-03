@@ -17,4 +17,10 @@ class MAGEANDSEEKER_API UMageAndSeekerSaveGame : public USaveGame
 public:
 	UPROPERTY(VisibleAnywhere, Category = "SaveData")
 	int32 CurrentCycle = 1;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	float HPLevel = 0;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	float AttackLevel = 0;
 };

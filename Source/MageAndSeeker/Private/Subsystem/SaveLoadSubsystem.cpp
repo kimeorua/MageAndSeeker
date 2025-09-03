@@ -1,6 +1,9 @@
 #include "Subsystem/SaveLoadSubsystem.h"
 #include "SaveGame/MageAndSeekerSaveGame.h"
 #include "Kismet/GameplayStatics.h"
+#include "Character/MageCharacter.h"
+#include "GAS/MASAbilitySystemComponent.h"
+#include "GAS/AttributeSet/MageAttributeSet.h"
 
 #include "DebugHelper.h"
 
@@ -23,14 +26,24 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 		if (bIsNewGame) 
 		{
 			SaveGameInstance->CurrentCycle = 1;
+			SaveGameInstance->HPLevel = 0.0f;
+			SaveGameInstance->AttackLevel = 0.0f;
 			CurrentSlot = Slot;
 		}
 		else
 		{	
+			UWorld* World = GetGameInstance()->GetWorld();
+			const UMageAttributeSet* MageAttributSet = Cast<AMageCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->GetAbilitySystemComponent()->GetSet<UMageAttributeSet>();
+
+			//SaveGameInstance->CurrentCycle = this->CurrentCycle;
+			//SaveGameInstance->HPLevel = MageAttributSet->GetHPLevel();
+			//SaveGameInstance->HPLevel = MageAttributSet->GetAttackLevel();
+
 			// 테스트용
 			CurrentCycle++;
-			SaveGameInstance->CurrentCycle = CurrentCycle;
-			//SaveGameInstance->CurrentCycle = this->CurrentCycle;
+			SaveGameInstance->CurrentCycle = this->CurrentCycle;
+			SaveGameInstance->HPLevel = MageAttributSet->GetHPLevel() + 1.0f;
+			SaveGameInstance->AttackLevel = MageAttributSet->GetAttackLevel() + 1.0f;
 		}
 		FString SlotName = TEXT("SaveSlot") + FString::FromInt(Slot);
 
@@ -51,11 +64,13 @@ void USaveLoadSubsystem::LoadGame(int32 Slot)
 		{
 			CurrentCycle = LoadGameInstance->CurrentCycle;
 			CurrentSlot = Slot;
+			HPLevel = LoadGameInstance->HPLevel;
+			AttackLevel = LoadGameInstance->AttackLevel;
 		}
 	}
 }
 
-bool USaveLoadSubsystem::GetSaveInfo(int32 Slot, FString& CycleInfo)
+bool USaveLoadSubsystem::GetSaveInfo(int32 Slot, FString& CycleInfo, FString& HPLV, FString& AttackLV)
 {
     FString SlotName = TEXT("SaveSlot") + FString::FromInt(Slot);
 	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
@@ -65,6 +80,8 @@ bool USaveLoadSubsystem::GetSaveInfo(int32 Slot, FString& CycleInfo)
 		if (LoadGameInstance)
 		{
 			CycleInfo = FString::FromInt(LoadGameInstance->CurrentCycle);
+			HPLV = FString::FromInt(FMath::FloorToInt32(LoadGameInstance->HPLevel));
+			AttackLV = FString::FromInt(FMath::FloorToInt32(LoadGameInstance->AttackLevel));
 			return true;
 		}
 	}
