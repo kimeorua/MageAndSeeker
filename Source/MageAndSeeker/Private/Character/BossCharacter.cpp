@@ -3,3 +3,12 @@
 
 #include "Character/BossCharacter.h"
 
+UPawnUIComponent* ABossCharacter::GetPawnUIComponent() const
+{
+    return Super::GetPawnUIComponent();
+}
+
+UMonsterUIComponent* ABossCharacter::GetMonsterUIComponent() const
+{
+    return Super::GetMonsterUIComponent();
+}

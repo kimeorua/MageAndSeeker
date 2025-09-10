@@ -3,6 +3,8 @@
 
 #include "GAS/AttributeSet/MASBaseAttributeSet.h"
 #include "GameplayEffectExtension.h"
+#include "Interface/PawnUIInterface.h"
+#include "Component/UI/PawnUIComponent.h"
 
 #include "DebugHelper.h"
 
@@ -18,16 +20,31 @@ void UMASBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 {
     Super::PostGameplayEffectExecute(Data);
 
+    if (!CachedPawnUIInterface.IsValid())
+    {
+        CachedPawnUIInterface = TWeakInterfacePtr<IPawnUIInterface>(Data.Target.GetAvatarActor());
+    }
+    checkf(CachedPawnUIInterface.IsValid(), TEXT("%s didn't implement IPawnUIInterface"), *Data.Target.GetAvatarActor()->GetActorLabel());
+
+    UPawnUIComponent* PawnUIComponent = CachedPawnUIInterface->GetPawnUIComponent();
+
     if (Data.EvaluatedData.Attribute == GetCurrentHPAttribute())
     {
         float NewHP = FMath::Clamp(GetCurrentHP(), 0.0f, GetMaxHP());
         SetCurrentHP(NewHP);
+
+        PawnUIComponent->OnChangedHP.Broadcast(GetCurrentHP() / GetMaxHP(), GetMaxHP());
 
         if (NewHP <= 0.0f)
         {
             DebugHelper::Print("Character Is Dead");
         }
     }
+    else if (Data.EvaluatedData.Attribute == GetMaxHPAttribute())
+    {
+        PawnUIComponent->OnChangedHP.Broadcast(GetCurrentHP() / GetMaxHP(), GetMaxHP());
+    }
+
     else if (Data.EvaluatedData.Attribute == GetAttackPowerAttribute())
     {
         SetAttackPower(FMath::Max(GetAttackPower(), 0.0f));

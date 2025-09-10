@@ -14,4 +14,9 @@ class MAGEANDSEEKER_API ABossCharacter : public AMonsterCharacter
 {
 	GENERATED_BODY()
 	
+protected:
+	// ~ Begin IPawnUIInterface
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	virtual UMonsterUIComponent* GetMonsterUIComponent() const override;
+	// ~ End IPawnUIInterface
 };

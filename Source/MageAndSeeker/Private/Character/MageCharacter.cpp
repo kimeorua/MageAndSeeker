@@ -14,6 +14,8 @@
 #include "Props/ActivatedProps.h"
 #include "GAS/AttributeSet/MageAttributeSet.h"
 #include "GAS/AttributeSet/ArtifactAttributeSet.h"
+#include "Component/UI/MageUIComponent.h"
+#include "UI/MageAndSeekerWidget.h"
 
 #include "DebugHelper.h"
 
@@ -42,6 +44,8 @@ AMageCharacter::AMageCharacter()
 
 	MageAttributeSet = CreateDefaultSubobject<UMageAttributeSet>(TEXT("MageAttributeSet"));
 	ArtifactAttributeSet = CreateDefaultSubobject<UArtifactAttributeSet>(TEXT("ArtifactAttributeSet"));
+
+	MageUIComponent = CreateDefaultSubobject<UMageUIComponent>(TEXT("Mage UI Component"));
 }
 
 void AMageCharacter::Input_Move(const FInputActionValue& InputActionValue)
@@ -138,4 +142,26 @@ void AMageCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
 	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Interection, ETriggerEvent::Started, this, &ThisClass::Input_Interactive);
+}
+
+UPawnUIComponent* AMageCharacter::GetPawnUIComponent() const
+{
+	return MageUIComponent;
+}
+
+UMageUIComponent* AMageCharacter::GetMageUIComponent() const
+{
+	return MageUIComponent;
+}
+
+void AMageCharacter::CreateUIAndAdd()
+{
+	APlayerController* PC = Cast<APlayerController>(GetController());
+
+	if (HUDWidgetClass)
+	{
+		UUserWidget* HUD = CreateWidget<UUserWidget>(PC, HUDWidgetClass);
+
+		if (HUD) { HUD->AddToViewport(); }
+	}
 }

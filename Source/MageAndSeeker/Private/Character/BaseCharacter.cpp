@@ -29,7 +29,7 @@ void ABaseCharacter::InitCharacterStatAndAbility()
 		if (UDataAsset_StartUp* LodedData = CharacterStartUpData.LoadSynchronous())
 		{
 			int32 AbilityApplyLevel = 1;
-
+			CreateUIAndAdd();
 			LodedData->GiveToAbilitySystemComponent(MASAbilitySystemComponent, AbilityApplyLevel);
 		}
 	}
@@ -49,4 +49,13 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 	{
 		MASAbilitySystemComponent->InitAbilityActorInfo(this, this);
 	}
+}
+
+UPawnUIComponent* ABaseCharacter::GetPawnUIComponent() const
+{
+	return nullptr;
+}
+
+void ABaseCharacter::CreateUIAndAdd()
+{
 }

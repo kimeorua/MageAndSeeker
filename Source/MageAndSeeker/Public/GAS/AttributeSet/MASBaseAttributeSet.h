@@ -13,6 +13,8 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+class IPawnUIInterface;
+
 UCLASS()
 class MAGEANDSEEKER_API UMASBaseAttributeSet : public UAttributeSet
 {
@@ -37,4 +39,7 @@ public:
 	ATTRIBUTE_ACCESSORS(UMASBaseAttributeSet, MaxHP);
 	ATTRIBUTE_ACCESSORS(UMASBaseAttributeSet, AttackPower);
 	ATTRIBUTE_ACCESSORS(UMASBaseAttributeSet, DefensivePower);
+
+private:
+	TWeakInterfacePtr<IPawnUIInterface>CachedPawnUIInterface;
 };

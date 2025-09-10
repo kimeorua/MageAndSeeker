@@ -12,6 +12,7 @@ class UDataAsset_InputConfig;
 struct FInputActionValue;
 class UMageAttributeSet;
 class UArtifactAttributeSet;
+class UMageUIComponent;
 
 UCLASS()
 class MAGEANDSEEKER_API AMageCharacter : public ABaseCharacter
@@ -32,6 +33,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI Component", meta = (AllowPrivateAccess = "true"))
+	UMageUIComponent* MageUIComponent;
+
 #pragma endregion
 
 #pragma region Input
@@ -50,6 +55,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Trace | Interaction", meta = (AllowPrivateAccess = "true"))
 	bool bIsTraceShow = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> HUDWidgetClass;
+
 #pragma endregion
 
 protected:
@@ -60,6 +68,13 @@ protected:
 	//~ End APawn Interface
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)override;
+
+	// ~ Begin IPawnUIInterface
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	virtual UMageUIComponent* GetMageUIComponent() const override;
+	// ~ End IPawnUIInterface
+
+	virtual void CreateUIAndAdd() override; 
 
 #pragma region AbilitySystem
 

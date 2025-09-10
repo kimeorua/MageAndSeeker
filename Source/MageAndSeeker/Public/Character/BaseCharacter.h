@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "Interface/PawnUIInterface.h"
 #include "BaseCharacter.generated.h"
 
 class UMASAbilitySystemComponent;
@@ -12,7 +13,7 @@ class UMASBaseAttributeSet;
 class UDataAsset_StartUp;
 
 UCLASS()
-class MAGEANDSEEKER_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
+class MAGEANDSEEKER_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnUIInterface
 {
 	GENERATED_BODY()
 
@@ -35,6 +36,12 @@ protected:
 	//~ Begin APawn Interface.
 	virtual void PossessedBy(AController* NewController) override;
 	//~ End APawn Interface
+
+	// ~ Begin IPawnUIInterface
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	// ~ End IPawnUIInterface
+
+	virtual void CreateUIAndAdd();
 
 #pragma region AbilitySystem
 
