@@ -18,6 +18,7 @@
 #include "UI/MageAndSeekerWidget.h"
 #include "Component/Weapon/MageWeaponComponent.h"
 
+
 #include "DebugHelper.h"
 
 AMageCharacter::AMageCharacter()
@@ -120,6 +121,16 @@ void AMageCharacter::Input_Interactive()
 	}
 }
 
+void AMageCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
+{
+	MASAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
+}
+
+void AMageCharacter::Input_AbilityInputRelased(FGameplayTag InInputTag)
+{
+	MASAbilitySystemComponent->OnAbilityInputRelased(InInputTag);
+}
+
 void AMageCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -144,6 +155,8 @@ void AMageCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
 	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Interection, ETriggerEvent::Started, this, &ThisClass::Input_Interactive);
+
+	MASInputComponent->BindAbilityInputAction(DataAsset_InputConfig, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputRelased);
 }
 
 UPawnUIComponent* AMageCharacter::GetPawnUIComponent() const

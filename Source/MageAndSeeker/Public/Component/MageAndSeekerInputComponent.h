@@ -40,6 +40,6 @@ inline void UMageAndSeekerInputComponent::BindAbilityInputAction(const UDataAsse
 	{
 		if (!AbilityInputActionConfig.IsVaild()) { continue; }
 		BindAction(AbilityInputActionConfig.InputAction, ETriggerEvent::Started, ContextObject, InputPressedFunc, AbilityInputActionConfig.InputTag);
-		BindAction(AbilityInputActionConfig.InputAction, ETriggerEvent::Completed, ContextObject, InputPressedFunc, AbilityInputActionConfig.InputTag);
+		BindAction(AbilityInputActionConfig.InputAction, ETriggerEvent::Completed, ContextObject, InputRelaseddFunc, AbilityInputActionConfig.InputTag);
 	}
 }

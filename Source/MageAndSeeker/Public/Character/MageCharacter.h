@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/BaseCharacter.h"
+#include "GameplayTagContainer.h"
 #include "MageCharacter.generated.h"
 
 class USpringArmComponent;
@@ -48,6 +49,9 @@ private:
 	void Input_Move(const FInputActionValue& InputActionValue);
 	void Input_Look(const FInputActionValue& InputActionValue);
 	void Input_Interactive();
+
+	void Input_AbilityInputPressed(FGameplayTag InInputTag);
+	void Input_AbilityInputRelased(FGameplayTag InInputTag);
 
 #pragma endregion
 

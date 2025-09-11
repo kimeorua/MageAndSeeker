@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "GameplayTagContainer.h"
 #include "MASAbilitySystemComponent.generated.h"
 
 /**
@@ -14,4 +15,7 @@ class MAGEANDSEEKER_API UMASAbilitySystemComponent : public UAbilitySystemCompon
 {
 	GENERATED_BODY()
 	
+public:
+	void OnAbilityInputPressed(const FGameplayTag& InInputTag);
+	void OnAbilityInputRelased(const FGameplayTag& InInputTag);
 };
