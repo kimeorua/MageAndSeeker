@@ -8,6 +8,7 @@
 
 class UMonsterAttributeSet;
 class UMonsterUIComponent;
+class UMonsterWeaponComponent;
 
 UCLASS()
 class MAGEANDSEEKER_API AMonsterCharacter : public ABaseCharacter
@@ -29,6 +30,11 @@ protected:
 	virtual UMonsterUIComponent* GetMonsterUIComponent() const override;
 	// ~ End IPawnUIInterface
 
+	// ~ Begin IPawnUIInterface
+	virtual UPawnWeaponComponent* GetPawnWeaponComponent() const override;
+	virtual UMonsterWeaponComponent* GetMonsterWeaponComponent() const override;
+	// ~ End IPawnUIInterface
+
 #pragma region AbilitySystem
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
@@ -40,6 +46,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI Component", meta = (AllowPrivateAccess = "true"))
 	UMonsterUIComponent* MonsterUIComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI Component", meta = (AllowPrivateAccess = "true"))
+	UMonsterWeaponComponent* MonsterWeaponComponent;
 
 #pragma endregion
 

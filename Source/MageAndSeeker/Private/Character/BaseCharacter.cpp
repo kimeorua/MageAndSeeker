@@ -56,6 +56,11 @@ UPawnUIComponent* ABaseCharacter::GetPawnUIComponent() const
 	return nullptr;
 }
 
+UPawnWeaponComponent* ABaseCharacter::GetPawnWeaponComponent() const
+{
+	return nullptr;
+}
+
 void ABaseCharacter::CreateUIAndAdd()
 {
 }

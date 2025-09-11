@@ -13,6 +13,7 @@ struct FInputActionValue;
 class UMageAttributeSet;
 class UArtifactAttributeSet;
 class UMageUIComponent;
+class UMageWeaponComponent;
 
 UCLASS()
 class MAGEANDSEEKER_API AMageCharacter : public ABaseCharacter
@@ -36,6 +37,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI Component", meta = (AllowPrivateAccess = "true"))
 	UMageUIComponent* MageUIComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Component", meta = (AllowPrivateAccess = "true"))
+	UMageWeaponComponent* MageWeaponComponent;
 
 #pragma endregion
 
@@ -72,6 +76,11 @@ protected:
 	// ~ Begin IPawnUIInterface
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 	virtual UMageUIComponent* GetMageUIComponent() const override;
+	// ~ End IPawnUIInterface
+
+	// ~ Begin IPawnUIInterface
+	virtual UPawnWeaponComponent* GetPawnWeaponComponent() const override;
+	virtual UMageWeaponComponent* GetMageWeaponComponent() const override;
 	// ~ End IPawnUIInterface
 
 	virtual void CreateUIAndAdd() override; 

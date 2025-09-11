@@ -9,3 +9,12 @@ enum class EMASInputMode : uint8
 	GameOnly,
 	UIOnly
 };
+
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	Staff,
+	Book,
+	Artifact,
+	Monster
+};

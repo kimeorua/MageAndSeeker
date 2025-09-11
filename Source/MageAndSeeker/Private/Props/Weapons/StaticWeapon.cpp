@@ -7,5 +7,5 @@
 AStaticWeapon::AStaticWeapon()
 {
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon Mesh"));
-	WeaponMesh->SetupAttachment(GetRootComponent());
+	SetRootComponent(WeaponMesh);
 }

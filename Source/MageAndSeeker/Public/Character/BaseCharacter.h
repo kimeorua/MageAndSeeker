@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "Interface/PawnUIInterface.h"
+#include "Interface/WeaponInterface.h"
 #include "BaseCharacter.generated.h"
 
 class UMASAbilitySystemComponent;
@@ -13,7 +14,7 @@ class UMASBaseAttributeSet;
 class UDataAsset_StartUp;
 
 UCLASS()
-class MAGEANDSEEKER_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnUIInterface
+class MAGEANDSEEKER_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnUIInterface, public IWeaponInterface
 {
 	GENERATED_BODY()
 
@@ -40,6 +41,10 @@ protected:
 	// ~ Begin IPawnUIInterface
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 	// ~ End IPawnUIInterface
+
+	// ~ Begin IWeaponInterface
+	virtual UPawnWeaponComponent* GetPawnWeaponComponent() const override;
+	// ~ End IWeaponInterface
 
 	virtual void CreateUIAndAdd();
 

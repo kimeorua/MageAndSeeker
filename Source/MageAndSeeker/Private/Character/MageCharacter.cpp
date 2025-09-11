@@ -16,6 +16,7 @@
 #include "GAS/AttributeSet/ArtifactAttributeSet.h"
 #include "Component/UI/MageUIComponent.h"
 #include "UI/MageAndSeekerWidget.h"
+#include "Component/Weapon/MageWeaponComponent.h"
 
 #include "DebugHelper.h"
 
@@ -46,6 +47,7 @@ AMageCharacter::AMageCharacter()
 	ArtifactAttributeSet = CreateDefaultSubobject<UArtifactAttributeSet>(TEXT("ArtifactAttributeSet"));
 
 	MageUIComponent = CreateDefaultSubobject<UMageUIComponent>(TEXT("Mage UI Component"));
+	MageWeaponComponent = CreateDefaultSubobject<UMageWeaponComponent>(TEXT("Mage Weapon Component"));
 }
 
 void AMageCharacter::Input_Move(const FInputActionValue& InputActionValue)
@@ -152,6 +154,16 @@ UPawnUIComponent* AMageCharacter::GetPawnUIComponent() const
 UMageUIComponent* AMageCharacter::GetMageUIComponent() const
 {
 	return MageUIComponent;
+}
+
+UPawnWeaponComponent* AMageCharacter::GetPawnWeaponComponent() const
+{
+	return MageWeaponComponent;
+}
+
+UMageWeaponComponent* AMageCharacter::GetMageWeaponComponent() const
+{
+	return MageWeaponComponent;
 }
 
 void AMageCharacter::CreateUIAndAdd()
