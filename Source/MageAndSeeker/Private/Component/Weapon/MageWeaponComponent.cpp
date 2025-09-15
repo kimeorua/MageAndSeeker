@@ -29,14 +29,14 @@ void UMageWeaponComponent::BeginPlay()
 	{
 		FBookData Data;
 
-		 Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Fire);
-		 EquipedBooks[EBookType::Fire] = Data;
+		Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Fire);
+		EquipedBooks[EBookType::Fire] = Data;
 
-		 Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Ice);
-		 EquipedBooks[EBookType::Ice] = Data;
+		Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Ice);
+		EquipedBooks[EBookType::Ice] = Data;
 
-		 Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Lightning);
-		 EquipedBooks[EBookType::Lightning] = Data;
+		Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Lightning);
+		EquipedBooks[EBookType::Lightning] = Data;
 	}
 
 	CurrentBook = EquipedBooks.FindRef(EBookType::Fire);

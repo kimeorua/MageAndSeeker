@@ -34,15 +34,17 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 			FBookData FireBook, IceBook, LightningBook;
 			FireBook.BookLevel = 3;
 			FireBook.BookType = EBookType::Fire;
-			SaveGameInstance->BookDatas.Add(EBookType::Fire, FireBook);
+			SaveGameInstance->BookDatas.FindOrAdd(EBookType::Fire, FireBook);
 
 			IceBook.BookLevel = 2;
 			IceBook.BookType = EBookType::Ice;
-			SaveGameInstance->BookDatas.Add(EBookType::Ice, IceBook);
+			SaveGameInstance->BookDatas.FindOrAdd(EBookType::Ice, IceBook);
 
 			LightningBook.BookLevel = 1;
 			LightningBook.BookType = EBookType::Lightning;
-			SaveGameInstance->BookDatas.Add(EBookType::Lightning, LightningBook);
+			SaveGameInstance->BookDatas.FindOrAdd(EBookType::Lightning, LightningBook);
+
+			DebugHelper::Print("Hi");
 		}
 		else
 		{	
@@ -128,9 +130,18 @@ FBookData USaveLoadSubsystem::GetLoadedBookData(EBookType BookType)
 {
 	FBookData ReturnData;
 
-	if (BookDatas.Contains(BookType))
+	FString SlotName = TEXT("SaveSlot") + FString::FromInt(CurrentSlot);
+	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
 	{
-		ReturnData = BookDatas.FindRef(BookType);
+		UMageAndSeekerSaveGame* LoadGameInstance = Cast<UMageAndSeekerSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
+
+		if (LoadGameInstance)
+		{
+			if (LoadGameInstance->BookDatas.Contains(BookType))
+			{
+				ReturnData = LoadGameInstance->BookDatas.FindRef(BookType);
+			}
+		}
 	}
 	return ReturnData;
 }
