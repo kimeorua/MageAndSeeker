@@ -8,6 +8,7 @@
 
 class AMageCharacter;
 class UMageWeaponComponent;
+class UMageUIComponent;
 
 UCLASS()
 class MAGEANDSEEKER_API UMageGameplayAbility : public UMASGameplayAbility
@@ -19,6 +20,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "MagicAndSeeker | Ability")
 	UMageWeaponComponent* GetMageWeaponComponentFromActorInfo();
+
+	UFUNCTION(BlueprintPure, Category = "Wrroir | Ability")
+	UMageUIComponent* GetMageUIComponentFromActorInfo();
 
 private:
 	TWeakObjectPtr<AMageCharacter> CachedWarriorHeroCharacter;

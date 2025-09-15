@@ -17,3 +17,8 @@ UMageWeaponComponent* UMageGameplayAbility::GetMageWeaponComponentFromActorInfo(
 {
 	return Cast<IWeaponInterface>(GetMageCharacterFromActorInfo())->GetMageWeaponComponent();
 }
+
+UMageUIComponent* UMageGameplayAbility::GetMageUIComponentFromActorInfo()
+{
+	return Cast<IPawnUIInterface>(GetMageCharacterFromActorInfo())->GetMageUIComponent();
+}

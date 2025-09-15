@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Type/MageAndSeekerEnum.h"
+#include "Type/MageAndSeekerStruct.h"
 #include "SaveLoadSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFinshedSvaeGameDelegate);
@@ -42,6 +44,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnFinshedSvaeGameDelegate OnFinshedSvaeGame;
 
+	FBookData GetLoadedBookData(EBookType BookType);
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "SaveData")
 	int32 CurrentCycle = 1;
@@ -54,4 +58,7 @@ private:
 
 	UPROPERTY()
 	int32 CurrentSlot = 0;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	TMap<EBookType, FBookData> BookDatas;
 };

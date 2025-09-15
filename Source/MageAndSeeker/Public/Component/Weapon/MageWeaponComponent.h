@@ -21,7 +21,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mage Weapon", meta = (AllowPrivateAccess = "true"))
 	TMap<EWeaponType, ABaseWeapon*>EquipedWeapons;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mage Weapon", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mage Weapon", meta = (AllowPrivateAccess = "true"))
 	TMap<EBookType, FBookData>EquipedBooks;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mage Weapon", meta = (AllowPrivateAccess = "true"))
@@ -41,4 +41,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SettingCurrentBook(EBookType BookType);
+
+	FBookData GetBookData(EBookType BookType);
 };

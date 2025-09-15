@@ -4,6 +4,7 @@
 #include "Character/MageCharacter.h"
 #include "GAS/MASAbilitySystemComponent.h"
 #include "GAS/AttributeSet/MageAttributeSet.h"
+#include "Component/Weapon/MageWeaponComponent.h"
 
 #include "DebugHelper.h"
 
@@ -29,21 +30,47 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 			SaveGameInstance->HPLevel = 0.0f;
 			SaveGameInstance->AttackLevel = 0.0f;
 			CurrentSlot = Slot;
+
+			FBookData FireBook, IceBook, LightningBook;
+			FireBook.BookLevel = 3;
+			FireBook.BookType = EBookType::Fire;
+			SaveGameInstance->BookDatas.Add(EBookType::Fire, FireBook);
+
+			IceBook.BookLevel = 2;
+			IceBook.BookType = EBookType::Ice;
+			SaveGameInstance->BookDatas.Add(EBookType::Ice, IceBook);
+
+			LightningBook.BookLevel = 1;
+			LightningBook.BookType = EBookType::Lightning;
+			SaveGameInstance->BookDatas.Add(EBookType::Lightning, LightningBook);
 		}
 		else
 		{	
 			UWorld* World = GetGameInstance()->GetWorld();
-			const UMageAttributeSet* MageAttributSet = Cast<AMageCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->GetAbilitySystemComponent()->GetSet<UMageAttributeSet>();
+			AMageCharacter* Mage = Cast<AMageCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+			const UMageAttributeSet* MageAttributSet = Mage->GetAbilitySystemComponent()->GetSet<UMageAttributeSet>();
+			UMageWeaponComponent* MageWeaponComponent = Cast<IWeaponInterface>(Mage)->GetMageWeaponComponent();
 
 			//SaveGameInstance->CurrentCycle = this->CurrentCycle;
 			//SaveGameInstance->HPLevel = MageAttributSet->GetHPLevel();
 			//SaveGameInstance->HPLevel = MageAttributSet->GetAttackLevel();
+			FBookData FireBook = MageWeaponComponent->GetBookData(EBookType::Fire);
+			FBookData IceBook = MageWeaponComponent->GetBookData(EBookType::Ice);
+			FBookData LightningBook = MageWeaponComponent->GetBookData(EBookType::Lightning);
+
+			SaveGameInstance->BookDatas.Add(EBookType::Fire, FireBook);
+			SaveGameInstance->BookDatas.Add(EBookType::Ice, IceBook);
+			SaveGameInstance->BookDatas.Add(EBookType::Lightning, LightningBook);
 
 			// 테스트용
 			CurrentCycle++;
 			SaveGameInstance->CurrentCycle = this->CurrentCycle;
 			SaveGameInstance->HPLevel = MageAttributSet->GetHPLevel() + 1.0f;
 			SaveGameInstance->AttackLevel = MageAttributSet->GetAttackLevel() + 1.0f;
+
+			FireBook = MageWeaponComponent->GetBookData(EBookType::Fire);
+			FireBook.BookLevel = 4;
+			SaveGameInstance->BookDatas.Add(EBookType::Fire, FireBook);
 		}
 		FString SlotName = TEXT("SaveSlot") + FString::FromInt(Slot);
 
@@ -66,6 +93,7 @@ void USaveLoadSubsystem::LoadGame(int32 Slot)
 			CurrentSlot = Slot;
 			HPLevel = LoadGameInstance->HPLevel;
 			AttackLevel = LoadGameInstance->AttackLevel;
+			BookDatas = LoadGameInstance->BookDatas;
 		}
 	}
 }
@@ -94,4 +122,15 @@ void USaveLoadSubsystem::OnSaveGameCompleted(const FString& SlotName, int32 Slot
 	{
 		OnFinshedSvaeGame.Broadcast();
 	}
+}
+
+FBookData USaveLoadSubsystem::GetLoadedBookData(EBookType BookType)
+{
+	FBookData ReturnData;
+
+	if (BookDatas.Contains(BookType))
+	{
+		ReturnData = BookDatas.FindRef(BookType);
+	}
+	return ReturnData;
 }

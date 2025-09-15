@@ -14,4 +14,26 @@ struct FBookData
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EBookType BookType = EBookType::Fire;
+
+    FBookData()
+    {
+        BookLevel = 1;
+        BookType = EBookType::Fire;
+    }
+
+    FBookData(const FBookData& Other)
+    {
+        BookLevel = Other.BookLevel;
+        BookType = Other.BookType;
+    }
+
+    FBookData& operator=(const FBookData& Other)
+    {
+        if (this != &Other) // 자기 자신 체크
+        {
+            BookLevel = Other.BookLevel;
+            BookType = Other.BookType;
+        }
+        return *this;
+    }
 };

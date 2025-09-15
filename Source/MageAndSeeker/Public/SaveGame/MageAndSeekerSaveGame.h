@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "Type/MageAndSeekerStruct.h"
 #include "MageAndSeekerSaveGame.generated.h"
 
 /**
@@ -23,4 +24,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveData")
 	float AttackLevel = 0;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	TMap<EBookType, FBookData> BookDatas;
 };
