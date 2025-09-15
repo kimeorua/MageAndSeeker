@@ -2,7 +2,6 @@
 
 #pragma once
 
-
 UENUM(BlueprintType)
 enum class EMASInputMode : uint8
 {
@@ -17,4 +16,12 @@ enum class EWeaponType : uint8
 	Book,
 	Artifact,
 	Monster
+};
+
+UENUM(BlueprintType)
+enum class EBookType : uint8
+{
+	Fire UMETA(DisplayName = "Fire"),
+	Ice UMETA(DisplayName = "Ice"),
+	Lightning UMETA(DisplayName = "Lightning")
 };

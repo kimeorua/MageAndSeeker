@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Component/Weapon/PawnWeaponComponent.h"
 #include "Type/MageAndSeekerEnum.h"
+#include "Type/MageAndSeekerStruct.h"
 #include "MageWeaponComponent.generated.h"
 
 class ABaseWeapon;
@@ -20,6 +21,15 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mage Weapon", meta = (AllowPrivateAccess = "true"))
 	TMap<EWeaponType, ABaseWeapon*>EquipedWeapons;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mage Weapon", meta = (AllowPrivateAccess = "true"))
+	TMap<EBookType, FBookData>EquipedBooks;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mage Weapon", meta = (AllowPrivateAccess = "true"))
+	FBookData CurrentBook;
+
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	virtual void RegisterWeapon(TArray<ABaseWeapon*> WeaponsToRegister) override;
 	
@@ -28,4 +38,7 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	ASkeletalWeapon* GetBook() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SettingCurrentBook(EBookType BookType);
 };

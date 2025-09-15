@@ -13,12 +13,10 @@ void UMASAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InInp
 		if (!AbilitySpec.DynamicAbilityTags.HasTagExact(InInputTag)) { continue; }
 
 		TryActivateAbility(AbilitySpec.Handle);
-
-		DebugHelper::Print("Ability Activate");
 	}
 }
 
 void UMASAbilitySystemComponent::OnAbilityInputRelased(const FGameplayTag& InInputTag)
 {
-	DebugHelper::Print("Ability Deactivate");
+
 }

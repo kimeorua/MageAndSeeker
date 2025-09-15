@@ -20,7 +20,7 @@ public:
 	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon | Mesh")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon | Mesh")
 	UMeshComponent* WeaponMesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon | Type")
