@@ -32,11 +32,11 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 			CurrentSlot = Slot;
 
 			FBookData FireBook, IceBook, LightningBook;
-			FireBook.BookLevel = 3;
+			FireBook.BookLevel = 1;
 			FireBook.BookType = EBookType::Fire;
 			SaveGameInstance->BookDatas.FindOrAdd(EBookType::Fire, FireBook);
 
-			IceBook.BookLevel = 2;
+			IceBook.BookLevel = 1;
 			IceBook.BookType = EBookType::Ice;
 			SaveGameInstance->BookDatas.FindOrAdd(EBookType::Ice, IceBook);
 
@@ -73,6 +73,8 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 			FireBook = MageWeaponComponent->GetBookData(EBookType::Fire);
 			FireBook.BookLevel = 4;
 			SaveGameInstance->BookDatas.Add(EBookType::Fire, FireBook);
+
+			// 테스트용
 		}
 		FString SlotName = TEXT("SaveSlot") + FString::FromInt(Slot);
 
