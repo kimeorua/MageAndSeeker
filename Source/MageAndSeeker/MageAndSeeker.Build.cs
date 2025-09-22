@@ -17,7 +17,8 @@ public class MageAndSeeker : ModuleRules
 			"EnhancedInput",
 			"GameplayTags",
             "GameplayTasks",
-            "AnimGraphRuntime"
+            "AnimGraphRuntime",
+            "Niagara"
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
