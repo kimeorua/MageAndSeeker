@@ -3,6 +3,8 @@
 
 #include "MageAndSeekerFunctionLibrary.h"
 #include "Subsystem/SaveLoadSubsystem.h"
+#include "GAS/MASAbilitySystemComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 void UMageAndSeekerFunctionLibrary::ToggleInputMode(const UObject* WorldContextObject, EMASInputMode InInputMode)
 {
@@ -51,5 +53,29 @@ int32 UMageAndSeekerFunctionLibrary::GetCurrentCycle(const UObject* WorldContext
 	else 
 	{
 		return 0;
+	}
+}
+
+UMASAbilitySystemComponent* UMageAndSeekerFunctionLibrary::NativeGetMageASCFromActor(AActor* InActor)
+{
+	check(InActor);
+	return CastChecked<UMASAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor));
+}
+
+void UMageAndSeekerFunctionLibrary::AddGameplayTagToActorIfNone(AActor* InActor, FGameplayTag TagToAdd)
+{
+	UMASAbilitySystemComponent* ASC = NativeGetMageASCFromActor(InActor);
+	if (!ASC->HasMatchingGameplayTag(TagToAdd))
+	{
+		ASC->AddLooseGameplayTag(TagToAdd);
+	}
+}
+
+void UMageAndSeekerFunctionLibrary::RemoveGameplayTagToActorIfFind(AActor* InActor, FGameplayTag TagToRemove)
+{
+	UMASAbilitySystemComponent* ASC = NativeGetMageASCFromActor(InActor);
+	if (ASC->HasMatchingGameplayTag(TagToRemove))
+	{
+		ASC->RemoveLooseGameplayTag(TagToRemove);
 	}
 }

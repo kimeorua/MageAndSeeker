@@ -24,4 +24,5 @@ namespace MageAndSeekerGameplayTag
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_Attack, "Mage.Ability.Attack");
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_ActivateBookChangeEffect, "Mage.Event.ActivateBookChangeEffect");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_SpawnProjectile , "Mage.Event.SpawnProjectile");
 }

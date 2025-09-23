@@ -25,4 +25,5 @@ namespace MageAndSeekerGameplayTag
 	MAGEANDSEEKER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Mage_Ability_Attack);
 
 	MAGEANDSEEKER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Mage_Event_ActivateBookChangeEffect);
+	MAGEANDSEEKER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Mage_Event_SpawnProjectile);
 }
