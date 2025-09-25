@@ -20,4 +20,7 @@ public:
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|Refrence")
 	AMageCharacter* OwningMageCharacter;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|Refrence")
+	bool bIsCombat = false;
 };

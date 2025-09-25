@@ -3,6 +3,8 @@
 
 #include "Animation/MageAnimInstance.h"
 #include "Character/MageCharacter.h"
+#include "MageAndSeekerFunctionLibrary.h"
+#include "MageAndSeekerGameplayTag.h"
 
 void UMageAnimInstance::NativeInitializeAnimation()
 {
@@ -17,4 +19,9 @@ void UMageAnimInstance::NativeInitializeAnimation()
 void UMageAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeThreadSafeUpdateAnimation(DeltaSeconds);
+
+	if (OwningMageCharacter)
+	{
+		bIsCombat = UMageAndSeekerFunctionLibrary::NativeDoseActorHaveTag(OwningMageCharacter, MageAndSeekerGameplayTag::Mage_Status_CombatMode);
+	}
 }

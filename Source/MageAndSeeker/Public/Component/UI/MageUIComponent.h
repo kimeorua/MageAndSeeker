@@ -8,6 +8,7 @@
 #include "MageUIComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeBook, EBookType, BookType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeMode, bool, IsCombatMode);
 
 UCLASS()
 class MAGEANDSEEKER_API UMageUIComponent : public UPawnUIComponent
@@ -18,6 +19,12 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnChangeBook OnChangeBook;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnChangeMode OnChangeMode;
+
 	UFUNCTION(BlueprintCallable)
 	void ChangeBookUI(EBookType BookType);
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeCombatMode(bool bIsCombat);
 };

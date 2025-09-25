@@ -7,3 +7,8 @@ void UMageUIComponent::ChangeBookUI(EBookType BookType)
 {
 	OnChangeBook.Broadcast(BookType);
 }
+
+void UMageUIComponent::ChangeCombatMode(bool bIsCombat)
+{
+	OnChangeMode.Broadcast(bIsCombat);
+}

@@ -32,4 +32,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MaginAndSeeker | Function Library")
 	static void RemoveGameplayTagToActorIfFind(AActor* InActor, FGameplayTag TagToRemove);
+
+	static bool NativeDoseActorHaveTag(AActor* InActor, FGameplayTag TagToCheck);
+
+	UFUNCTION(BlueprintCallable, Category = "MaginAndSeeker | Function Library", meta = (DisplayName = "Dose Actor Have Tag", ExpandEnumAsExecs = "OutConfirmType"))
+	static void BP_DoseActorHaveTag(AActor* InActor, FGameplayTag TagToCheck, EMageAndSeekerConfirmType& OutConfirmType);
 };

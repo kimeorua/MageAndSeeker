@@ -19,10 +19,12 @@ namespace MageAndSeekerGameplayTag
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Status_Book_Fire, "Mage.Status.Book.Fire");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Status_Book_Ice, "Mage.Status.Book.Ice");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Status_Book_Lightning, "Mage.Status.Book.Lightning");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Status_CombatMode, "Mage.Status.CombatMode");
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_BookChange, "Mage.Ability.BookChange");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_Attack, "Mage.Ability.Attack");
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_ActivateBookChangeEffect, "Mage.Event.ActivateBookChangeEffect");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_SpawnProjectile , "Mage.Event.SpawnProjectile");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_ModeChange, "Mage.Event.ModeChange");
 }

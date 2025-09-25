@@ -79,3 +79,14 @@ void UMageAndSeekerFunctionLibrary::RemoveGameplayTagToActorIfFind(AActor* InAct
 		ASC->RemoveLooseGameplayTag(TagToRemove);
 	}
 }
+
+bool UMageAndSeekerFunctionLibrary::NativeDoseActorHaveTag(AActor* InActor, FGameplayTag TagToCheck)
+{
+	UMASAbilitySystemComponent* ASC = NativeGetMageASCFromActor(InActor);
+	return ASC->HasMatchingGameplayTag(TagToCheck);
+}
+
+void UMageAndSeekerFunctionLibrary::BP_DoseActorHaveTag(AActor* InActor, FGameplayTag TagToCheck, EMageAndSeekerConfirmType& OutConfirmType)
+{
+	OutConfirmType = NativeDoseActorHaveTag(InActor, TagToCheck) ? EMageAndSeekerConfirmType::Yes : EMageAndSeekerConfirmType::No;
+}

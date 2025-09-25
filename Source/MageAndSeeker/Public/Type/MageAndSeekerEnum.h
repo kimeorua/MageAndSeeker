@@ -25,3 +25,10 @@ enum class EBookType : uint8
 	Ice UMETA(DisplayName = "Ice"),
 	Lightning UMETA(DisplayName = "Lightning")
 };
+
+UENUM()
+enum class EMageAndSeekerConfirmType : uint8
+{
+	Yes,
+	No
+};
