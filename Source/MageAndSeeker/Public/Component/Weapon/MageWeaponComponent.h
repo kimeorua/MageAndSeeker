@@ -42,5 +42,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SettingCurrentBook(EBookType BookType);
 
+	UFUNCTION(BlueprintPure)
+	FVector CalculatePosition();
+
 	FBookData GetBookData(EBookType BookType);
 };

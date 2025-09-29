@@ -21,7 +21,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "MagicAndSeeker | Ability")
 	UMageWeaponComponent* GetMageWeaponComponentFromActorInfo();
 
-	UFUNCTION(BlueprintPure, Category = "Wrroir | Ability")
+	UFUNCTION(BlueprintPure, Category = "MagicAndSeeker | Ability")
 	UMageUIComponent* GetMageUIComponentFromActorInfo();
 
 private:

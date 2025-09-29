@@ -5,6 +5,7 @@
 #include "Props/Weapons/SkeletalWeapon.h"
 #include "Props/Weapons/StaticWeapon.h"
 #include "Subsystem/SaveLoadSubsystem.h"
+#include "Kismet/GameplayStatics.h"
 
 #include"DebugHelper.h"
 
@@ -88,6 +89,31 @@ void UMageWeaponComponent::SettingCurrentBook(EBookType BookType)
 	default:
 		break;
 	}
+}
+
+FVector UMageWeaponComponent::CalculatePosition()
+{
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	int32 ViewportX, ViewportY;
+	PC->GetViewportSize(ViewportX, ViewportY);
+
+	FVector2D CrosshairScreen(ViewportX * 0.5f, ViewportY * 0.5f);
+
+	FVector WorldLocation, WorldDirection;
+	PC->DeprojectScreenPositionToWorld(CrosshairScreen.X, CrosshairScreen.Y, WorldLocation, WorldDirection);
+
+	FVector Start = WorldLocation;
+	FVector End = Start + (WorldDirection * 10000.0f);
+
+	FHitResult HitResult;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(GetOwningCharacter_Base());
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, Params);
+
+	FVector TargetPoint = bHit ? HitResult.Location : End;
+
+	return TargetPoint;
 }
 
 FBookData UMageWeaponComponent::GetBookData(EBookType BookType)

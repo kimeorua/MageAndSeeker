@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Type/MageAndSeekerEnum.h"
 #include "BaseProjectile.generated.h"
 
 class UProjectileMovementComponent;
+class UNiagaraComponent;
 class UNiagaraSystem;
 
 UCLASS()
@@ -25,5 +27,5 @@ private:
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
-	UNiagaraSystem* ProjectileFX;
+	UNiagaraComponent* ProjectileFX;
 };
