@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void ActivateProp();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void DeactivateProp();
+
 protected:
 	virtual void BeginPlay() override;
 

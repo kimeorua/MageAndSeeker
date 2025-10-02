@@ -15,6 +15,7 @@ class UMageAttributeSet;
 class UArtifactAttributeSet;
 class UMageUIComponent;
 class UMageWeaponComponent;
+class AActivatedProps;
 
 UCLASS()
 class MAGEANDSEEKER_API AMageCharacter : public ABaseCharacter
@@ -26,6 +27,9 @@ public:
 
 	FORCEINLINE UMageAttributeSet* GetMageAttributeSet() const { return MageAttributeSet; }
 	FORCEINLINE UArtifactAttributeSet* GetArtifactAttributeSet() const { return ArtifactAttributeSet; }
+
+	UFUNCTION(BlueprintCallable)
+	void EndInteractive();
 
 private:
 #pragma region Components
@@ -65,6 +69,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> HUDWidgetClass;
+
+	UPROPERTY()
+	AActivatedProps* ActivatedProp;
 
 #pragma endregion
 

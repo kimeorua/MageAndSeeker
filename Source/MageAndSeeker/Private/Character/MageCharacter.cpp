@@ -51,6 +51,15 @@ AMageCharacter::AMageCharacter()
 	MageWeaponComponent = CreateDefaultSubobject<UMageWeaponComponent>(TEXT("Mage Weapon Component"));
 }
 
+void AMageCharacter::EndInteractive()
+{
+	if (IsValid(ActivatedProp))
+	{
+		GetMageUIComponent()->OnChangeShowUI.Broadcast(true);
+		ActivatedProp->DeactivateProp();
+	}
+}
+
 void AMageCharacter::Input_Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();
@@ -100,6 +109,8 @@ void AMageCharacter::Input_Interactive()
 
 	FHitResult Hit;
 
+	ActivatedProp = nullptr;
+
 	bool bHit = UKismetSystemLibrary::SphereTraceSingle
 	(
 		this, 
@@ -116,8 +127,10 @@ void AMageCharacter::Input_Interactive()
 
 	if (bHit && Hit.GetActor())
 	{
-		AActivatedProps* ActivatedProp = Cast<AActivatedProps>(Hit.GetActor());
+		ActivatedProp = Cast<AActivatedProps>(Hit.GetActor());
 		ActivatedProp->ActivateProp();
+
+		GetMageUIComponent()->OnChangeShowUI.Broadcast(false);
 	}
 }
 
