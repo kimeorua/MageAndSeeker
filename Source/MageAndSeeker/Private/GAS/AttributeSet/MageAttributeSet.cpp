@@ -4,6 +4,9 @@
 #include "GAS/AttributeSet/MageAttributeSet.h"
 #include "GameplayEffectExtension.h"
 #include "MageAndSeekerFunctionLibrary.h"
+#include "Interface/PawnUIInterface.h"
+#include "Component/UI/PawnUIComponent.h"
+#include "Component/UI/MageUIComponent.h"
 
 #include "DebugHelper.h"
 
@@ -18,14 +21,29 @@ UMageAttributeSet::UMageAttributeSet()
 
 void UMageAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
+	Super::PostGameplayEffectExecute(Data);
+
+	if (!CachedPawnUIInterface.IsValid())
+	{
+		CachedPawnUIInterface = TWeakInterfacePtr<IPawnUIInterface>(Data.Target.GetAvatarActor());
+	}
+	checkf(CachedPawnUIInterface.IsValid(), TEXT("%s didn't implement IPawnUIInterface"), *Data.Target.GetAvatarActor()->GetActorLabel());
+
+	UPawnUIComponent* PawnUIComponent = CachedPawnUIInterface->GetPawnUIComponent();
+	UMageUIComponent* MageUIComponent = CachedPawnUIInterface->GetMageUIComponent();
+
 	if (Data.EvaluatedData.Attribute == GetCurrentMPAttribute())
 	{
 		float NewMP = FMath::Clamp(GetCurrentMP(), 0.0f, GetMaxMP());
 		SetCurrentMP(NewMP);
+
+		MageUIComponent->OnChangeCurrentMP.Broadcast(GetCurrentMP() / GetMaxMP());
 	}
 	else if (Data.EvaluatedData.Attribute == GetMaxMPAttribute())
 	{
 		SetMaxMP(FMath::Max(GetMaxMP(), 0.0f));
+
+		MageUIComponent->OnSettingMaxMana.Broadcast(GetMaxMP());
 	}
 	else if (Data.EvaluatedData.Attribute == GetHPLevelAttribute())
 	{

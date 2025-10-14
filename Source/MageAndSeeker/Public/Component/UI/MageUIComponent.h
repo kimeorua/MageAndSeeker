@@ -10,6 +10,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeBook, EBookType, BookType);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeMode, bool, IsCombatMode);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeShowUI, bool, IsShow);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSettingMaxMana, float, MaxMP);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeCurrentMP, float, Percent);
 
 UCLASS()
 class MAGEANDSEEKER_API UMageUIComponent : public UPawnUIComponent
@@ -25,6 +27,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnChangeShowUI OnChangeShowUI;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnSettingMaxMana OnSettingMaxMana;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnChangeCurrentMP OnChangeCurrentMP;
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeBookUI(EBookType BookType);

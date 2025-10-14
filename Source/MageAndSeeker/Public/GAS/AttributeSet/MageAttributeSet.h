@@ -13,6 +13,8 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+class IPawnUIInterface;
+
 UCLASS()
 class MAGEANDSEEKER_API UMageAttributeSet : public UAttributeSet
 {
@@ -44,4 +46,7 @@ public:
 	ATTRIBUTE_ACCESSORS(UMageAttributeSet, CurrentMP);
 	ATTRIBUTE_ACCESSORS(UMageAttributeSet, MaxMP);
 	ATTRIBUTE_ACCESSORS(UMageAttributeSet, MaxLevel);
+
+private:
+	TWeakInterfacePtr<IPawnUIInterface>CachedPawnUIInterface;
 };
