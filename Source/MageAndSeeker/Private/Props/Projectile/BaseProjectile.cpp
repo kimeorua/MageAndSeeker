@@ -5,13 +5,17 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "Components/SphereComponent.h"
+
 #include "DebugHelper.h"
 
 
 // Sets default values
 ABaseProjectile::ABaseProjectile()
 {
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
+	SetRootComponent(SphereCollision);
+	SphereCollision->SetSphereRadius(90.0f);
 
 	ProjectileFX = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ProjectileFX"));
 	ProjectileFX->SetupAttachment(RootComponent);
@@ -25,7 +29,16 @@ ABaseProjectile::ABaseProjectile()
     ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 }
 
+void ABaseProjectile::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	DebugHelper::Print(OtherActor->GetActorNameOrLabel());
+}
+
 void ABaseProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SphereCollision->SetCollisionObjectType(ECC_GameTraceChannel2);
+
+	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnComponentBeginOverlap);
 }

@@ -5,12 +5,15 @@
 #include "GAS/AttributeSet/MonsterAttributeSet.h"
 #include "Component/UI/MonsterUIComponent.h"
 #include "Component/Weapon/MonsterWeaponComponent.h"
+#include "Components/CapsuleComponent.h"
 
 AMonsterCharacter::AMonsterCharacter()
 {
 	MonsterAttributeSet = CreateDefaultSubobject<UMonsterAttributeSet>(TEXT("MonsterAttributeSet"));
 	MonsterUIComponent = CreateDefaultSubobject<UMonsterUIComponent>(TEXT("Monster UI Component"));
 	MonsterWeaponComponent = CreateDefaultSubobject<UMonsterWeaponComponent>(TEXT("Monster Weapon Component"));
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Block);
 }
 
 void AMonsterCharacter::BeginPlay()
