@@ -44,7 +44,7 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 			LightningBook.BookType = EBookType::Lightning;
 			SaveGameInstance->BookDatas.FindOrAdd(EBookType::Lightning, LightningBook);
 
-			DebugHelper::Print("Hi");
+			//DebugHelper::Print("Hi");
 		}
 		else
 		{	

@@ -6,6 +6,7 @@
 #include "Props/Weapons/StaticWeapon.h"
 #include "Subsystem/SaveLoadSubsystem.h"
 #include "Kismet/GameplayStatics.h"
+#include "Subsystem/EquipmentSubsystem.h"
 
 #include"DebugHelper.h"
 
@@ -119,4 +120,28 @@ FVector UMageWeaponComponent::CalculatePosition()
 FBookData UMageWeaponComponent::GetBookData(EBookType BookType)
 {
 	return EquipedBooks.FindRef(BookType);
+}
+
+void UMageWeaponComponent::ArtifactCreate()
+{
+	if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+	{
+		Artifact = EquipmentSubsystem->CreateArtifact();
+	}
+}
+
+void UMageWeaponComponent::ArtifactChange()
+{
+	if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+	{
+		EquipmentSubsystem->ChangeArtifact(Artifact);
+	}
+}
+
+void UMageWeaponComponent::ActivateArtifact()
+{
+	if (Artifact)
+	{
+		Artifact->OnActivate();
+	}
 }

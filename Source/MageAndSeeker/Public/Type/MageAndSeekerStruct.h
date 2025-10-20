@@ -4,6 +4,8 @@
 #include "Type/MageAndSeekerEnum.h"
 #include "MageAndSeekerStruct.generated.h"
 
+class UBaseArtifact;
+
 USTRUCT(BlueprintType)
 struct FBookData
 {
@@ -36,4 +38,25 @@ struct FBookData
         }
         return *this;
     }
+};
+
+USTRUCT(BlueprintType)
+struct FArtifactDataRow : public FTableRowBase
+{
+    GENERATED_BODY();
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 ArtifactID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FText ArtifactName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FText ArtifactDescription;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UTexture2D* Icon;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<UBaseArtifact> ArtifactClass;
 };

@@ -11,6 +11,7 @@
 class ABaseWeapon;
 class ASkeletalWeapon;
 class AStaticWeapon;
+class UBaseArtifact;
 
 UCLASS()
 class MAGEANDSEEKER_API UMageWeaponComponent : public UPawnWeaponComponent
@@ -26,6 +27,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mage Weapon", meta = (AllowPrivateAccess = "true"))
 	FBookData CurrentBook;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Artifacte", meta = (AllowPrivateAccess = "true"))
+	UBaseArtifact* Artifact;
 
 protected:
 	virtual void BeginPlay() override;
@@ -46,4 +50,13 @@ public:
 	FVector CalculatePosition();
 
 	FBookData GetBookData(EBookType BookType);
+
+	UFUNCTION(BlueprintCallable)
+	void ArtifactCreate();
+
+	UFUNCTION(BlueprintCallable)
+	void ArtifactChange();
+
+	UFUNCTION(BlueprintCallable)
+	void ActivateArtifact();
 };
