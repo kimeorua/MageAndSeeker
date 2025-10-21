@@ -5,6 +5,7 @@
 #include "GAS/MASAbilitySystemComponent.h"
 #include "GAS/AttributeSet/MageAttributeSet.h"
 #include "Component/Weapon/MageWeaponComponent.h"
+#include "Subsystem/EquipmentSubsystem.h"
 
 #include "DebugHelper.h"
 
@@ -44,7 +45,8 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 			LightningBook.BookType = EBookType::Lightning;
 			SaveGameInstance->BookDatas.FindOrAdd(EBookType::Lightning, LightningBook);
 
-			//DebugHelper::Print("Hi");
+			SaveGameInstance->EquipedArtifactData = FArtifactData();
+			SaveGameInstance->SavedArtifactInventory.Empty();
 		}
 		else
 		{	
@@ -56,6 +58,7 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 			//SaveGameInstance->CurrentCycle = this->CurrentCycle;
 			//SaveGameInstance->HPLevel = MageAttributSet->GetHPLevel();
 			//SaveGameInstance->HPLevel = MageAttributSet->GetAttackLevel();
+
 			FBookData FireBook = MageWeaponComponent->GetBookData(EBookType::Fire);
 			FBookData IceBook = MageWeaponComponent->GetBookData(EBookType::Ice);
 			FBookData LightningBook = MageWeaponComponent->GetBookData(EBookType::Lightning);
@@ -73,8 +76,28 @@ void USaveLoadSubsystem::SaveGame(int32 Slot, bool bIsNewGame)
 			FireBook = MageWeaponComponent->GetBookData(EBookType::Fire);
 			FireBook.BookLevel = 4;
 			SaveGameInstance->BookDatas.Add(EBookType::Fire, FireBook);
-
 			// 테스트용
+
+			SaveGameInstance->EquipedArtifactData.ArtifactID = MageWeaponComponent->GetArtifact()->GetArtifactID();
+			SaveGameInstance->EquipedArtifactData.ArtifactName = MageWeaponComponent->GetArtifact()->GetArtifactName();
+			SaveGameInstance->EquipedArtifactData.UpgradeLevel = MageWeaponComponent->GetArtifact()->GetUpgradeLevel();
+
+			SaveGameInstance->SavedArtifactInventory.Empty();
+
+			if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+			{
+				for (auto& Pair : EquipmentSubsystem->GetArtifactInventory())
+				{
+					if (!IsValid(Pair.Value)) { continue; }
+
+					FArtifactData Data;
+					Data.ArtifactID = Pair.Value->GetArtifactID();
+					Data.ArtifactName = Pair.Value->GetArtifactName();
+					Data.UpgradeLevel = Pair.Value->GetUpgradeLevel();
+
+					SaveGameInstance->SavedArtifactInventory.Add(Pair.Key, Data);
+				}
+			}
 		}
 		FString SlotName = TEXT("SaveSlot") + FString::FromInt(Slot);
 
@@ -98,6 +121,14 @@ void USaveLoadSubsystem::LoadGame(int32 Slot)
 			HPLevel = LoadGameInstance->HPLevel;
 			AttackLevel = LoadGameInstance->AttackLevel;
 			BookDatas = LoadGameInstance->BookDatas;
+
+			EquipedArtifactData = LoadGameInstance->EquipedArtifactData;
+			SavedArtifactInventory.Empty();
+
+			for (auto& Pair : LoadGameInstance->SavedArtifactInventory)
+			{
+				SavedArtifactInventory.Add(Pair.Key, Pair.Value);
+			}
 		}
 	}
 }

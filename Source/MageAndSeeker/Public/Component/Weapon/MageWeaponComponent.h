@@ -29,7 +29,7 @@ private:
 	FBookData CurrentBook;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Artifacte", meta = (AllowPrivateAccess = "true"))
-	UBaseArtifact* Artifact;
+	UBaseArtifact* Artifact = nullptr;
 
 protected:
 	virtual void BeginPlay() override;
@@ -52,11 +52,11 @@ public:
 	FBookData GetBookData(EBookType BookType);
 
 	UFUNCTION(BlueprintCallable)
-	void ArtifactCreate();
-
-	UFUNCTION(BlueprintCallable)
-	void ArtifactChange();
+	void RegisterArtifact(UBaseArtifact* NewArtifact);
 
 	UFUNCTION(BlueprintCallable)
 	void ActivateArtifact();
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE UBaseArtifact* GetArtifact() { return Artifact; }
 };

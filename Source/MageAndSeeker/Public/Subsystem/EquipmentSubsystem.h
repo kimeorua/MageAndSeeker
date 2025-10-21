@@ -5,9 +5,12 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Props/Artifact/BaseArtifact.h"
+#include "Type/MageAndSeekerStruct.h"
 #include "EquipmentSubsystem.generated.h"
 
-
+#define GETTER(Type, Name) \
+public: \
+    FORCEINLINE Type Get##Name() const { return Name; }
 
 UCLASS(Abstract, Blueprintable)
 class MAGEANDSEEKER_API UEquipmentSubsystem : public UGameInstanceSubsystem
@@ -21,12 +24,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UBaseArtifact* CreateArtifact();
 
+	UBaseArtifact* CreateArtifact(int32 ID, FArtifactData Data);
+
 	UFUNCTION(BlueprintCallable)
-	void ChangeArtifact(UBaseArtifact* EquipedArtifact);
+	void LoadAndCreateArtifact(int32 ID, FArtifactData Data);
+
+	UFUNCTION(BlueprintCallable)
+	UBaseArtifact* ChangeArtifact(int32 ChangeArtifactID, UBaseArtifact* OldArtifact);
+
+	using FArtifactInventoryMap = TMap<int32, UBaseArtifact*>;
+	GETTER(FArtifactInventoryMap, ArtifactInventory);
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Artifact DataTable", meta = (AllowPrivateAccess = "true"))
-	UDataTable* ArtifactDataTable = nullptr;
-
 	TMap<int32, UBaseArtifact*>ArtifactInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Artifacte", meta = (AllowPrivateAccess = "true"))
+	TMap<int32, TSubclassOf<UBaseArtifact>>CreatableArtifacts;
 };

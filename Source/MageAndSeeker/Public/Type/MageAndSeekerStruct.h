@@ -4,18 +4,16 @@
 #include "Type/MageAndSeekerEnum.h"
 #include "MageAndSeekerStruct.generated.h"
 
-class UBaseArtifact;
-
 USTRUCT(BlueprintType)
 struct FBookData
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 BookLevel = 1;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    int32 BookLevel = 1;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	EBookType BookType = EBookType::Fire;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    EBookType BookType = EBookType::Fire;
 
     FBookData()
     {
@@ -41,22 +39,40 @@ struct FBookData
 };
 
 USTRUCT(BlueprintType)
-struct FArtifactDataRow : public FTableRowBase
+struct FArtifactData
 {
-    GENERATED_BODY();
+    GENERATED_BODY()
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 ArtifactID;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    int32 ArtifactID = -1;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    int32 UpgradeLevel = 1;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
     FText ArtifactName;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FText ArtifactDescription;
+    FArtifactData()
+    {
+        ArtifactID = -1;
+        UpgradeLevel = 1;
+    }
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    UTexture2D* Icon;
+    FArtifactData(const FArtifactData& Other)
+    {
+        ArtifactID = Other.ArtifactID;
+        UpgradeLevel = Other.UpgradeLevel;
+        ArtifactName = Other.ArtifactName;
+    }
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TSubclassOf<UBaseArtifact> ArtifactClass;
+    FArtifactData& operator=(const FArtifactData& Other)
+    {
+        if (this != &Other) // 자기 자신 체크
+        {
+            ArtifactID = Other.ArtifactID;
+            UpgradeLevel = Other.UpgradeLevel;
+            ArtifactName = Other.ArtifactName;
+        }
+        return *this;
+    }
 };

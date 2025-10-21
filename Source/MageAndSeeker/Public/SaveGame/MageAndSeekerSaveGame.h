@@ -7,9 +7,8 @@
 #include "Type/MageAndSeekerStruct.h"
 #include "MageAndSeekerSaveGame.generated.h"
 
-/**
- * 
- */
+class UBaseArtifact;
+
 UCLASS()
 class MAGEANDSEEKER_API UMageAndSeekerSaveGame : public USaveGame
 {
@@ -27,4 +26,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveData")
 	TMap<EBookType, FBookData> BookDatas;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	FArtifactData EquipedArtifactData;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	TMap<int32, FArtifactData>SavedArtifactInventory;
 };

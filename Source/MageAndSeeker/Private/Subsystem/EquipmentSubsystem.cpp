@@ -20,50 +20,76 @@ void UEquipmentSubsystem::Deinitialize()
 
 UBaseArtifact* UEquipmentSubsystem::CreateArtifact()
 {
-	if (!ArtifactDataTable) { return nullptr; }
+	UBaseArtifact* NewArtifact = nullptr;
 
-	UBaseArtifact* ReturnArtifact = nullptr;
-
-	 int32 RandomIndex = FMath::RandRange(0, ArtifactDataTable->GetRowMap().Num() - 1);
-
-	 FString IndexString = FString::FromInt(RandomIndex);
-	 FString CombinedString = FString("Artifact") + IndexString;
-
-	const FName RowName = FName(*(FString("Artifact") + FString::FromInt(RandomIndex)));
-	const FArtifactDataRow* Row = ArtifactDataTable->FindRow<FArtifactDataRow>(RowName, TEXT(""));
-
-	if (!Row || !Row->ArtifactClass) { return nullptr; }
-
-	if (ArtifactInventory.Contains(RandomIndex))
+	if (CreatableArtifacts.Num() == 0)
 	{
-		DebugHelper::Print("Call Artifact");
-		int32 NewLevel = ArtifactInventory[RandomIndex]->GetUpgradeLevel() + 1;
-		ArtifactInventory[RandomIndex]->SetUpgradeLevel(NewLevel);
-
-		DebugHelper::Print("Artifact Level is", NewLevel);
-		return ArtifactInventory[RandomIndex];
-	}
-	else
-	{
-		ReturnArtifact = NewObject<UBaseArtifact>(this, Row->ArtifactClass);
-		ReturnArtifact->SetArtifactID(Row->ArtifactID);
-		ReturnArtifact->SetArtifactName(Row->ArtifactName);
-		ReturnArtifact->SetUpgradeLevel(1);
-
-		DebugHelper::Print("Create New Artifact");
+		return nullptr;
 	}
 
-	return ReturnArtifact;
+	TArray<int32> Keys;
+	CreatableArtifacts.GetKeys(Keys);
+
+	int32 RandomKeyIndex = FMath::RandRange(0, Keys.Num() - 1);
+	int32 SelectedKey = Keys[RandomKeyIndex];
+
+	TSubclassOf<UBaseArtifact> ArtifactClass = CreatableArtifacts.FindRef(SelectedKey);
+
+	if (ArtifactClass)
+	{
+		NewArtifact = NewObject<UBaseArtifact>(this, ArtifactClass);
+		CreatableArtifacts.Remove(SelectedKey);
+		ArtifactInventory.Add(NewArtifact->GetArtifactID(), NewArtifact);
+	}
+
+	return NewArtifact;
 }
 
-void UEquipmentSubsystem::ChangeArtifact(UBaseArtifact* EquipedArtifact)
+UBaseArtifact* UEquipmentSubsystem::CreateArtifact(int32 ID, FArtifactData Data)
 {
-	if (EquipedArtifact)
+	UBaseArtifact* NewArtifact = nullptr;
+
+	if (ID < 0) { return nullptr; }
+
+	TSubclassOf<UBaseArtifact> ArtifactClass = CreatableArtifacts.FindRef(ID);
+
+	if (ArtifactClass)
 	{
-		ArtifactInventory.Add(EquipedArtifact->GetArtifactID(), EquipedArtifact);
+		NewArtifact = NewObject<UBaseArtifact>(this, ArtifactClass);
+		NewArtifact->SetArtifactID(Data.ArtifactID);
+		NewArtifact->SetArtifactName(Data.ArtifactName);
+		NewArtifact->SetUpgradeLevel(Data.UpgradeLevel);
 	}
-	else
+
+	return NewArtifact;
+}
+
+void UEquipmentSubsystem::LoadAndCreateArtifact(int32 ID, FArtifactData Data)
+{
+	ArtifactInventory.Empty();
+
+	TSubclassOf<UBaseArtifact> ArtifactClass = CreatableArtifacts.FindRef(ID);
+
+	if (ArtifactClass)
 	{
-		DebugHelper::Print("Artifact Is Not Vaild");
+		UBaseArtifact* NewArtifact = NewObject<UBaseArtifact>(this, ArtifactClass);
+		CreatableArtifacts.Remove(ID);
+
+		NewArtifact->SetArtifactID(Data.ArtifactID);
+		NewArtifact->SetArtifactName(Data.ArtifactName);
+		NewArtifact->SetUpgradeLevel(Data.UpgradeLevel);
+
+		ArtifactInventory.Add(NewArtifact->GetArtifactID(), NewArtifact);
 	}
+}
+
+UBaseArtifact* UEquipmentSubsystem::ChangeArtifact(int32 ChangeArtifactID, UBaseArtifact* OldArtifact)
+{
+	if (ArtifactInventory.Contains(ChangeArtifactID))
+	{
+		ArtifactInventory.Add(OldArtifact->GetArtifactID(), OldArtifact);
+
+		return ArtifactInventory[ChangeArtifactID];
+	}
+	return nullptr;
 }

@@ -14,34 +14,50 @@ void UMageWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FBookData FireBook, IceBook, LightningBook;
-	FireBook.BookLevel = 1;
-	FireBook.BookType = EBookType::Fire;
-	EquipedBooks.Add(EBookType::Fire, FireBook);
-
-	IceBook.BookLevel = 1;
-	IceBook.BookType = EBookType::Ice;
-	EquipedBooks.Add(EBookType::Ice, IceBook);
-
-	LightningBook.BookLevel = 1;
-	LightningBook.BookType = EBookType::Lightning;
-	EquipedBooks.Add(EBookType::Lightning, LightningBook);
-
-	if (USaveLoadSubsystem* SaveLoadSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<USaveLoadSubsystem>())
+	if (UGameplayStatics::GetCurrentLevelName(this, true) == "DevMap")
 	{
-		FBookData Data;
+		FBookData FireBook, IceBook, LightningBook;
+		FireBook.BookLevel = 1;
+		FireBook.BookType = EBookType::Fire;
+		EquipedBooks.Add(EBookType::Fire, FireBook);
 
-		Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Fire);
-		EquipedBooks[EBookType::Fire] = Data;
+		IceBook.BookLevel = 1;
+		IceBook.BookType = EBookType::Ice;
+		EquipedBooks.Add(EBookType::Ice, IceBook);
 
-		Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Ice);
-		EquipedBooks[EBookType::Ice] = Data;
+		LightningBook.BookLevel = 1;
+		LightningBook.BookType = EBookType::Lightning;
+		EquipedBooks.Add(EBookType::Lightning, LightningBook);
 
-		Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Lightning);
-		EquipedBooks[EBookType::Lightning] = Data;
+		if (USaveLoadSubsystem* SaveLoadSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<USaveLoadSubsystem>())
+		{
+			FBookData Data;
+
+			Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Fire);
+			EquipedBooks[EBookType::Fire] = Data;
+
+			Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Ice);
+			EquipedBooks[EBookType::Ice] = Data;
+
+			Data = SaveLoadSubsystem->GetLoadedBookData(EBookType::Lightning);
+			EquipedBooks[EBookType::Lightning] = Data;
+
+			TMap<int32, FArtifactData> LoadedData = SaveLoadSubsystem->GetSavedArtifactInventory();
+
+			if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+			{
+				RegisterArtifact(EquipmentSubsystem->CreateArtifact(SaveLoadSubsystem->GetEquipedArtifactData().ArtifactID, SaveLoadSubsystem->GetEquipedArtifactData()));
+
+				for (auto& ArtifactData : LoadedData)
+				{
+					{
+						EquipmentSubsystem->LoadAndCreateArtifact(ArtifactData.Key, ArtifactData.Value);
+					}
+				}
+			}
+		}
+		CurrentBook = EquipedBooks.FindRef(EBookType::Fire);
 	}
-
-	CurrentBook = EquipedBooks.FindRef(EBookType::Fire);
 }
 
 void UMageWeaponComponent::RegisterWeapon(TArray<ABaseWeapon*> WeaponsToRegister)
@@ -122,20 +138,10 @@ FBookData UMageWeaponComponent::GetBookData(EBookType BookType)
 	return EquipedBooks.FindRef(BookType);
 }
 
-void UMageWeaponComponent::ArtifactCreate()
+void UMageWeaponComponent::RegisterArtifact(UBaseArtifact* NewArtifact)
 {
-	if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
-	{
-		Artifact = EquipmentSubsystem->CreateArtifact();
-	}
-}
-
-void UMageWeaponComponent::ArtifactChange()
-{
-	if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
-	{
-		EquipmentSubsystem->ChangeArtifact(Artifact);
-	}
+	if (!NewArtifact) { return; }
+	Artifact = NewArtifact;
 }
 
 void UMageWeaponComponent::ActivateArtifact()

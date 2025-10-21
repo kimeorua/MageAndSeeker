@@ -8,6 +8,8 @@
 #include "Type/MageAndSeekerStruct.h"
 #include "SaveLoadSubsystem.generated.h"
 
+class UBaseArtifact;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFinshedSvaeGameDelegate);
 
 UCLASS()
@@ -38,6 +40,9 @@ public:
 
 	FORCEINLINE int32 GetAttackLevel() const { return AttackLevel; }
 
+	FORCEINLINE TMap<int32, FArtifactData> GetSavedArtifactInventory() const { return SavedArtifactInventory; }
+	FORCEINLINE FArtifactData GetEquipedArtifactData() const { return EquipedArtifactData; }
+
 	UFUNCTION()
 	void OnSaveGameCompleted(const FString& SlotName, int32 SlotNum, bool bSuccess);
 
@@ -61,4 +66,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveData")
 	TMap<EBookType, FBookData> BookDatas;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	FArtifactData EquipedArtifactData;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	TMap<int32, FArtifactData>SavedArtifactInventory;
 };
