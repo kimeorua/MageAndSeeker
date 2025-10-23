@@ -8,6 +8,8 @@
 #include "Type/MageAndSeekerStruct.h"
 #include "EquipmentSubsystem.generated.h"
 
+class UMagicModule;
+
 #define GETTER(Type, Name) \
 public: \
     FORCEINLINE Type Get##Name() const { return Name; }
@@ -40,4 +42,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Artifacte", meta = (AllowPrivateAccess = "true"))
 	TMap<int32, TSubclassOf<UBaseArtifact>>CreatableArtifacts;
+
+	UPROPERTY(EditAnywhere, Category = "Module", meta = (AllowPrivateAccess = "true"))
+	UDataTable* ModuleDataTable;
+
+	UPROPERTY()
+	TMap<FName, UMagicModule*> AllModules;
+
+	void CreateAllModule();
 };

@@ -40,3 +40,12 @@ enum class EOrbSize : uint8
 	Small UMETA(DisplayName = "Small"), 
 	Big UMETA(DisplayName = "Big"),
 };
+
+UENUM(BlueprintType)
+enum class EApplyPhase : uint8
+{
+	OnHit UMETA(DisplayName = "On Hit"),
+	OnCast UMETA(DisplayName = "On Cast"),
+	OnMake UMETA(DisplayName = "On Make"),
+	OnArtifactActivate UMETA(DisplayName = "On Artifact Activate")
+};

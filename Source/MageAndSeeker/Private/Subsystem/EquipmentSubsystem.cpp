@@ -3,6 +3,7 @@
 
 #include "Subsystem/EquipmentSubsystem.h"
 #include "Type/MageAndSeekerStruct.h"
+#include "Props/Module/MagicModule.h"
 
 #include "DebugHelper.h"
 
@@ -12,6 +13,8 @@ void UEquipmentSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	Super::Initialize(Collection);
 
 	DebugHelper::Print("UEquipmentSubsystem Init");
+
+	CreateAllModule();
 }
 
 void UEquipmentSubsystem::Deinitialize()
@@ -92,4 +95,27 @@ UBaseArtifact* UEquipmentSubsystem::ChangeArtifact(int32 ChangeArtifactID, UBase
 		return ArtifactInventory[ChangeArtifactID];
 	}
 	return nullptr;
+}
+
+void UEquipmentSubsystem::CreateAllModule()
+{
+	if (!ModuleDataTable) { return;}
+
+	AllModules.Empty();
+
+	static const FString ContextString(TEXT("CreateAllModule"));
+	TArray<FMagicModuleData*> AllRows;
+	ModuleDataTable->GetAllRows(ContextString, AllRows);
+
+	for (FMagicModuleData* Row : AllRows)
+	{
+		if (!Row->MagicModuleClass) { continue; }
+
+		UMagicModule* NewModule = NewObject<UMagicModule>(this, Row->MagicModuleClass);
+		NewModule->Initialize(Row->ModuleID, Row->ApplyPhase, Row->ModuleName);
+
+		AllModules.Add(Row->ModuleID, NewModule);
+	}
+
+	DebugHelper::Print("Module Count : ", AllModules.Num());
 }
