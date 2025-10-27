@@ -24,6 +24,11 @@ class MAGEANDSEEKER_API UMagicModule : public UObject
 {
 	GENERATED_BODY()
 	
+public:
+	GETTER_SETTER(FName, ModuleID);
+	GETTER_SETTER(int32, UpgradeLevel);
+	GETTER_SETTER(EApplyPhase, ApplyPhase);
+
 protected:
 	UMagicModule();
 
@@ -32,14 +37,11 @@ private:
 	FName ModuleID;
 
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
-	FName ModuleName;
-
-	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
 	int32 UpgradeLevel;
 
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
 	EApplyPhase ApplyPhase;
 
 public:
-	virtual void Initialize(FName InID, EApplyPhase InPhase, FName InName, int32 InLevel = 1);
+	virtual void Initialize(FName InID, EApplyPhase InPhase, int32 InLevel = 1);
 };

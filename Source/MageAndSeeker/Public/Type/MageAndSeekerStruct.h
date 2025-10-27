@@ -80,7 +80,7 @@ struct FArtifactData
 };
 
 USTRUCT(BlueprintType)
-struct FMagicModuleData : public FTableRowBase
+struct FMagicModuleDataTableRow : public FTableRowBase
 {
     GENERATED_BODY();
 
@@ -98,4 +98,19 @@ struct FMagicModuleData : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     TSubclassOf<UMagicModule> MagicModuleClass;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    FString LimitModulesID;
+};
+
+USTRUCT(BlueprintType)
+struct FEquippedMagicModule
+{
+    GENERATED_BODY();
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FName ModuleID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 ModuleLevel = 1;
 };

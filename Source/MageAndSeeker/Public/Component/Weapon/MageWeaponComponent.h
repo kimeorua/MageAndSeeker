@@ -12,6 +12,7 @@ class ABaseWeapon;
 class ASkeletalWeapon;
 class AStaticWeapon;
 class UBaseArtifact;
+class UMagicModule;
 
 UCLASS()
 class MAGEANDSEEKER_API UMageWeaponComponent : public UPawnWeaponComponent

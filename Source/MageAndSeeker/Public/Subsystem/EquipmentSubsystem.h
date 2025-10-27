@@ -10,9 +10,21 @@
 
 class UMagicModule;
 
-#define GETTER(Type, Name) \
-public: \
-    FORCEINLINE Type Get##Name() const { return Name; }
+USTRUCT(BlueprintType)
+struct FMagicModuleUIData
+{
+	GENERATED_BODY();
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FName ModuleID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString BanModulesID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 LV;
+};
 
 UCLASS(Abstract, Blueprintable)
 class MAGEANDSEEKER_API UEquipmentSubsystem : public UGameInstanceSubsystem

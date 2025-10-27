@@ -18,7 +18,9 @@ public class MageAndSeeker : ModuleRules
 			"GameplayTags",
             "GameplayTasks",
             "AnimGraphRuntime",
-            "Niagara"
+            "Niagara",
+			"UMG",
+            "SlateCore"
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

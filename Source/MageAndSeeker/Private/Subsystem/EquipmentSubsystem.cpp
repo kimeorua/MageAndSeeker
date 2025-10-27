@@ -104,18 +104,16 @@ void UEquipmentSubsystem::CreateAllModule()
 	AllModules.Empty();
 
 	static const FString ContextString(TEXT("CreateAllModule"));
-	TArray<FMagicModuleData*> AllRows;
+	TArray<FMagicModuleDataTableRow*> AllRows;
 	ModuleDataTable->GetAllRows(ContextString, AllRows);
 
-	for (FMagicModuleData* Row : AllRows)
+	for (FMagicModuleDataTableRow* Row : AllRows)
 	{
 		if (!Row->MagicModuleClass) { continue; }
 
 		UMagicModule* NewModule = NewObject<UMagicModule>(this, Row->MagicModuleClass);
-		NewModule->Initialize(Row->ModuleID, Row->ApplyPhase, Row->ModuleName);
+		NewModule->Initialize(Row->ModuleID, Row->ApplyPhase);
 
 		AllModules.Add(Row->ModuleID, NewModule);
 	}
-
-	DebugHelper::Print("Module Count : ", AllModules.Num());
 }
