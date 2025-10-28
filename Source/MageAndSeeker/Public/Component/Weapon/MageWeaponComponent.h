@@ -20,6 +20,9 @@ class MAGEANDSEEKER_API UMageWeaponComponent : public UPawnWeaponComponent
 	GENERATED_BODY()
 
 private:
+
+#pragma region Value
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mage Weapon", meta = (AllowPrivateAccess = "true"))
 	TMap<EWeaponType, ABaseWeapon*>EquipedWeapons;
 
@@ -35,38 +38,68 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TMap<EBookType, FMagicModules>Modules;
 
+#pragma endregion
+
 protected:
+
+#pragma region Basic
+
 	virtual void BeginPlay() override;
 
+	void SettingAllSaveData();
+	void SettingBookSaveData();
+	void SettingEquipmentSaveData();
+	void BookSettingInit();
+
+#pragma endregion
+
 public:
+
+#pragma region 스태프 등록 Mesh 반환
 	virtual void RegisterWeapon(TArray<ABaseWeapon*> WeaponsToRegister) override;
-	
+
 	UFUNCTION(BlueprintPure)
 	AStaticWeapon* GetStaff() const;
 
 	UFUNCTION(BlueprintPure)
 	ASkeletalWeapon* GetBook() const;
 
-	UFUNCTION(BlueprintCallable)
-	void SettingCurrentBook(EBookType BookType);
+#pragma endregion
 
-	UFUNCTION(BlueprintPure)
-	FVector CalculatePosition();
-
-	FBookData GetBookData(EBookType BookType);
-
-	UFUNCTION(BlueprintCallable)
-	void RegisterArtifact(UBaseArtifact* NewArtifact);
+#pragma region 모듈 관련 함수
 
 	void RegisterModule(EBookType Type, UMagicModule* Module);
 
 	void ResetModules(EBookType Type);
 
 	TArray<FEquippedMagicModule> GetEquippedModules(EBookType Type) const;
+	
+#pragma endregion
+
+#pragma region Book
+
+	UFUNCTION(BlueprintCallable)
+	void SettingCurrentBook(EBookType BookType);
+
+	FBookData GetBookData(EBookType BookType);
+
+#pragma endregion
+
+#pragma region 아티팩트 관련 함수
+
+	UFUNCTION(BlueprintCallable)
+	void RegisterArtifact(UBaseArtifact* NewArtifact);
 
 	UFUNCTION(BlueprintCallable)
 	void ActivateArtifact();
 
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE UBaseArtifact* GetArtifact() { return Artifact; }
+
+#pragma endregion
+
+#pragma region 조준선 관련 함수
+	UFUNCTION(BlueprintPure)
+	FVector CalculatePosition();
+#pragma endregion
 };

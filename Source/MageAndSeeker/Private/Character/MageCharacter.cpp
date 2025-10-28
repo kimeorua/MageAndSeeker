@@ -21,45 +21,44 @@
 
 #include "DebugHelper.h"
 
+#pragma region Basic
 AMageCharacter::AMageCharacter()
 {
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationRoll = false;
-	bUseControllerRotationYaw = false;
-
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(GetRootComponent());
-	CameraBoom->TargetArmLength = 200.0f;
-	CameraBoom->SocketOffset = FVector(0.0f, 20.0f, 80.0f);
-	CameraBoom->bUsePawnControlRotation = true;
-
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false;
-
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
-	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
-	GetCharacterMovement()->BrakingDecelerationWalking = 2000.0f;
-
-	MageAttributeSet = CreateDefaultSubobject<UMageAttributeSet>(TEXT("MageAttributeSet"));
-	ArtifactAttributeSet = CreateDefaultSubobject<UArtifactAttributeSet>(TEXT("ArtifactAttributeSet"));
-
-	MageUIComponent = CreateDefaultSubobject<UMageUIComponent>(TEXT("Mage UI Component"));
-	MageWeaponComponent = CreateDefaultSubobject<UMageWeaponComponent>(TEXT("Mage Weapon Component"));
+	MageInit();
 }
 
-void AMageCharacter::EndInteractive()
+void AMageCharacter::BeginPlay()
 {
-	if (IsValid(ActivatedProp))
-	{
-		GetMageUIComponent()->OnChangeShowUI.Broadcast(true);
-		ActivatedProp->DeactivateProp();
-	}
+	Super::BeginPlay();
 }
 
+void AMageCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+}
+
+void AMageCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	checkf(DataAsset_InputConfig, TEXT("Forgot to Assign a DataAsset_InputConfig"));
+	ULocalPlayer* LocalPlayer = GetController<APlayerController>()->GetLocalPlayer();
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+
+	check(Subsystem);
+
+	Subsystem->AddMappingContext(DataAsset_InputConfig->InputMappingContext, 0);
+	UMageAndSeekerInputComponent* MASInputComponent = CastChecked<UMageAndSeekerInputComponent>(PlayerInputComponent);
+
+	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
+	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Interection, ETriggerEvent::Started, this, &ThisClass::Input_Interactive);
+
+	MASInputComponent->BindAbilityInputAction(DataAsset_InputConfig, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputRelased);
+}
+#pragma endregion
+
+#pragma region Input
 void AMageCharacter::Input_Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();
@@ -134,6 +133,15 @@ void AMageCharacter::Input_Interactive()
 	}
 }
 
+void AMageCharacter::EndInteractive()
+{
+	if (IsValid(ActivatedProp))
+	{
+		GetMageUIComponent()->OnChangeShowUI.Broadcast(true);
+		ActivatedProp->DeactivateProp();
+	}
+}
+
 void AMageCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
 {
 	MASAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
@@ -143,35 +151,9 @@ void AMageCharacter::Input_AbilityInputRelased(FGameplayTag InInputTag)
 {
 	MASAbilitySystemComponent->OnAbilityInputRelased(InInputTag);
 }
+#pragma endregion
 
-void AMageCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-void AMageCharacter::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-}
-
-void AMageCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	checkf(DataAsset_InputConfig, TEXT("Forgot to Assign a DataAsset_InputConfig"));
-	ULocalPlayer* LocalPlayer = GetController<APlayerController>()->GetLocalPlayer();
-	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
-
-	check(Subsystem);
-
-	Subsystem->AddMappingContext(DataAsset_InputConfig->InputMappingContext, 0);
-	UMageAndSeekerInputComponent* MASInputComponent = CastChecked<UMageAndSeekerInputComponent>(PlayerInputComponent);
-
-	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
-	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
-	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Interection, ETriggerEvent::Started, this, &ThisClass::Input_Interactive);
-
-	MASInputComponent->BindAbilityInputAction(DataAsset_InputConfig, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputRelased);
-}
-
+#pragma region DIP
 UPawnUIComponent* AMageCharacter::GetPawnUIComponent() const
 {
 	return MageUIComponent;
@@ -203,3 +185,34 @@ void AMageCharacter::CreateUIAndAdd()
 		if (HUD) { HUD->AddToViewport(); }
 	}
 }
+#pragma endregion
+
+#pragma region privateFunc
+void AMageCharacter::MageInit()
+{
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(GetRootComponent());
+	CameraBoom->TargetArmLength = 200.0f;
+	CameraBoom->SocketOffset = FVector(0.0f, 20.0f, 80.0f);
+	CameraBoom->bUsePawnControlRotation = true;
+
+	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	FollowCamera->bUsePawnControlRotation = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+	GetCharacterMovement()->BrakingDecelerationWalking = 2000.0f;
+
+	MageAttributeSet = CreateDefaultSubobject<UMageAttributeSet>(TEXT("MageAttributeSet"));
+	ArtifactAttributeSet = CreateDefaultSubobject<UArtifactAttributeSet>(TEXT("ArtifactAttributeSet"));
+
+	MageUIComponent = CreateDefaultSubobject<UMageUIComponent>(TEXT("Mage UI Component"));
+	MageWeaponComponent = CreateDefaultSubobject<UMageWeaponComponent>(TEXT("Mage Weapon Component"));
+}
+#pragma endregion

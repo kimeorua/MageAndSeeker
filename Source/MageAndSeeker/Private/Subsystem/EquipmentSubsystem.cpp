@@ -10,7 +10,7 @@
 
 #include "DebugHelper.h"
 
-
+#pragma region Basic
 void UEquipmentSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
@@ -21,7 +21,9 @@ void UEquipmentSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 void UEquipmentSubsystem::Deinitialize()
 {
 }
+#pragma endregion
 
+#pragma region Artifact
 UBaseArtifact* UEquipmentSubsystem::CreateArtifact()
 {
 	UBaseArtifact* NewArtifact = nullptr;
@@ -97,7 +99,9 @@ UBaseArtifact* UEquipmentSubsystem::ChangeArtifact(int32 ChangeArtifactID, UBase
 	}
 	return nullptr;
 }
+#pragma endregion
 
+#pragma region Module
 void UEquipmentSubsystem::CreateModule(EBookType Type, FEquippedMagicModule& ModuleData, APawn* Pawn)
 {
 	FName ID = ModuleData.ModuleID;
@@ -126,3 +130,4 @@ void UEquipmentSubsystem::CreateModule(EBookType Type, FEquippedMagicModule& Mod
 		}
 	}
 }
+#pragma endregion

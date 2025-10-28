@@ -20,6 +20,7 @@ class MAGEANDSEEKER_API UMageUIComponent : public UPawnUIComponent
 	GENERATED_BODY()
 	
 public:
+#pragma region Delegate
 	UPROPERTY(BlueprintAssignable)
 	FOnChangeBook OnChangeBook;
 
@@ -37,10 +38,13 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnChangeCurrentAP OnChangeCurrentAP;
+#pragma endregion
 
+#pragma region Delegate_Call_Func
 	UFUNCTION(BlueprintCallable)
 	void ChangeBookUI(EBookType BookType);
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeCombatMode(bool bIsCombat);
+#pragma endregion
 };

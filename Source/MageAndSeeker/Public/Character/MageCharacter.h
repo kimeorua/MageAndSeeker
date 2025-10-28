@@ -23,6 +23,8 @@ class MAGEANDSEEKER_API AMageCharacter : public ABaseCharacter
 	GENERATED_BODY()
 	
 public:
+
+#pragma region publcFunc
 	AMageCharacter();
 
 	FORCEINLINE UMageAttributeSet* GetMageAttributeSet() const { return MageAttributeSet; }
@@ -30,52 +32,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void EndInteractive();
-
-private:
-#pragma region Components
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FollowCamera;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI Component", meta = (AllowPrivateAccess = "true"))
-	UMageUIComponent* MageUIComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Component", meta = (AllowPrivateAccess = "true"))
-	UMageWeaponComponent* MageWeaponComponent;
-
-#pragma endregion
-
-#pragma region Input
-
-	void Input_Move(const FInputActionValue& InputActionValue);
-	void Input_Look(const FInputActionValue& InputActionValue);
-	void Input_Interactive();
-
-	void Input_AbilityInputPressed(FGameplayTag InInputTag);
-	void Input_AbilityInputRelased(FGameplayTag InInputTag);
-
-#pragma endregion
-
-#pragma region Values
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data Asset", meta = (AllowPrivateAccess = "true"))
-	UDataAsset_InputConfig* DataAsset_InputConfig;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Trace | Interaction", meta = (AllowPrivateAccess = "true"))
-	bool bIsTraceShow = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UUserWidget> HUDWidgetClass;
-
-	UPROPERTY()
-	AActivatedProps* ActivatedProp;
-
 #pragma endregion
 
 protected:
+
+#pragma region protected
 	virtual void BeginPlay() override;
 
 	//~ Begin APawn Interface.
@@ -93,8 +54,11 @@ protected:
 	virtual UPawnWeaponComponent* GetPawnWeaponComponent() const override;
 	virtual UMageWeaponComponent* GetMageWeaponComponent() const override;
 	// ~ End IPawnUIInterface
+#pragma endregion
 
-	virtual void CreateUIAndAdd() override; 
+#pragma region UI_Func
+	virtual void CreateUIAndAdd() override;
+#pragma endregion
 
 #pragma region AbilitySystem
 
@@ -104,5 +68,53 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UArtifactAttributeSet* ArtifactAttributeSet;
 
+#pragma endregion
+
+private:
+
+#pragma region Components
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* CameraBoom;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI Component", meta = (AllowPrivateAccess = "true"))
+	UMageUIComponent* MageUIComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Component", meta = (AllowPrivateAccess = "true"))
+	UMageWeaponComponent* MageWeaponComponent;
+
+#pragma endregion
+
+#pragma region EditerValues
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data Asset", meta = (AllowPrivateAccess = "true"))
+	UDataAsset_InputConfig* DataAsset_InputConfig;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Trace | Interaction", meta = (AllowPrivateAccess = "true"))
+	bool bIsTraceShow = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> HUDWidgetClass;
+
+	UPROPERTY()
+	AActivatedProps* ActivatedProp;
+
+#pragma endregion
+
+#pragma region InputFunc
+
+	void Input_Move(const FInputActionValue& InputActionValue);
+	void Input_Look(const FInputActionValue& InputActionValue);
+	void Input_Interactive();
+
+	void Input_AbilityInputPressed(FGameplayTag InInputTag);
+	void Input_AbilityInputRelased(FGameplayTag InInputTag);
+#pragma endregion
+
+#pragma region privateFunc
+	void MageInit();
 #pragma endregion
 };

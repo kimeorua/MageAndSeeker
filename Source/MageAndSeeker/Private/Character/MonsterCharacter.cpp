@@ -7,6 +7,8 @@
 #include "Component/Weapon/MonsterWeaponComponent.h"
 #include "Components/CapsuleComponent.h"
 
+#pragma region Basic
+
 AMonsterCharacter::AMonsterCharacter()
 {
 	MonsterAttributeSet = CreateDefaultSubobject<UMonsterAttributeSet>(TEXT("MonsterAttributeSet"));
@@ -25,6 +27,10 @@ void AMonsterCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 }
+
+#pragma endregion
+
+#pragma region DIP
 
 UPawnUIComponent* AMonsterCharacter::GetPawnUIComponent() const
 {
@@ -45,3 +51,5 @@ UMonsterWeaponComponent* AMonsterCharacter::GetMonsterWeaponComponent() const
 {
 	return MonsterWeaponComponent;
 }
+
+#pragma endregion

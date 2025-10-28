@@ -16,9 +16,12 @@ class MAGEANDSEEKER_API UEquipmentSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+#pragma region Basic
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
+#pragma endregion
 
+#pragma region ArtifactFunc
 	UFUNCTION(BlueprintCallable)
 	UBaseArtifact* CreateArtifact();
 
@@ -32,8 +35,11 @@ public:
 
 	using FArtifactInventoryMap = TMap<int32, UBaseArtifact*>;
 	GETTER(FArtifactInventoryMap, ArtifactInventory);
+#pragma endregion
 
+#pragma region Module
 	void CreateModule(EBookType Type, FEquippedMagicModule& ModuleData, APawn* Pawn);
+#pragma endregion
 
 private:
 	UPROPERTY()

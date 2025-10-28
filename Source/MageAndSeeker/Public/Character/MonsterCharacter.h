@@ -16,9 +16,14 @@ class MAGEANDSEEKER_API AMonsterCharacter : public ABaseCharacter
 	GENERATED_BODY()
 	
 public:
+
+#pragma region publicFunc
 	AMonsterCharacter();
+#pragma endregion
 
 protected:
+
+#pragma region protectedFunc
 	virtual void BeginPlay() override;
 
 	//~ Begin APawn Interface.
@@ -34,6 +39,7 @@ protected:
 	virtual UPawnWeaponComponent* GetPawnWeaponComponent() const override;
 	virtual UMonsterWeaponComponent* GetMonsterWeaponComponent() const override;
 	// ~ End IPawnUIInterface
+#pragma endregion
 
 #pragma region AbilitySystem
 
@@ -51,5 +57,4 @@ protected:
 	UMonsterWeaponComponent* MonsterWeaponComponent;
 
 #pragma endregion
-
 };
