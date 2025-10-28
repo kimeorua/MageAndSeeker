@@ -114,3 +114,23 @@ struct FEquippedMagicModule
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int32 ModuleLevel = 1;
 };
+
+USTRUCT(BlueprintType)
+struct FMagicModuleMap
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TMap<FName, UMagicModule*> Modules;
+};
+
+USTRUCT(BlueprintType)
+struct FMagicModules
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TArray<UMagicModule*> Modules;
+};

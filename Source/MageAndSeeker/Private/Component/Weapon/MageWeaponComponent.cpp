@@ -7,6 +7,7 @@
 #include "Subsystem/SaveLoadSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystem/EquipmentSubsystem.h"
+#include "Props/Module/MagicModule.h"
 
 #include"DebugHelper.h"
 
@@ -142,6 +143,42 @@ void UMageWeaponComponent::RegisterArtifact(UBaseArtifact* NewArtifact)
 {
 	if (!NewArtifact) { return; }
 	Artifact = NewArtifact;
+}
+
+void UMageWeaponComponent::RegisterModule(EBookType Type, UMagicModule* Module)
+{
+	if (!Modules.Contains(Type))
+	{
+		Modules.Add(Type, FMagicModules());
+	}
+	Modules[Type].Modules.Add(Module);
+}
+
+void UMageWeaponComponent::ResetModules(EBookType Type)
+{
+	if (Modules.Contains(Type) && Modules[Type].Modules.Num() > 0)
+	{
+		Modules[Type].Modules.Empty();
+	}
+	else { return; }
+}
+
+TArray<FEquippedMagicModule> UMageWeaponComponent::GetEquippedModules(EBookType Type) const
+{
+	TArray<FEquippedMagicModule> ReturnModules;
+
+	if (Modules.Contains(Type) && Modules[Type].Modules.Num() > 0)
+	{
+		for (UMagicModule* Module : Modules[Type].Modules)
+		{
+			FEquippedMagicModule Data;
+			Data.ModuleID = Module->GetModuleID();
+			Data.ModuleLevel = Module->GetUpgradeLevel();
+
+			ReturnModules.Add(Data);
+		}
+	}
+	return ReturnModules;
 }
 
 void UMageWeaponComponent::ActivateArtifact()

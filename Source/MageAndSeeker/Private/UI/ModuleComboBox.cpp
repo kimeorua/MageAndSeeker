@@ -4,34 +4,25 @@
 #include "UI/ModuleComboBox.h"
 #include "Types/SlateEnums.h"
 #include "Components/ComboBoxString.h"
+#include "Components/Button.h"
+#include "Subsystem/EquipmentSubsystem.h"
+#include "Character/MageCharacter.h"
+#include "Component/Weapon/MageWeaponComponent.h"
+#include "Interface/WeaponInterface.h"
 
-void UModuleComboBox::RebuildBlockedModules()
-{
-    if (!MagicModuleDataTable) return;
-
-    BlockedModules.Empty();
-
-    static const FString Context(TEXT("MagicModule"));
-
-    for (const FEquippedMagicModule& Equipped : EquippedModules)
-    {
-        if (Equipped.ModuleID == NAME_None) continue;
-
-        if (const FMagicModuleDataTableRow* Row = MagicModuleDataTable->FindRow<FMagicModuleDataTableRow>(Equipped.ModuleID, Context))
-        {
-            TArray<FString> ParsedIDs;
-            Row->LimitModulesID.ParseIntoArray(ParsedIDs, TEXT(","), true);
-            for (const FString& ID : ParsedIDs)
-            {
-                BlockedModules.Add(FName(*ID));
-            }
-        }
-    }
-}
+#include "DebugHelper.h"
 
 void UModuleComboBox::NativeConstruct()
 {
     Super::NativeConstruct();
+
+    if (const AMageCharacter* Mage = Cast<AMageCharacter>(GetOwningPlayerPawn()))
+    {
+        if (const UMageWeaponComponent* MageWeaponComponent = Cast<IWeaponInterface>(Mage)->GetMageWeaponComponent())
+        {
+            EquippedModules = MageWeaponComponent->GetEquippedModules(Type);
+        }
+    }
 
     RebuildBlockedModules();
     UpdateAllComboBoxes();
@@ -40,6 +31,7 @@ void UModuleComboBox::NativeConstruct()
     ComboBox_Slot2->OnSelectionChanged.AddDynamic(this, &ThisClass::OnModuleSelected_Slot2);
     ComboBox_Slot3->OnSelectionChanged.AddDynamic(this, &ThisClass::OnModuleSelected_Slot3);
     ComboBox_Slot4->OnSelectionChanged.AddDynamic(this, &ThisClass::OnModuleSelected_Slot4);
+    ApplyButton->OnClicked.AddDynamic(this, &ThisClass::Call_CreateModules);
 }
 
 void UModuleComboBox::OnModuleSelected_Slot1(FString SelectedOption, ESelectInfo::Type SelectionType)
@@ -71,6 +63,24 @@ void UModuleComboBox::OnModuleSelected_Slot4(FString SelectedOption, ESelectInfo
     if (SelectionType != ESelectInfo::Direct)
     {
         OnModuleSelected(ComboBox_Slot4, 3, SelectedOption);
+    }
+}
+
+void UModuleComboBox::Call_CreateModules()
+{
+    if (AMageCharacter* Mage = Cast<AMageCharacter>(GetOwningPlayerPawn()))
+    {
+        UMageWeaponComponent* MageWeaponComponent = Cast<IWeaponInterface>(Mage)->GetMageWeaponComponent();
+
+        MageWeaponComponent->ResetModules(Type);
+    }
+
+    if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+    {
+        for (FEquippedMagicModule Module : EquippedModules)
+        {
+            EquipmentSubsystem->CreateModule(Type, Module, GetOwningPlayerPawn());
+        }
     }
 }
 
@@ -140,9 +150,33 @@ void UModuleComboBox::UpdateComboBox(UComboBoxString* ComboBox, int32 SlotIndex)
     ComboBox->SetSelectedOption(CurrentlyEquippedDisplayName);
 }
 
-void UModuleComboBox::OnModuleSelected(UComboBoxString* ComboBox, int32 SlotIndex, FString SelectedOption)
+void UModuleComboBox::RebuildBlockedModules()
 {
     if (!MagicModuleDataTable) return;
+
+    BlockedModules.Empty();
+
+    static const FString Context(TEXT("MagicModule"));
+
+    for (const FEquippedMagicModule& Equipped : EquippedModules)
+    {
+        if (Equipped.ModuleID == NAME_None) continue;
+
+        if (const FMagicModuleDataTableRow* Row = MagicModuleDataTable->FindRow<FMagicModuleDataTableRow>(Equipped.ModuleID, Context))
+        {
+            TArray<FString> ParsedIDs;
+            Row->LimitModulesID.ParseIntoArray(ParsedIDs, TEXT(","), true);
+            for (const FString& ID : ParsedIDs)
+            {
+                BlockedModules.Add(FName(*ID));
+            }
+        }
+    }
+}
+
+void UModuleComboBox::OnModuleSelected(UComboBoxString* ComboBox, int32 SlotIndex, FString SelectedOption)
+{
+    if (!MagicModuleDataTable) { return; }
 
     static const FString Context(TEXT("MagicModule"));
     TArray<FMagicModuleDataTableRow*> AllRows;

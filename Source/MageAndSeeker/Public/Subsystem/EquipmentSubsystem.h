@@ -10,22 +10,6 @@
 
 class UMagicModule;
 
-USTRUCT(BlueprintType)
-struct FMagicModuleUIData
-{
-	GENERATED_BODY();
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FName ModuleID;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FString BanModulesID;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 LV;
-};
-
 UCLASS(Abstract, Blueprintable)
 class MAGEANDSEEKER_API UEquipmentSubsystem : public UGameInstanceSubsystem
 {
@@ -49,17 +33,18 @@ public:
 	using FArtifactInventoryMap = TMap<int32, UBaseArtifact*>;
 	GETTER(FArtifactInventoryMap, ArtifactInventory);
 
+	void CreateModule(EBookType Type, FEquippedMagicModule& ModuleData, APawn* Pawn);
+
 private:
+	UPROPERTY()
 	TMap<int32, UBaseArtifact*>ArtifactInventory;
+
+	UPROPERTY()
+	TMap<EBookType, FMagicModuleMap>ModuleInventory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Artifacte", meta = (AllowPrivateAccess = "true"))
 	TMap<int32, TSubclassOf<UBaseArtifact>>CreatableArtifacts;
 
 	UPROPERTY(EditAnywhere, Category = "Module", meta = (AllowPrivateAccess = "true"))
 	UDataTable* ModuleDataTable;
-
-	UPROPERTY()
-	TMap<FName, UMagicModule*> AllModules;
-
-	void CreateAllModule();
 };

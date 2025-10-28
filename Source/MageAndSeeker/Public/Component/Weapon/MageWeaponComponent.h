@@ -32,6 +32,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Artifacte", meta = (AllowPrivateAccess = "true"))
 	UBaseArtifact* Artifact = nullptr;
 
+	UPROPERTY(VisibleAnywhere)
+	TMap<EBookType, FMagicModules>Modules;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -54,6 +57,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RegisterArtifact(UBaseArtifact* NewArtifact);
+
+	void RegisterModule(EBookType Type, UMagicModule* Module);
+
+	void ResetModules(EBookType Type);
+
+	TArray<FEquippedMagicModule> GetEquippedModules(EBookType Type) const;
 
 	UFUNCTION(BlueprintCallable)
 	void ActivateArtifact();

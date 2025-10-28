@@ -8,6 +8,7 @@
 #include "ModuleComboBox.generated.h"
 
 class UComboBoxString;
+class UButton;
 
 UCLASS()
 class MAGEANDSEEKER_API UModuleComboBox : public UUserWidget
@@ -32,6 +33,12 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     UDataTable* MagicModuleDataTable;
 
+    UPROPERTY(meta = (BindWidget))
+    UButton* ApplyButton;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    EBookType Type = EBookType::Fire;
+
     UFUNCTION()
     void OnModuleSelected_Slot1(FString SelectedOption, ESelectInfo::Type SelectionType);
     UFUNCTION()
@@ -40,6 +47,9 @@ public:
     void OnModuleSelected_Slot3(FString SelectedOption, ESelectInfo::Type SelectionType);
     UFUNCTION()
     void OnModuleSelected_Slot4(FString SelectedOption, ESelectInfo::Type SelectionType);
+
+    UFUNCTION()
+    void Call_CreateModules();
 
     UPROPERTY()
     TArray<FEquippedMagicModule> EquippedModules;

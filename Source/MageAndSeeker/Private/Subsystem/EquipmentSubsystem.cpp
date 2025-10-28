@@ -4,6 +4,9 @@
 #include "Subsystem/EquipmentSubsystem.h"
 #include "Type/MageAndSeekerStruct.h"
 #include "Props/Module/MagicModule.h"
+#include "Character/MageCharacter.h"
+#include "Component/Weapon/MageWeaponComponent.h"
+#include "Interface/WeaponInterface.h"
 
 #include "DebugHelper.h"
 
@@ -13,8 +16,6 @@ void UEquipmentSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	Super::Initialize(Collection);
 
 	DebugHelper::Print("UEquipmentSubsystem Init");
-
-	CreateAllModule();
 }
 
 void UEquipmentSubsystem::Deinitialize()
@@ -97,23 +98,31 @@ UBaseArtifact* UEquipmentSubsystem::ChangeArtifact(int32 ChangeArtifactID, UBase
 	return nullptr;
 }
 
-void UEquipmentSubsystem::CreateAllModule()
+void UEquipmentSubsystem::CreateModule(EBookType Type, FEquippedMagicModule& ModuleData, APawn* Pawn)
 {
-	if (!ModuleDataTable) { return;}
+	FName ID = ModuleData.ModuleID;
+	int32 LV = ModuleData.ModuleLevel;
 
-	AllModules.Empty();
-
-	static const FString ContextString(TEXT("CreateAllModule"));
-	TArray<FMagicModuleDataTableRow*> AllRows;
-	ModuleDataTable->GetAllRows(ContextString, AllRows);
-
-	for (FMagicModuleDataTableRow* Row : AllRows)
+	static const FString ContextString(TEXT("Item Data Context"));
+	FMagicModuleDataTableRow* Row = ModuleDataTable->FindRow<FMagicModuleDataTableRow>(ID, ContextString);
+	if (Row)
 	{
-		if (!Row->MagicModuleClass) { continue; }
-
 		UMagicModule* NewModule = NewObject<UMagicModule>(this, Row->MagicModuleClass);
-		NewModule->Initialize(Row->ModuleID, Row->ApplyPhase);
+		NewModule->Initialize(Row->ModuleID, Row->ApplyPhase, LV);
 
-		AllModules.Add(Row->ModuleID, NewModule);
+		if (!ModuleInventory.Contains(Type))
+		{
+			ModuleInventory.Add(Type, FMagicModuleMap());
+		}
+
+		ModuleInventory[Type].Modules.Add(NewModule->GetModuleID(), NewModule);
+
+		if (IsValid(Pawn))
+		{
+			AMageCharacter* Mage = Cast<AMageCharacter>(Pawn);
+			UMageWeaponComponent* MageWeaponComponent = Cast<IWeaponInterface>(Mage)->GetMageWeaponComponent();
+
+			MageWeaponComponent->RegisterModule(Type, NewModule);
+		}
 	}
 }

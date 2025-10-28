@@ -3,8 +3,6 @@
 
 #include "Props/Module/MagicModule.h"
 
-#include "DebugHelper.h"
-
 UMagicModule::UMagicModule()
 {
 	ModuleID = "Magic Module";
