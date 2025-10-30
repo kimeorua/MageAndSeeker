@@ -116,13 +116,12 @@ struct FEquippedMagicModule
 };
 
 USTRUCT(BlueprintType)
-struct FMagicModuleMap
+struct FInventoryMagicModule
 {
-    GENERATED_BODY()
+    GENERATED_BODY();
 
-public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TMap<FName, UMagicModule*> Modules;
+    TMap<FName, FEquippedMagicModule>InventoryModule;
 };
 
 USTRUCT(BlueprintType)
@@ -133,4 +132,44 @@ struct FMagicModules
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TArray<UMagicModule*> Modules;
+};
+
+USTRUCT(BlueprintType)
+struct FModuleSaveData
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    EBookType Type;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    FName ModuleID = "";
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    int32 UpgradeLevel = 1;
+
+    FModuleSaveData()
+    {
+        ModuleID = "";
+        UpgradeLevel = 1;
+        Type = EBookType::Fire;
+    }
+
+    FModuleSaveData(const FModuleSaveData& Other)
+    {
+        ModuleID = Other.ModuleID;
+        UpgradeLevel = Other.UpgradeLevel;
+        Type = Other.Type;
+    }
+
+    FModuleSaveData& operator=(const FModuleSaveData& Other)
+    {
+        if (this != &Other) // 자기 자신 체크
+        {
+            ModuleID = Other.ModuleID;
+            UpgradeLevel = Other.UpgradeLevel;
+            Type = Other.Type;
+        }
+        return *this;
+    }
 };

@@ -32,4 +32,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveData")
 	TMap<int32, FArtifactData>SavedArtifactInventory;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	TArray<FModuleSaveData>SavedEquipedModule;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	TMap<EBookType, FInventoryMagicModule>SavedModuleInventory;
 };

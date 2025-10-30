@@ -51,6 +51,8 @@ public:
 	FORCEINLINE TMap<int32, FArtifactData> GetSavedArtifactInventory() const { return SavedArtifactInventory; }
 	FORCEINLINE FArtifactData GetEquipedArtifactData() const { return EquipedArtifactData; }
 
+	FORCEINLINE TArray<FModuleSaveData>GetSavedEquipedModule() const { return SavedEquipedModule; }
+
 	UFUNCTION(BlueprintPure)
 	bool GetSaveInfo(int32 Slot, FString& CycleInfo, FString& HPLV, FString& AttackLV);
 #pragma endregion
@@ -85,6 +87,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveData")
 	TMap<int32, FArtifactData>SavedArtifactInventory;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	TArray<FModuleSaveData>SavedEquipedModule;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveData")
+	TMap<EBookType, FInventoryMagicModule>SavedModuleInventory;
 #pragma endregion
 
 	UMageAndSeekerSaveGame* CreateNewSaveData(int32 Slot);
@@ -92,6 +100,6 @@ private:
 	void OverridePlayerStatus(UMageAndSeekerSaveGame* SaveGameInstance);
 	void OverrideBookData(UMageAndSeekerSaveGame* SaveGameInstance);
 	void OverrideArtifactData(UMageAndSeekerSaveGame* SaveGameInstance);
+	void OverrideModuleData(UMageAndSeekerSaveGame* SaveGameInstance);
 	void ExecuteAsyncSave(int32 Slot, UMageAndSeekerSaveGame* SaveGameInstance);
-
 };

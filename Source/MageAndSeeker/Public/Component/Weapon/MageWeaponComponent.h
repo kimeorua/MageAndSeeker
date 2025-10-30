@@ -72,6 +72,7 @@ public:
 
 	void ResetModules(EBookType Type);
 
+	UFUNCTION(BlueprintCallable)
 	TArray<FEquippedMagicModule> GetEquippedModules(EBookType Type) const;
 	
 #pragma endregion

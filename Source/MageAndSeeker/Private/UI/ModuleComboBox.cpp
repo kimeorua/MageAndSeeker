@@ -131,19 +131,34 @@ void UModuleComboBox::UpdateComboBox(UComboBoxString* ComboBox, int32 SlotIndex)
 
         if (ModuleID == CurrentModuleID) { continue; }
         bool bIsEquippedInOtherSlot = false;
+        int32 EquippedLevel = 1;
 
         for (int32 i = 0; i < EquippedModules.Num(); ++i)
         {
             if (i != SlotIndex && EquippedModules[i].ModuleID == ModuleID && EquippedModules[i].ModuleID != NAME_None)
             {
                 bIsEquippedInOtherSlot = true;
+
                 break;
+            }
+
+            if (EquippedModules[i].ModuleID == ModuleID)
+            {
+                EquippedLevel = EquippedModules[i].ModuleLevel;
+                break;
+            }
+        }
+        if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+        {
+            if (EquipmentSubsystem->GetModuleInInventory(Type).InventoryModule.Contains(ModuleID))
+            {
+                EquippedLevel = EquipmentSubsystem->GetModuleInInventory(Type).InventoryModule.Find(ModuleID)->ModuleLevel;
             }
         }
 
         if (bIsEquippedInOtherSlot || BlockedModules.Contains(ModuleID)) { continue;  }
 
-        FString DisplayText = FString::Printf(TEXT("%s (Lv.%d)"), *Row->ModuleName.ToString(), 1);
+        FString DisplayText = FString::Printf(TEXT("%s (Lv.%d)"), *Row->ModuleName.ToString(), EquippedLevel);
         ComboBox->AddOption(DisplayText);
     }
     ComboBox->RefreshOptions();
@@ -191,7 +206,17 @@ void UModuleComboBox::OnModuleSelected(UComboBoxString* ComboBox, int32 SlotInde
                 EquippedModules.SetNum(SlotIndex + 1);
             }
             EquippedModules[SlotIndex].ModuleID = Row->ModuleID;
-            EquippedModules[SlotIndex].ModuleLevel = 1;
+            if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+            {
+                if (EquipmentSubsystem->GetModuleInInventory(Type).InventoryModule.Contains(EquippedModules[SlotIndex].ModuleID))
+                {
+                    EquippedModules[SlotIndex].ModuleLevel = EquipmentSubsystem->GetModuleInInventory(Type).InventoryModule.Find(EquippedModules[SlotIndex].ModuleID)->ModuleLevel;
+                }
+                else
+                {
+                    EquippedModules[SlotIndex].ModuleLevel = 1;
+                }
+            }
 
             break;
         }

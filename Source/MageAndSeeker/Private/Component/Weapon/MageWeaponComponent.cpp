@@ -65,6 +65,15 @@ void UMageWeaponComponent::SettingEquipmentSaveData()
 					EquipmentSubsystem->LoadAndCreateArtifact(ArtifactData.Key, ArtifactData.Value);
 				}
 			}
+
+			for (FModuleSaveData Data : SaveLoadSubsystem->GetSavedEquipedModule())
+			{
+				FEquippedMagicModule Module;
+				Module.ModuleID = Data.ModuleID;
+				Module.ModuleLevel = Data.UpgradeLevel;
+
+				EquipmentSubsystem->CreateModule(Data.Type, Module, GetOwningCharacter_Base());
+			}
 		}
 	}
 }
@@ -178,6 +187,13 @@ void UMageWeaponComponent::ResetModules(EBookType Type)
 {
 	if (Modules.Contains(Type) && Modules[Type].Modules.Num() > 0)
 	{
+		if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+		{
+			for (FEquippedMagicModule Data : GetEquippedModules(Type))
+			{
+				EquipmentSubsystem->AddModuleToInventory(Type, Data);
+			}
+		}
 		Modules[Type].Modules.Empty();
 	}
 	else { return; }

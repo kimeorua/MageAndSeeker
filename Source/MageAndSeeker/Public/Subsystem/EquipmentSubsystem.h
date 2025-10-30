@@ -39,6 +39,8 @@ public:
 
 #pragma region Module
 	void CreateModule(EBookType Type, FEquippedMagicModule& ModuleData, APawn* Pawn);
+	void AddModuleToInventory(EBookType Type, FEquippedMagicModule ModuleData);
+	FInventoryMagicModule GetModuleInInventory(EBookType Type);
 #pragma endregion
 
 private:
@@ -46,7 +48,7 @@ private:
 	TMap<int32, UBaseArtifact*>ArtifactInventory;
 
 	UPROPERTY()
-	TMap<EBookType, FMagicModuleMap>ModuleInventory;
+	TMap<EBookType, FInventoryMagicModule>ModuleInventory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Artifacte", meta = (AllowPrivateAccess = "true"))
 	TMap<int32, TSubclassOf<UBaseArtifact>>CreatableArtifacts;

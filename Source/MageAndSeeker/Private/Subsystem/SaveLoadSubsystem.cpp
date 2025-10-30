@@ -44,14 +44,19 @@ UMageAndSeekerSaveGame* USaveLoadSubsystem::CreateNewSaveData(int32 Slot)
 		}
 		SaveGameInstance->EquipedArtifactData = FArtifactData();
 		SaveGameInstance->SavedArtifactInventory.Empty();
+
+		SaveGameInstance->SavedEquipedModule.Empty();
+		SaveGameInstance->SavedModuleInventory.Empty();
 	}
 	return SaveGameInstance;
 }
+
 void USaveLoadSubsystem::OverrideGameData(UMageAndSeekerSaveGame* SaveGameInstance)
 {
 	OverridePlayerStatus(SaveGameInstance);
 	OverrideBookData(SaveGameInstance);
 	OverrideArtifactData(SaveGameInstance);
+	OverrideModuleData(SaveGameInstance);
 }
 
 void USaveLoadSubsystem::OverridePlayerStatus(UMageAndSeekerSaveGame* SaveGameInstance)
@@ -60,16 +65,9 @@ void USaveLoadSubsystem::OverridePlayerStatus(UMageAndSeekerSaveGame* SaveGameIn
 	if (!Mage) { return; }
 
 	const UMageAttributeSet* MageAttributSet = Mage->GetAbilitySystemComponent()->GetSet<UMageAttributeSet>();
-	//SaveGameInstance->CurrentCycle = this->CurrentCycle;
-	//SaveGameInstance->HPLevel = MageAttributSet->GetHPLevel();
-	//SaveGameInstance->HPLevel = MageAttributSet->GetAttackLevel();
-
-	//--------------테스트용--------------//
-	this->CurrentCycle++;
 	SaveGameInstance->CurrentCycle = this->CurrentCycle;
-	SaveGameInstance->HPLevel = MageAttributSet->GetHPLevel() + 1.0f;
-	SaveGameInstance->AttackLevel = MageAttributSet->GetAttackLevel() + 1.0f;
-	//--------------테스트용--------------//
+	SaveGameInstance->HPLevel = MageAttributSet->GetHPLevel();
+	SaveGameInstance->HPLevel = MageAttributSet->GetAttackLevel();
 }
 
 void USaveLoadSubsystem::OverrideBookData(UMageAndSeekerSaveGame* SaveGameInstance)
@@ -82,13 +80,7 @@ void USaveLoadSubsystem::OverrideBookData(UMageAndSeekerSaveGame* SaveGameInstan
 
 	for (EBookType Type : {EBookType::Fire, EBookType::Ice, EBookType::Lightning})
 	{
-		//--------------테스트용--------------//
 		FBookData Data = MageWeaponComponent->GetBookData(Type);
-		if (Data.BookType == EBookType::Fire)
-		{
-			Data.BookLevel = 4;
-		}
-		//--------------테스트용--------------//
 		SaveGameInstance->BookDatas.FindOrAdd(Type) = Data;
 	}
 }
@@ -122,6 +114,34 @@ void USaveLoadSubsystem::OverrideArtifactData(UMageAndSeekerSaveGame* SaveGameIn
 			Data.UpgradeLevel = Pair.Value->GetUpgradeLevel();
 
 			SaveGameInstance->SavedArtifactInventory.Add(Pair.Key, Data);
+		}
+	}
+}
+
+void USaveLoadSubsystem::OverrideModuleData(UMageAndSeekerSaveGame* SaveGameInstance)
+{
+	AMageCharacter* Mage = Cast<AMageCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (!Mage) { return; }
+
+	UMageWeaponComponent* MageWeaponComponent = Cast<IWeaponInterface>(Mage)->GetMageWeaponComponent();
+	if (!MageWeaponComponent) { return; }
+
+	for (EBookType Type : {EBookType::Fire, EBookType::Ice, EBookType::Lightning})
+	{
+		for (FEquippedMagicModule Module : MageWeaponComponent->GetEquippedModules(Type))
+		{
+			FModuleSaveData SaveData;
+			SaveData.ModuleID = Module.ModuleID;
+			SaveData.UpgradeLevel = Module.ModuleLevel;
+			SaveData.Type = Type;
+
+			SaveGameInstance->SavedEquipedModule.Add(SaveData);
+		}
+		if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+		{
+			TMap<FName, FEquippedMagicModule> PlayerModules = EquipmentSubsystem->GetModuleInInventory(Type).InventoryModule;
+			FInventoryMagicModule& SavedInventory = SaveGameInstance->SavedModuleInventory.FindOrAdd(Type);
+			SavedInventory.InventoryModule = PlayerModules;
 		}
 	}
 }
@@ -175,6 +195,22 @@ void USaveLoadSubsystem::LoadGame(int32 Slot)
 			for (auto& Pair : LoadGameInstance->SavedArtifactInventory)
 			{
 				SavedArtifactInventory.Add(Pair.Key, Pair.Value);
+			}
+			SavedEquipedModule = LoadGameInstance->SavedEquipedModule;
+
+			if (UEquipmentSubsystem* EquipmentSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UEquipmentSubsystem>())
+			{
+				for (EBookType Type : {EBookType::Fire, EBookType::Ice, EBookType::Lightning})
+				{
+					for (auto& Module : LoadGameInstance->SavedModuleInventory[Type].InventoryModule)
+					{
+						FEquippedMagicModule Data;
+						Data.ModuleID = Module.Value.ModuleID;
+						Data.ModuleLevel = Module.Value.ModuleLevel;
+
+						EquipmentSubsystem->AddModuleToInventory(Type, Data);
+					}
+				}
 			}
 		}
 	}

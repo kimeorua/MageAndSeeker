@@ -116,10 +116,13 @@ void UEquipmentSubsystem::CreateModule(EBookType Type, FEquippedMagicModule& Mod
 
 		if (!ModuleInventory.Contains(Type))
 		{
-			ModuleInventory.Add(Type, FMagicModuleMap());
+			ModuleInventory.Add(Type, FInventoryMagicModule());
 		}
+		FEquippedMagicModule InventoryMagicModule;
+		InventoryMagicModule.ModuleID = NewModule->GetModuleID();
+		InventoryMagicModule.ModuleLevel = NewModule->GetUpgradeLevel();
 
-		ModuleInventory[Type].Modules.Add(NewModule->GetModuleID(), NewModule);
+		ModuleInventory[Type].InventoryModule.FindOrAdd(NewModule->GetModuleID(), InventoryMagicModule);
 
 		if (IsValid(Pawn))
 		{
@@ -129,5 +132,18 @@ void UEquipmentSubsystem::CreateModule(EBookType Type, FEquippedMagicModule& Mod
 			MageWeaponComponent->RegisterModule(Type, NewModule);
 		}
 	}
+}
+void UEquipmentSubsystem::AddModuleToInventory(EBookType Type, FEquippedMagicModule ModuleData)
+{
+	FInventoryMagicModule& Inventory = ModuleInventory.FindOrAdd(Type);
+	Inventory.InventoryModule.FindOrAdd(ModuleData.ModuleID, ModuleData);
+}
+FInventoryMagicModule UEquipmentSubsystem::GetModuleInInventory(EBookType Type)
+{
+	if (ModuleInventory.Contains(Type))
+	{
+		return *ModuleInventory.Find(Type);
+	}
+	return FInventoryMagicModule();
 }
 #pragma endregion
