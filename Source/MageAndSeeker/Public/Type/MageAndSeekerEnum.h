@@ -33,14 +33,6 @@ enum class EMageAndSeekerConfirmType : uint8
 	No
 };
 
-UENUM()
-enum class EOrbSize : uint8
-{
-	Midium UMETA(DisplayName = "Midium"), 
-	Small UMETA(DisplayName = "Small"), 
-	Big UMETA(DisplayName = "Big"),
-};
-
 UENUM(BlueprintType)
 enum class EApplyPhase : uint8
 {

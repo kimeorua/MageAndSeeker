@@ -13,6 +13,7 @@ class ASkeletalWeapon;
 class AStaticWeapon;
 class UBaseArtifact;
 class UMagicModule;
+class ABaseProjectile;
 
 UCLASS()
 class MAGEANDSEEKER_API UMageWeaponComponent : public UPawnWeaponComponent
@@ -37,6 +38,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TMap<EBookType, FMagicModules>Modules;
+
+	UPROPERTY(VisibleAnywhere)
+	FMagicOrbSpawnData OrbSpawnData;
 
 #pragma endregion
 
@@ -74,6 +78,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	TArray<FEquippedMagicModule> GetEquippedModules(EBookType Type) const;
+
+	UFUNCTION(BlueprintCallable)
+	void ActivateModule(EApplyPhase ApplyPahse);
 	
 #pragma endregion
 
@@ -99,8 +106,11 @@ public:
 
 #pragma endregion
 
-#pragma region 조준선 관련 함수
+#pragma region 조준
 	UFUNCTION(BlueprintPure)
 	FVector CalculatePosition();
 #pragma endregion
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnOrb(TSubclassOf<ABaseProjectile>ProjectileClass, FVector SocketLocation);
 };

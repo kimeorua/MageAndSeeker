@@ -38,7 +38,20 @@ void ABaseProjectile::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 		FGameplayEventData Data;
 		Data.Target = GetOwner();
 
+		//DebugHelper::Print("Owenr : " + GetOwner()->GetName());
+
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwner(), MageAndSeekerGameplayTag::Mage_Event_APCharge, Data);
+	}
+}
+
+void ABaseProjectile::InitProjectile(const FVector& ShootDirection, float Speed)
+{
+	if (ProjectileMovementComponent)
+	{
+		FVector NormalizedDir = ShootDirection.GetSafeNormal();
+		ProjectileMovementComponent->Velocity = NormalizedDir * Speed;
+
+		ProjectileFX->SetVariableFloat(FName("Size"), GetActorScale3D().X);
 	}
 }
 

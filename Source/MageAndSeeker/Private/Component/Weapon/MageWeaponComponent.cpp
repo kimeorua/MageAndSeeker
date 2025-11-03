@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Subsystem/EquipmentSubsystem.h"
 #include "Props/Module/MagicModule.h"
+#include "Props/Projectile/BaseProjectile.h"
 
 #include"DebugHelper.h"
 
@@ -216,9 +217,25 @@ TArray<FEquippedMagicModule> UMageWeaponComponent::GetEquippedModules(EBookType 
 	}
 	return ReturnModules;
 }
+void UMageWeaponComponent::ActivateModule(EApplyPhase ApplyPahse)
+{
+	OrbSpawnData = FMagicOrbSpawnData();
+
+	if (Modules.Contains(CurrentBook.BookType))
+	{
+		for (UMagicModule* Module : Modules[CurrentBook.BookType].Modules)
+		{
+			if (Module->GetApplyPhase() == ApplyPahse)
+			{
+				Module->ModuleActivate(OrbSpawnData);
+			}
+		}
+	}
+}
+
 #pragma endregion
 
-#pragma region 조준선
+#pragma region 조준
 FVector UMageWeaponComponent::CalculatePosition()
 {
 	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
@@ -244,3 +261,45 @@ FVector UMageWeaponComponent::CalculatePosition()
 	return TargetPoint;
 }
 #pragma endregion
+
+void UMageWeaponComponent::SpawnOrb(TSubclassOf<ABaseProjectile> ProjectileClass, FVector SocketLocation)
+{
+	if (!ProjectileClass) return;
+
+	FVector TargetPoint = CalculatePosition();
+
+	FVector MuzzleLocation = SocketLocation;
+	FVector Direction = (TargetPoint - MuzzleLocation).GetSafeNormal();
+	FRotator BaseRotation = Direction.Rotation();
+
+	int32 ProjectileCount = OrbSpawnData.OrbCount;  
+	float SpreadAngle = 75.0f;   
+
+	UWorld* World = GetWorld();
+	if (!World) { return; }
+
+	for (int32 i = 0; i < ProjectileCount; ++i)
+	{
+		float AngleOffset = 0.f;
+
+		if (ProjectileCount > 1)
+		{
+			float Step = SpreadAngle / (ProjectileCount - 1);
+			AngleOffset = -SpreadAngle / 2 + Step * i;
+		}
+
+		FRotator FireRotation = BaseRotation;
+		FireRotation.Yaw += AngleOffset;
+
+		FVector SpawnLocation = MuzzleLocation + FireRotation.Vector() * 50.f;
+		FTransform SpawnTM(FireRotation, SpawnLocation, OrbSpawnData.OrbScale);
+
+		ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(ProjectileClass, SpawnTM);
+
+		if (Projectile)
+		{
+			Projectile->SetOwner(GetOwner());
+			Projectile->InitProjectile(FireRotation.Vector(), OrbSpawnData.Speed);
+		}
+	}
+}

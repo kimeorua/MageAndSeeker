@@ -173,3 +173,41 @@ struct FModuleSaveData
         return *this;
     }
 };
+
+USTRUCT(BlueprintType)
+struct FMagicOrbSpawnData
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 OrbCount = 1;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FVector OrbScale = FVector(1.0, 1.0, 1.0);
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float Speed = 1500.0f;
+
+    FMagicOrbSpawnData()
+    {
+        OrbCount = 1;
+        OrbScale = FVector(1.0, 1.0, 1.0);
+        Speed = 1500.0f;
+    }
+    FMagicOrbSpawnData(const FMagicOrbSpawnData& Other)
+    {
+        OrbCount = Other.OrbCount;
+        OrbScale = Other.OrbScale;
+        Speed = Other.Speed;
+    }
+
+    FMagicOrbSpawnData& operator=(const FMagicOrbSpawnData& Other)
+    {
+        if (this != &Other) // 자기 자신 체크
+        {
+            OrbCount = Other.OrbCount;
+            OrbScale = Other.OrbScale;
+            Speed = Other.Speed;
+        }
+        return *this;
+    }
+};

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "Type/MageAndSeekerEnum.h"
+#include "Type/MageAndSeekerStruct.h"
 #include "MagicModule.generated.h"
 
 #define GETTER(Type, Name) \
@@ -36,7 +36,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
 	FName ModuleID;
 
-	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	int32 UpgradeLevel;
 
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
@@ -44,4 +44,9 @@ private:
 
 public:
 	virtual void Initialize(FName InID, EApplyPhase InPhase, int32 InLevel = 1);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	FMagicOrbSpawnData ActivateModule(FMagicOrbSpawnData Data);
+
+	void ModuleActivate(FMagicOrbSpawnData& Data);
 };
