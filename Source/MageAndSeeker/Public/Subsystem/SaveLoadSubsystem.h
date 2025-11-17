@@ -24,7 +24,6 @@ public:
 	virtual void Deinitialize() override;
 #pragma endregion
 
-
 #pragma region Save&Load
 public:
 	UFUNCTION(BlueprintCallable)
