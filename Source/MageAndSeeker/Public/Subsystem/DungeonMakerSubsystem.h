@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Type/MageAndSeekerEnum.h"
 #include "DungeonMakerSubsystem.generated.h"
 
 class ATargetPoint;
@@ -20,6 +21,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void MoveToDungeon();
+
+	UFUNCTION(BlueprintCallable)
+	void CreateMonsters(EBookType ElementalType, EMatterType Matter, EMonsterLV LV);
 #pragma endregion
 
 private:

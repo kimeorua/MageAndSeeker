@@ -41,3 +41,21 @@ enum class EApplyPhase : uint8
 	OnMake UMETA(DisplayName = "On Make"),
 	OnArtifactActivate UMETA(DisplayName = "On Artifact Activate")
 };
+
+UENUM(BlueprintType)
+enum class EMatterType : uint8
+{
+	MagicBook UMETA(DisplayName = "MagicBook"),
+	Staff UMETA(DisplayName = "Staff"),
+	Artifact UMETA(DisplayName = "Artifact"),
+	Gold UMETA(DisplayName = "Gold")
+};
+
+UENUM(BlueprintType)
+enum class EMonsterLV : uint8
+{
+	LV_1 UMETA(DisplayName = "1"),
+	LV_2 UMETA(DisplayName = "2"),
+	LV_3 UMETA(DisplayName = "3"),
+	LV_Boss UMETA(DisplayName = "Boss")
+};

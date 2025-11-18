@@ -38,3 +38,16 @@ void UDungeonMakerSubsystem::MoveToDungeon()
 
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Mage, MageAndSeekerGameplayTag::Mage_Event_ModeChange, Payload);
 }
+
+void UDungeonMakerSubsystem::CreateMonsters(EBookType ElementalType, EMatterType Matter, EMonsterLV LV)
+{
+	const UEnum* EBookTypePtr = StaticEnum<EBookType>();
+	const UEnum* EMatterTypePtr = StaticEnum<EMatterType>();
+	const UEnum* EMonsterLVPtr = StaticEnum<EMonsterLV>();
+	if (EBookTypePtr && EMatterTypePtr && EMonsterLVPtr)
+	{
+		FString str = "Dungeon Elementl : " + EBookTypePtr->GetDisplayNameTextByValue((uint8)ElementalType).ToString() + " Drop Matter : " + EMatterTypePtr->GetDisplayNameTextByValue((uint8)Matter).ToString() + " Monster LV : " + EMonsterLVPtr->GetDisplayNameTextByValue((uint8)LV).ToString();
+
+		DebugHelper::Print(str);
+	}
+}
