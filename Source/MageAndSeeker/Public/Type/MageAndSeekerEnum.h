@@ -56,6 +56,6 @@ enum class EMonsterLV : uint8
 {
 	LV_1 UMETA(DisplayName = "1"),
 	LV_2 UMETA(DisplayName = "2"),
-	LV_3 UMETA(DisplayName = "3"),
+	LV_3 UMETA(DisplayName = "3"), 
 	LV_Boss UMETA(DisplayName = "Boss")
 };

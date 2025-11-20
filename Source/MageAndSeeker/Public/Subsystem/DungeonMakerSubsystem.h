@@ -9,7 +9,7 @@
 
 class ATargetPoint;
 
-UCLASS()
+UCLASS(Abstract, Blueprintable)
 class MAGEANDSEEKER_API UDungeonMakerSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
@@ -29,4 +29,13 @@ public:
 private:
 	UPROPERTY()
 	ATargetPoint* StartPoint;
+
+	UPROPERTY(EditAnywhere, Category = "Module", meta = (AllowPrivateAccess = "true"))
+	UDataTable* BossMonsterDataTable;
+
+	UPROPERTY(EditAnywhere, Category = "Module", meta = (AllowPrivateAccess = "true"))
+	UDataTable* BasicMonsterDataTable;
+
+	UPROPERTY(EditAnywhere, Category = "Module", meta = (AllowPrivateAccess = "true"))
+	TMap<EMatterType, UDataTable*> MatterMonsterDataTable;
 };

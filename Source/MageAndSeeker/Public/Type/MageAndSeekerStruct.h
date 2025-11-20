@@ -5,6 +5,7 @@
 #include "MageAndSeekerStruct.generated.h"
 
 class UMagicModule;
+class AMonsterCharacter;
 
 USTRUCT(BlueprintType)
 struct FBookData
@@ -210,4 +211,50 @@ public:
         }
         return *this;
     }
+};
+
+USTRUCT(BlueprintType)
+struct FMonsyterCreateData
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 SpawnNum = 1;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<AMonsterCharacter> MonsterBP;
+};
+
+USTRUCT(BlueprintType)
+struct FBasicMonsterDataTable : public FTableRowBase
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TArray<FMonsyterCreateData>StageMonsterArr;
+};
+
+USTRUCT(BlueprintType)
+struct FMatterMonsterDataTable : public FTableRowBase
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FMonsyterCreateData MatterMonster;
+};
+
+USTRUCT(BlueprintType)
+struct FBossMonsterDataTable : public FTableRowBase
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    EBookType BossType = EBookType::Fire;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<AMonsterCharacter> BossBP;
 };
