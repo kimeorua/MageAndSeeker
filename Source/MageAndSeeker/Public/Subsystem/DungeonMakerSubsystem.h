@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
-#include "Type/MageAndSeekerEnum.h"
+#include "Type/MageAndSeekerStruct.h"
 #include "DungeonMakerSubsystem.generated.h"
 
 class ATargetPoint;
@@ -30,12 +30,25 @@ private:
 	UPROPERTY()
 	ATargetPoint* StartPoint;
 
-	UPROPERTY(EditAnywhere, Category = "Module", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* BossMonsterDataTable;
 
-	UPROPERTY(EditAnywhere, Category = "Module", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	UDataTable* BasicMonsterDataTable;
 
-	UPROPERTY(EditAnywhere, Category = "Module", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
 	TMap<EMatterType, UDataTable*> MatterMonsterDataTable;
+
+	UPROPERTY(EditAnywhere, Category = "DataTable", meta = (AllowPrivateAccess = "true"))
+	UDataTable* MonsterSpawnTable;
+
+	UPROPERTY()
+	int32 CurrentMonsterCount = 0;
+
+	UPROPERTY()
+	int32 StageCount = 1;
+
+	void SpawnBasicMonsterFromTable(EBookType ElementalType);
+	void SpawnMatterMonsterFromTable(UDataTable* Table);
+	void SpawnBossFromTable(FName TableRowName);
 };

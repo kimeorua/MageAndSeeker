@@ -7,6 +7,8 @@
 #include "Character/MageCharacter.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "MageAndSeekerGameplayTag.h"
+#include "Character/MonsterCharacter.h"
+#include "Character/BaseCharacter.h"
 
 #include "DebugHelper.h"
 
@@ -41,13 +43,116 @@ void UDungeonMakerSubsystem::MoveToDungeon()
 
 void UDungeonMakerSubsystem::CreateMonsters(EBookType ElementalType, EMatterType Matter, EMonsterLV LV)
 {
-	const UEnum* EBookTypePtr = StaticEnum<EBookType>();
-	const UEnum* EMatterTypePtr = StaticEnum<EMatterType>();
-	const UEnum* EMonsterLVPtr = StaticEnum<EMonsterLV>();
-	if (EBookTypePtr && EMatterTypePtr && EMonsterLVPtr)
+	if (LV == EMonsterLV::LV_Boss)
 	{
-		FString str = "Dungeon Elementl : " + EBookTypePtr->GetDisplayNameTextByValue((uint8)ElementalType).ToString() + " Drop Matter : " + EMatterTypePtr->GetDisplayNameTextByValue((uint8)Matter).ToString() + " Monster LV : " + EMonsterLVPtr->GetDisplayNameTextByValue((uint8)LV).ToString();
-
-		DebugHelper::Print(str);
+		switch (ElementalType)
+		{
+		case EBookType::Fire:
+			SpawnBossFromTable(FName("FireBoss"));
+			break;
+		case EBookType::Ice:
+			SpawnBossFromTable(FName("IceBoss"));
+			break;
+		case EBookType::Lightning:
+			SpawnBossFromTable(FName("LightningBoss"));
+			break;
+		default:
+			break;
+		}
 	}
+	else
+	{
+		SpawnBasicMonsterFromTable(ElementalType);
+		SpawnMatterMonsterFromTable(MatterMonsterDataTable[Matter]);
+	}
+}
+
+void UDungeonMakerSubsystem::SpawnBasicMonsterFromTable(EBookType ElementalType)
+{
+	static const FString ContextString(TEXT("Spawn Data Context"));
+	FString RowString = "Stage" + FString::FromInt(StageCount);
+	FName StageName = FName(*RowString);
+
+	FActorSpawnParameters Params;
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	FBasicMonsterDataTable* Row = BasicMonsterDataTable->FindRow<FBasicMonsterDataTable>(StageName, ContextString);
+	if (Row)
+	{
+		for (FMonsyterCreateData Data : Row->StageMonsterArr)
+		{
+			for (int i = 0; i < Data.SpawnNum; i++)
+			{
+				CurrentMonsterCount++;
+				FString MonsterRowString = "Point" + FString::FromInt(CurrentMonsterCount);
+				FName SpawnPoint = FName(*MonsterRowString);
+
+				FMonsterSpawnLocationDataTable* SpawnLocationRow = MonsterSpawnTable->FindRow<FMonsterSpawnLocationDataTable>(
+					SpawnPoint, 
+					ContextString
+				);
+		
+				AMonsterCharacter* SpawnedMonster = GetWorld()->SpawnActor<AMonsterCharacter>(
+					Data.MonsterBP, 
+					SpawnLocationRow->SpawnLocation, 
+					FRotator::ZeroRotator, 
+					Params
+				);
+				SpawnedMonster->SettingElemental(ElementalType);
+			}
+		}
+	}
+}
+
+void UDungeonMakerSubsystem::SpawnMatterMonsterFromTable(UDataTable* Table)
+{
+	static const FString ContextString(TEXT("Spawn Data Context"));
+	//FString RowString = "Stage" + FString::FromInt(StageCount);
+	FString RowString = "Stage3";
+	FName StageName = FName(*RowString);
+
+	FActorSpawnParameters Params;
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	FMatterMonsterDataTable* Row = Table->FindRow<FMatterMonsterDataTable>(StageName, ContextString);
+	if (Row)
+	{
+		for (int i = 0; i <  Row->MatterMonster.SpawnNum; i++)
+		{
+			CurrentMonsterCount++;
+			FString MonsterRowString = "Point" + FString::FromInt(CurrentMonsterCount);
+			FName SpawnPoint = FName(*MonsterRowString);
+
+			FMonsterSpawnLocationDataTable* SpawnLocationRow = MonsterSpawnTable->FindRow<FMonsterSpawnLocationDataTable>(
+				SpawnPoint,
+				ContextString
+			);
+
+			AMonsterCharacter* SpawnedMonster = GetWorld()->SpawnActor<AMonsterCharacter>(
+				Row->MatterMonster.MonsterBP,
+				SpawnLocationRow->SpawnLocation,
+				FRotator::ZeroRotator,
+				Params
+			);
+		}
+	}
+}
+
+void UDungeonMakerSubsystem::SpawnBossFromTable(FName TableRowName)
+{
+	static const FString ContextString(TEXT("Spawn Data Context"));
+
+	FActorSpawnParameters Params;
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	FBossMonsterDataTable* Row = BossMonsterDataTable->FindRow<FBossMonsterDataTable>(TableRowName, ContextString);
+	
+	FMonsterSpawnLocationDataTable* SpawnLocationRow = MonsterSpawnTable->FindRow<FMonsterSpawnLocationDataTable>(FName("BossPoint"), ContextString);
+	ABaseCharacter* SpawnedMonster = GetWorld()->SpawnActor<ABaseCharacter>(
+		Row->BossBP,
+		SpawnLocationRow->SpawnLocation,
+		FRotator::ZeroRotator,
+		Params
+	);
+	CurrentMonsterCount++;
 }

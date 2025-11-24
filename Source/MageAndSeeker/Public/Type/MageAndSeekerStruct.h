@@ -258,3 +258,13 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<AMonsterCharacter> BossBP;
 };
+
+USTRUCT(BlueprintType)
+struct FMonsterSpawnLocationDataTable : public FTableRowBase
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FVector SpawnLocation;
+};

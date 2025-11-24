@@ -7,6 +7,8 @@
 #include "Component/Weapon/MonsterWeaponComponent.h"
 #include "Components/CapsuleComponent.h"
 
+#include "DebugHelper.h"
+
 #pragma region Basic
 
 AMonsterCharacter::AMonsterCharacter()
@@ -16,6 +18,34 @@ AMonsterCharacter::AMonsterCharacter()
 	MonsterWeaponComponent = CreateDefaultSubobject<UMonsterWeaponComponent>(TEXT("Monster Weapon Component"));
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Block);
+}
+
+void AMonsterCharacter::SettingElemental(EBookType Type)
+{
+    UMaterialInstanceDynamic* DynMat = GetMesh()->CreateDynamicMaterialInstance(0);
+    if (!DynMat) return;
+
+    FLinearColor Color;
+
+    switch (Type)
+    {
+    case EBookType::Fire:
+        Color = FLinearColor(1.f, 0.f, 0.f); 
+        break;
+
+    case EBookType::Ice:
+        Color = FLinearColor(0.f, 0.5f, 1.f);
+        break;
+
+    case EBookType::Lightning:
+        Color = FLinearColor(1.f, 1.f, 0.f);
+        break;
+
+    default:
+        Color = FLinearColor::White;
+        break;
+    }
+    DynMat->SetVectorParameterValue(TEXT("Elemental Color"), Color);
 }
 
 void AMonsterCharacter::BeginPlay()

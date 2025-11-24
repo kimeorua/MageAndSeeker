@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/BaseCharacter.h"
+#include "Type/MageAndSeekerEnum.h"
 #include "MonsterCharacter.generated.h"
 
 class UMonsterAttributeSet;
@@ -19,6 +20,7 @@ public:
 
 #pragma region publicFunc
 	AMonsterCharacter();
+	void SettingElemental(EBookType Type);
 #pragma endregion
 
 protected:
@@ -48,6 +50,7 @@ protected:
 
 #pragma endregion
 
+private:
 #pragma region Components
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI Component", meta = (AllowPrivateAccess = "true"))
