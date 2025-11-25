@@ -28,10 +28,20 @@ namespace MageAndSeekerGameplayTag
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_Attack, "Mage.Ability.Attack");
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_ActivateBookChangeEffect, "Mage.Event.ActivateBookChangeEffect");
-	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_SpawnProjectile , "Mage.Event.SpawnProjectile");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_SpawnProjectile, "Mage.Event.SpawnProjectile");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_ModeChange, "Mage.Event.ModeChange");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_APCharge, "Mage.Event.APCharge");
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaChargePer, "Mage.Data.ManaChargePer");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_APChargePer, "Mage.Data.APChargePer");
+
+	/*Shared Tag*/
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Ability_TakeDamage, "Shared.Ability.TakeDamage");
+
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Event_TakeDamage, "Shared.Event.TakeDamage");
+
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Data_Damage, "Shared.Data.TakeDamage");
+	UE_DEFINE_GAMEPLAY_TAG(Shared_DamageType_Fire, "Shared.DamageType.Fire");
+	UE_DEFINE_GAMEPLAY_TAG(Shared_DamageType_Ice, "Shared.DamageType.Ice");
+	UE_DEFINE_GAMEPLAY_TAG(Shared_DamageType_Lightning, "Shared.DamageType.Lightning");
 }

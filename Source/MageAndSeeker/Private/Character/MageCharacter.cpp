@@ -142,6 +142,26 @@ void AMageCharacter::EndInteractive()
 	}
 }
 
+FGameplayTag AMageCharacter::ReturnAttackType()
+{
+	EBookType ElementalType = MageWeaponComponent->GetCurrentBookData().BookType;
+	switch (ElementalType)
+	{
+	case EBookType::Fire:
+		return MageAndSeekerGameplayTag::Shared_DamageType_Fire;
+		break;
+	case EBookType::Ice:
+		return MageAndSeekerGameplayTag::Shared_DamageType_Ice;
+		break;
+	case EBookType::Lightning:
+		return MageAndSeekerGameplayTag::Shared_DamageType_Lightning;
+		break;
+	default:
+		return MageAndSeekerGameplayTag::Shared_DamageType_Fire;
+		break;
+	}
+}
+
 void AMageCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
 {
 	MASAbilitySystemComponent->OnAbilityInputPressed(InInputTag);

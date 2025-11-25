@@ -17,5 +17,9 @@ class MAGEANDSEEKER_API UMonsterWeaponComponent : public UPawnWeaponComponent
 public:
 	virtual void RegisterWeapon(TArray<ABaseWeapon*>WeaponsToRegister) override;
 
+	UFUNCTION(BlueprintCallable)
+	void DestroyWeapon();
 
+private:
+	ABaseWeapon* EquipWeapon;
 };

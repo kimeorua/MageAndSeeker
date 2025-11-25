@@ -32,6 +32,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void EndInteractive();
+
+	FGameplayTag ReturnAttackType();
+
 #pragma endregion
 
 protected:

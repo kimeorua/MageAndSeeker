@@ -24,6 +24,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CreateMonsters(EBookType ElementalType, EMatterType Matter, EMonsterLV LV);
+
+	UFUNCTION(BlueprintCallable)
+	void OnMonsterDied();
+
 #pragma endregion
 
 private:
@@ -51,4 +55,16 @@ private:
 	void SpawnBasicMonsterFromTable(EBookType ElementalType);
 	void SpawnMatterMonsterFromTable(UDataTable* Table);
 	void SpawnBossFromTable(FName TableRowName);
+
+	UPROPERTY()
+	EBookType DungeonElemental;
+
+	UPROPERTY()
+	EMonsterLV DungeonLV;
+
+	UPROPERTY()
+	EMatterType DungeonMatter;
+
+	UPROPERTY()
+	int32 MaxStage = 3;
 };

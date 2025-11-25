@@ -6,6 +6,7 @@
 #include "Component/UI/MonsterUIComponent.h"
 #include "Component/Weapon/MonsterWeaponComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Subsystem/DungeonMakerSubsystem.h"
 
 #include "DebugHelper.h"
 
@@ -80,6 +81,16 @@ UPawnWeaponComponent* AMonsterCharacter::GetPawnWeaponComponent() const
 UMonsterWeaponComponent* AMonsterCharacter::GetMonsterWeaponComponent() const
 {
 	return MonsterWeaponComponent;
+}
+
+void AMonsterCharacter::CharacterDied()
+{
+    if (UDungeonMakerSubsystem* DungeonMakerSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UDungeonMakerSubsystem>())
+    {
+        MonsterWeaponComponent->DestroyWeapon();
+        DungeonMakerSubsystem->OnMonsterDied();
+    }
+    Destroy();
 }
 
 #pragma endregion

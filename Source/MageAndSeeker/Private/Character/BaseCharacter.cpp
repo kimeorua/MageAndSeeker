@@ -35,6 +35,10 @@ void ABaseCharacter::InitCharacterStatAndAbility()
 	}
 }
 
+void ABaseCharacter::CharacterDied()
+{
+}
+
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();

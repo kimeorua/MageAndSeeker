@@ -31,6 +31,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InitCharacterStatAndAbility();
 
+	virtual void CharacterDied();
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -41,6 +41,8 @@ protected:
 	virtual UPawnWeaponComponent* GetPawnWeaponComponent() const override;
 	virtual UMonsterWeaponComponent* GetMonsterWeaponComponent() const override;
 	// ~ End IPawnUIInterface
+
+	virtual void CharacterDied()override;
 #pragma endregion
 
 #pragma region AbilitySystem

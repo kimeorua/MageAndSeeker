@@ -5,6 +5,7 @@
 #include "GameplayEffectExtension.h"
 #include "Interface/PawnUIInterface.h"
 #include "Component/UI/PawnUIComponent.h"
+#include "Character/BaseCharacter.h"
 
 #include "DebugHelper.h"
 
@@ -37,7 +38,8 @@ void UMASBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 
         if (NewHP <= 0.0f)
         {
-            DebugHelper::Print("Character Is Dead");
+            ABaseCharacter* Character = Cast<ABaseCharacter>(Data.Target.GetAvatarActor());
+            Character->CharacterDied();
         }
     }
     else if (Data.EvaluatedData.Attribute == GetMaxHPAttribute())

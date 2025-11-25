@@ -8,6 +8,7 @@
 #include "Components/SphereComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "MageAndSeekerGameplayTag.h"
+#include "Character/MageCharacter.h"
 
 #include "DebugHelper.h"
 
@@ -35,12 +36,22 @@ void ABaseProjectile::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 {
 	if (IsValid(OtherActor))
 	{
+		SphereCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 		FGameplayEventData Data;
 		Data.Target = GetOwner();
 
-		//DebugHelper::Print("Owenr : " + GetOwner()->GetName());
-
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwner(), MageAndSeekerGameplayTag::Mage_Event_APCharge, Data);
+
+		FGameplayEventData DamageData;
+		DamageData.Target = OtherActor;
+		DamageData.Instigator = GetOwner();
+		DamageData.TargetTags.AddTag(Cast<AMageCharacter>(GetOwner())->ReturnAttackType());
+		// 임시 데미지 //
+		DamageData.EventMagnitude = -10000.0f;
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, MageAndSeekerGameplayTag::Shared_Event_TakeDamage, DamageData);
+
+		Destroy();
 	}
 }
 

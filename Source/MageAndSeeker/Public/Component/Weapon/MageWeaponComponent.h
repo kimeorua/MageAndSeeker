@@ -68,6 +68,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	ASkeletalWeapon* GetBook() const;
 
+	FORCEINLINE FBookData GetCurrentBookData() const { return CurrentBook; }
+
 #pragma endregion
 
 #pragma region 모듈 관련 함수

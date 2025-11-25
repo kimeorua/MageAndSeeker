@@ -43,6 +43,28 @@ void UDungeonMakerSubsystem::MoveToDungeon()
 
 void UDungeonMakerSubsystem::CreateMonsters(EBookType ElementalType, EMatterType Matter, EMonsterLV LV)
 {
+	DungeonElemental = ElementalType;
+	DungeonLV = LV;
+	DungeonMatter = Matter;
+
+	switch (LV)
+	{
+	case EMonsterLV::LV_1:
+		MaxStage = 3;
+		break;
+	case EMonsterLV::LV_2:
+		MaxStage = 5;
+		break;
+	case EMonsterLV::LV_3:
+		MaxStage = 7;
+		break;
+	case EMonsterLV::LV_Boss:
+		MaxStage = 1;
+		break;
+	default:
+		break;
+	}
+
 	if (LV == EMonsterLV::LV_Boss)
 	{
 		switch (ElementalType)
@@ -64,6 +86,30 @@ void UDungeonMakerSubsystem::CreateMonsters(EBookType ElementalType, EMatterType
 	{
 		SpawnBasicMonsterFromTable(ElementalType);
 		SpawnMatterMonsterFromTable(MatterMonsterDataTable[Matter]);
+	}
+}
+
+void UDungeonMakerSubsystem::OnMonsterDied()
+{
+	CurrentMonsterCount--;
+	if (CurrentMonsterCount == 0)
+	{
+		if (StageCount == MaxStage)
+		{
+			DebugHelper::Print("Dungen End!");
+		}
+		else
+		{
+			FTimerHandle SpawnTimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, FTimerDelegate::CreateLambda([&]()
+				{
+					StageCount++;
+					CreateMonsters(DungeonElemental, DungeonMatter, DungeonLV);
+
+					GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);
+				}), 2.0f, false); 
+			
+		}
 	}
 }
 
@@ -107,8 +153,10 @@ void UDungeonMakerSubsystem::SpawnBasicMonsterFromTable(EBookType ElementalType)
 void UDungeonMakerSubsystem::SpawnMatterMonsterFromTable(UDataTable* Table)
 {
 	static const FString ContextString(TEXT("Spawn Data Context"));
-	//FString RowString = "Stage" + FString::FromInt(StageCount);
-	FString RowString = "Stage3";
+
+	if (StageCount < 3) { return; }
+
+	FString RowString = "Stage" + FString::FromInt(StageCount);
 	FName StageName = FName(*RowString);
 
 	FActorSpawnParameters Params;
