@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "Type/MageAndSeekerEnum.h"
+#include "Type/Enums/FunctionLibraryEnums.h"
 #include "MageAndSeekerGameplayTag.h"
 #include "MageAndSeekerFunctionLibrary.generated.h"
 
@@ -22,9 +22,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MaginAndSeeker | Function Library", meta = (WorldContext = "WorldContextObject"))
 	static void ToggleInputMode(const UObject* WorldContextObject, EMASInputMode InInputMode);
 
-	UFUNCTION(BlueprintCallable, Category = "MaginAndSeeker | Function Library", meta = (WorldContext = "WorldContextObject"))
-	static int32 GetCurrentCycle(const UObject* WorldContextObject);
-
 	static UMASAbilitySystemComponent* NativeGetMageASCFromActor(AActor* InActor);
 
 	UFUNCTION(BlueprintCallable, Category = "MaginAndSeeker | Function Library")
@@ -37,4 +34,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MaginAndSeeker | Function Library", meta = (DisplayName = "Dose Actor Have Tag", ExpandEnumAsExecs = "OutConfirmType"))
 	static void BP_DoseActorHaveTag(AActor* InActor, FGameplayTag TagToCheck, EMageAndSeekerConfirmType& OutConfirmType);
+
+	UFUNCTION(BlueprintPure, Category = "Utility|Interface")
+	static UPARAM(DisplayName = "Found Interface") TScriptInterface<IInterface> FindComponentByInterface(AActor* TargetActor, TSubclassOf<UInterface> InterfaceClass);
 };

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
-#include "Type/MageAndSeekerStruct.h"
 #include "MageAndSeekerSaveGame.generated.h"
 
 class UBaseArtifact;
@@ -15,27 +14,5 @@ class MAGEANDSEEKER_API UMageAndSeekerSaveGame : public USaveGame
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, Category = "SaveData")
-	int32 CurrentCycle = 1;
 
-	UPROPERTY(VisibleAnywhere, Category = "SaveData")
-	float HPLevel = 0;
-
-	UPROPERTY(VisibleAnywhere, Category = "SaveData")
-	float AttackLevel = 0;
-
-	UPROPERTY(VisibleAnywhere, Category = "SaveData")
-	TMap<EBookType, FBookData> BookDatas;
-
-	UPROPERTY(VisibleAnywhere, Category = "SaveData")
-	FArtifactData EquipedArtifactData;
-
-	UPROPERTY(VisibleAnywhere, Category = "SaveData")
-	TMap<int32, FArtifactData>SavedArtifactInventory;
-
-	UPROPERTY(VisibleAnywhere, Category = "SaveData")
-	TArray<FModuleSaveData>SavedEquipedModule;
-
-	UPROPERTY(VisibleAnywhere, Category = "SaveData")
-	TMap<EBookType, FInventoryMagicModule>SavedModuleInventory;
 };

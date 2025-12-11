@@ -1,52 +1,26 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Character/MonsterCharacter.h"
-#include "GAS/AttributeSet/MonsterAttributeSet.h"
-#include "Component/UI/MonsterUIComponent.h"
-#include "Component/Weapon/MonsterWeaponComponent.h"
+//------------------------ Component ------------------------//
+#include "Component/Combat/MonsterCombatComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Subsystem/DungeonMakerSubsystem.h"
+#include "Component/UI/MonsterUIComponent.h"
+//------------------------ Component ------------------------//
 
-#include "DebugHelper.h"
+//------------------------ AttributeSet ------------------------//
+#include "GAS/AttributeSet/MonsterAttributeSet.h"
+//------------------------ AttributeSet ------------------------//
 
-#pragma region Basic
+//------------------------ DataAsset ------------------------//
+#include "DataAsset/StartUp/DataAsset_StartUp.h"
+//------------------------ DataAsset ------------------------//
 
 AMonsterCharacter::AMonsterCharacter()
 {
 	MonsterAttributeSet = CreateDefaultSubobject<UMonsterAttributeSet>(TEXT("MonsterAttributeSet"));
-	MonsterUIComponent = CreateDefaultSubobject<UMonsterUIComponent>(TEXT("Monster UI Component"));
-	MonsterWeaponComponent = CreateDefaultSubobject<UMonsterWeaponComponent>(TEXT("Monster Weapon Component"));
-
+	MonsterCombatComponent = CreateDefaultSubobject<UMonsterCombatComponent>(TEXT("MonsterCombatComponent"));
+	MonsterUIComponent = CreateDefaultSubobject<UMonsterUIComponent>(TEXT("MonsterUIComponent"));
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Block);
-}
-
-void AMonsterCharacter::SettingElemental(EBookType Type)
-{
-    UMaterialInstanceDynamic* DynMat = GetMesh()->CreateDynamicMaterialInstance(0);
-    if (!DynMat) return;
-
-    FLinearColor Color;
-
-    switch (Type)
-    {
-    case EBookType::Fire:
-        Color = FLinearColor(1.f, 0.f, 0.f); 
-        break;
-
-    case EBookType::Ice:
-        Color = FLinearColor(0.f, 0.5f, 1.f);
-        break;
-
-    case EBookType::Lightning:
-        Color = FLinearColor(1.f, 1.f, 0.f);
-        break;
-
-    default:
-        Color = FLinearColor::White;
-        break;
-    }
-    DynMat->SetVectorParameterValue(TEXT("Elemental Color"), Color);
 }
 
 void AMonsterCharacter::BeginPlay()
@@ -59,38 +33,17 @@ void AMonsterCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 }
 
-#pragma endregion
-
-#pragma region DIP
-
-UPawnUIComponent* AMonsterCharacter::GetPawnUIComponent() const
+void AMonsterCharacter::InitCharacterStatAndAbility()
 {
-	return MonsterUIComponent;
-}
+	if (!CharacterStartUpData.IsNull())
+	{
+		if (UDataAsset_StartUp* LodedData = CharacterStartUpData.LoadSynchronous())
+		{
+			int32 AbilityApplyLevel = 1;
 
-UMonsterUIComponent* AMonsterCharacter::GetMonsterUIComponent() const
-{
-	return MonsterUIComponent;
-}
+			//TODO: 던전 생성시 선택한 몬스터 레벨에 따라, Ablity 및 AttributeSet LV 설정!
 
-UPawnWeaponComponent* AMonsterCharacter::GetPawnWeaponComponent() const
-{
-	return MonsterWeaponComponent;
+			LodedData->GiveToAbilitySystemComponent(MASAbilitySystemComponent, AbilityApplyLevel);
+		}
+	}
 }
-
-UMonsterWeaponComponent* AMonsterCharacter::GetMonsterWeaponComponent() const
-{
-	return MonsterWeaponComponent;
-}
-
-void AMonsterCharacter::CharacterDied()
-{
-    if (UDungeonMakerSubsystem* DungeonMakerSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UDungeonMakerSubsystem>())
-    {
-        MonsterWeaponComponent->DestroyWeapon();
-        DungeonMakerSubsystem->OnMonsterDied();
-    }
-    Destroy();
-}
-
-#pragma endregion

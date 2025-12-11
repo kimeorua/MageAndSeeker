@@ -6,6 +6,8 @@
 #include "MageAndSeekerFunctionLibrary.h"
 #include "MageAndSeekerGameplayTag.h"
 
+#include "DebugHelper.h"
+
 void UMageAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();

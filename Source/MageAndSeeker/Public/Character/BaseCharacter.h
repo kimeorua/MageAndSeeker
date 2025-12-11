@@ -5,8 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
-#include "Interface/PawnUIInterface.h"
-#include "Interface/WeaponInterface.h"
 #include "BaseCharacter.generated.h"
 
 class UMASAbilitySystemComponent;
@@ -14,7 +12,7 @@ class UMASBaseAttributeSet;
 class UDataAsset_StartUp;
 
 UCLASS()
-class MAGEANDSEEKER_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnUIInterface, public IWeaponInterface
+class MAGEANDSEEKER_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -28,29 +26,12 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	// ~End IAbilitySystemInterface
 
-	UFUNCTION(BlueprintCallable)
-	void InitCharacterStatAndAbility();
-
-	virtual void CharacterDied();
-
 protected:
 	virtual void BeginPlay() override;
 
 	//~ Begin APawn Interface.
 	virtual void PossessedBy(AController* NewController) override;
 	//~ End APawn Interface
-
-	// ~ Begin IPawnUIInterface
-	virtual UPawnUIComponent* GetPawnUIComponent() const override;
-	// ~ End IPawnUIInterface
-
-	// ~ Begin IWeaponInterface
-	virtual UPawnWeaponComponent* GetPawnWeaponComponent() const override;
-	// ~ End IWeaponInterface
-
-	virtual void CreateUIAndAdd();
-
-#pragma region AbilitySystem
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UMASAbilitySystemComponent* MASAbilitySystemComponent;
@@ -61,5 +42,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data")
 	TSoftObjectPtr<UDataAsset_StartUp> CharacterStartUpData;
 
-#pragma endregion
+private:
+	virtual void InitCharacterStatAndAbility();
 };

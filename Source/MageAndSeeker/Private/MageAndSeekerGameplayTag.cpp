@@ -8,9 +8,9 @@ namespace MageAndSeekerGameplayTag
 	/* Input Tag */
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_Move, "InputTag.Move");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_Look, "InputTag.Look");
-	UE_DEFINE_GAMEPLAY_TAG(InputTag_Interection, "InputTag.Interection");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_Attack, "InputTag.Attack");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_Artifact, "InputTag.Artifact");
+	UE_DEFINE_GAMEPLAY_TAG(InputTag_Interaction, "InputTag.Interaction");
 
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_BookChange_Fire, "InputTag.BookChange.Fire");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_BookChange_Ice, "InputTag.BookChange.Ice");
@@ -26,11 +26,13 @@ namespace MageAndSeekerGameplayTag
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_BookChange, "Mage.Ability.BookChange");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_Attack, "Mage.Ability.Attack");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_Interaction, "Mage.Ability.Interaction");
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_ActivateBookChangeEffect, "Mage.Event.ActivateBookChangeEffect");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_SpawnProjectile, "Mage.Event.SpawnProjectile");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_ModeChange, "Mage.Event.ModeChange");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_APCharge, "Mage.Event.APCharge");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_InteractionEnd, "Mage.Event.InteractionEnd");
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaChargePer, "Mage.Data.ManaChargePer");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_APChargePer, "Mage.Data.APChargePer");

@@ -40,21 +40,6 @@ void UMageAndSeekerFunctionLibrary::ToggleInputMode(const UObject* WorldContextO
 		break;
 	}
 }
-int32 UMageAndSeekerFunctionLibrary::GetCurrentCycle(const UObject* WorldContextObject)
-{
-	if (GEngine)
-	{
-		UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
-
-		USaveLoadSubsystem* SaveLoadSubsystem = World->GetGameInstance()->GetSubsystem<USaveLoadSubsystem>();
-
-		return SaveLoadSubsystem->GetCurrentCycle();
-	}
-	else 
-	{
-		return 0;
-	}
-}
 
 UMASAbilitySystemComponent* UMageAndSeekerFunctionLibrary::NativeGetMageASCFromActor(AActor* InActor)
 {
@@ -89,4 +74,14 @@ bool UMageAndSeekerFunctionLibrary::NativeDoseActorHaveTag(AActor* InActor, FGam
 void UMageAndSeekerFunctionLibrary::BP_DoseActorHaveTag(AActor* InActor, FGameplayTag TagToCheck, EMageAndSeekerConfirmType& OutConfirmType)
 {
 	OutConfirmType = NativeDoseActorHaveTag(InActor, TagToCheck) ? EMageAndSeekerConfirmType::Yes : EMageAndSeekerConfirmType::No;
+}
+
+UPARAM(DisplayName = "Found Interface")TScriptInterface<IInterface> UMageAndSeekerFunctionLibrary::FindComponentByInterface(AActor* TargetActor, TSubclassOf<UInterface> InterfaceClass)
+{
+	if (!TargetActor || !InterfaceClass) { return nullptr; }
+	UObject* FoundObject = TargetActor->FindComponentByInterface(InterfaceClass);
+
+	if (FoundObject) { return TScriptInterface<IInterface>(FoundObject); }
+
+	return nullptr;
 }

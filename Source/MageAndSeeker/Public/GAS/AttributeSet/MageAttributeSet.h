@@ -13,28 +13,29 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-class IPawnUIInterface;
-
 UCLASS()
 class MAGEANDSEEKER_API UMageAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadOnly, Category = "LV", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData HPLevel;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Attack Power", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadOnly, Category = "LV", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData AttackLevel;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))
-	FGameplayAttributeData MaxLevel;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Mana", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData CurrentMP;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Mana", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData MaxMP;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Armor", meta = (AllowPrivateAccess = "true"))
+	FGameplayAttributeData Armor;
+
+private:
+	const int32 MaxLV = 10;
 
 public:
 	UMageAttributeSet();
@@ -45,8 +46,5 @@ public:
 	ATTRIBUTE_ACCESSORS(UMageAttributeSet, AttackLevel);
 	ATTRIBUTE_ACCESSORS(UMageAttributeSet, CurrentMP);
 	ATTRIBUTE_ACCESSORS(UMageAttributeSet, MaxMP);
-	ATTRIBUTE_ACCESSORS(UMageAttributeSet, MaxLevel);
-
-private:
-	TWeakInterfacePtr<IPawnUIInterface>CachedPawnUIInterface;
+	ATTRIBUTE_ACCESSORS(UMageAttributeSet, Armor)
 };

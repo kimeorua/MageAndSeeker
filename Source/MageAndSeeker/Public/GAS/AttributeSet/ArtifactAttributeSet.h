@@ -13,8 +13,6 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-class IPawnUIInterface;
-
 UCLASS()
 class MAGEANDSEEKER_API UArtifactAttributeSet : public UAttributeSet
 {
@@ -36,7 +34,4 @@ public:
 	ATTRIBUTE_ACCESSORS(UArtifactAttributeSet, CurrentAP);
 	ATTRIBUTE_ACCESSORS(UArtifactAttributeSet, MaxAP);
 	ATTRIBUTE_ACCESSORS(UArtifactAttributeSet, APChargePerHit);
-
-private:
-	TWeakInterfacePtr<IPawnUIInterface>CachedPawnUIInterface;
 };

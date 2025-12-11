@@ -3,48 +3,34 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Component/UI/PawnUIComponent.h"
-#include "Type/MageAndSeekerEnum.h"
+#include "Component/UI/UIComponent.h"
+#include "Type/Enums/GamePlayEnums.h"
 #include "MageUIComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeBook, EBookType, BookType);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeMode, bool, IsCombatMode);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeShowUI, bool, IsShow);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSettingMaxMana, float, MaxMP);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeCurrentMP, float, Percent);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangeCurrentAP, float, Percent);
+class UMageHUD;
 
 UCLASS()
-class MAGEANDSEEKER_API UMageUIComponent : public UPawnUIComponent
+class MAGEANDSEEKER_API UMageUIComponent : public UUIComponent
 {
 	GENERATED_BODY()
 	
 public:
-#pragma region Delegate
-	UPROPERTY(BlueprintAssignable)
-	FOnChangeBook OnChangeBook;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnChangeMode OnChangeMode;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnChangeShowUI OnChangeShowUI;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnSettingMaxMana OnSettingMaxMana;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnChangeCurrentMP OnChangeCurrentMP;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnChangeCurrentAP OnChangeCurrentAP;
-#pragma endregion
-
-#pragma region Delegate_Call_Func
 	UFUNCTION(BlueprintCallable)
-	void ChangeBookUI(EBookType BookType);
+	void OnChangedUIShow(bool bIsShow);
 
 	UFUNCTION(BlueprintCallable)
-	void ChangeCombatMode(bool bIsCombat);
-#pragma endregion
+	void OnChangedCombatMode(bool bIsComabat);
+
+	UFUNCTION(BlueprintCallable)
+	void OnChangedBookIcon(EElementalType Type);
+
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	void OnCurrentAPChanged(const FOnAttributeChangeData& Data);
+
+	void OnCurrentManaChanged(const FOnAttributeChangeData& Data);
+
+	void OnMaxManaChanged(const FOnAttributeChangeData& Data);
 };

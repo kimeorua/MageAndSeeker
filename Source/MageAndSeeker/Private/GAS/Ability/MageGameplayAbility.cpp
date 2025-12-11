@@ -6,19 +6,19 @@
 
 AMageCharacter* UMageGameplayAbility::GetMageCharacterFromActorInfo()
 {
-	if (!CachedWarriorHeroCharacter.IsValid())
+	if (!CachedMageCharacter.IsValid())
 	{
-		CachedWarriorHeroCharacter = Cast<AMageCharacter>(CurrentActorInfo->AvatarActor);
+		CachedMageCharacter = Cast<AMageCharacter>(CurrentActorInfo->AvatarActor);
 	}
-	return CachedWarriorHeroCharacter.IsValid() ? CachedWarriorHeroCharacter.Get() : nullptr;
+	return CachedMageCharacter.IsValid() ? CachedMageCharacter.Get() : nullptr;
 }
 
-UMageWeaponComponent* UMageGameplayAbility::GetMageWeaponComponentFromActorInfo()
+UMageCombatComponent* UMageGameplayAbility::GetMageCombatComponentFromActorInfo()
 {
-	return Cast<IWeaponInterface>(GetMageCharacterFromActorInfo())->GetMageWeaponComponent();
+	return GetMageCharacterFromActorInfo()->GetMageCombatComponent();
 }
 
 UMageUIComponent* UMageGameplayAbility::GetMageUIComponentFromActorInfo()
 {
-	return Cast<IPawnUIInterface>(GetMageCharacterFromActorInfo())->GetMageUIComponent();
+	return GetMageCharacterFromActorInfo()->GetMageUIComponent();
 }

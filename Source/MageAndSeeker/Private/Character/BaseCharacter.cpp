@@ -4,9 +4,6 @@
 #include "Character/BaseCharacter.h"
 #include "GAS/MASAbilitySystemComponent.h"
 #include "GAS/AttributeSet/MASBaseAttributeSet.h"
-#include "DataAsset/StartUp/DataAsset_StartUp.h"
-
-#include "DebugHelper.h"
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -22,27 +19,14 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 	return GetMASAbilitySystemComponent();
 }
 
-void ABaseCharacter::InitCharacterStatAndAbility()
-{
-	if (!CharacterStartUpData.IsNull())
-	{
-		if (UDataAsset_StartUp* LodedData = CharacterStartUpData.LoadSynchronous())
-		{
-			int32 AbilityApplyLevel = 1;
-			CreateUIAndAdd();
-			LodedData->GiveToAbilitySystemComponent(MASAbilitySystemComponent, AbilityApplyLevel);
-		}
-	}
-}
-
-void ABaseCharacter::CharacterDied()
-{
-}
-
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (GetWorld()->GetMapName().Contains("DevMap"))
+	{
+		InitCharacterStatAndAbility();
+	}
 }
 
 void ABaseCharacter::PossessedBy(AController* NewController)
@@ -55,16 +39,6 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 	}
 }
 
-UPawnUIComponent* ABaseCharacter::GetPawnUIComponent() const
-{
-	return nullptr;
-}
-
-UPawnWeaponComponent* ABaseCharacter::GetPawnWeaponComponent() const
-{
-	return nullptr;
-}
-
-void ABaseCharacter::CreateUIAndAdd()
+void ABaseCharacter::InitCharacterStatAndAbility()
 {
 }

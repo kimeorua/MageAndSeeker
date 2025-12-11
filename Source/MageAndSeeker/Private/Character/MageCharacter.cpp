@@ -2,26 +2,37 @@
 
 
 #include "Character/MageCharacter.h"
+//------------------------ Component ------------------------//
 #include "GameFramework/SpringArmComponent.h"
+#include "Component/Combat/MageCombatComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "EnhancedInputSubsystems.h"
-#include "DataAsset/DataAsset_InputConfig.h"
 #include "Component/MageAndSeekerInputComponent.h"
+#include "Component/Rune/MageRuneComponent.h"
+#include "Component/UI/MageUIComponent.h"
+//------------------------ Component ------------------------//
+
+//------------------------ AttributeSet ------------------------//
+#include "GAS/AttributeSet/MageAttributeSet.h"
+#include "GAS/AttributeSet/ArtifactAttributeSet.h"
+//------------------------ AttributeSet ------------------------//
+
+//------------------------ DataAsset ------------------------//
+#include "DataAsset/DataAsset_InputConfig.h"
+#include "DataAsset/StartUp/DataAsset_StartUp.h"
+//------------------------ DataAsset ------------------------//
+
+//------------------------ Subsystem ------------------------//
+#include "EnhancedInputSubsystems.h"
+//------------------------ Subsystem ------------------------//
+
+//------------------------ etc ------------------------//
 #include "MageAndSeekerGameplayTag.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Props/ActivatedProps.h"
-#include "GAS/AttributeSet/MageAttributeSet.h"
-#include "GAS/AttributeSet/ArtifactAttributeSet.h"
-#include "Component/UI/MageUIComponent.h"
-#include "UI/MageAndSeekerWidget.h"
-#include "Component/Weapon/MageWeaponComponent.h"
+//------------------------ etc ------------------------//
 
-
-#include "DebugHelper.h"
-
-#pragma region Basic
 AMageCharacter::AMageCharacter()
 {
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
@@ -50,15 +61,12 @@ void AMageCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Subsystem->AddMappingContext(DataAsset_InputConfig->InputMappingContext, 0);
 	UMageAndSeekerInputComponent* MASInputComponent = CastChecked<UMageAndSeekerInputComponent>(PlayerInputComponent);
 
-	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
-	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
-	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Interection, ETriggerEvent::Started, this, &ThisClass::Input_Interactive);
+	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Move, ETriggerEvent::Triggered, this, &AMageCharacter::Input_Move);
+	MASInputComponent->BindNativeInputAction(DataAsset_InputConfig, MageAndSeekerGameplayTag::InputTag_Look, ETriggerEvent::Triggered, this, &AMageCharacter::Input_Look);
 
-	MASInputComponent->BindAbilityInputAction(DataAsset_InputConfig, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputRelased);
+	MASInputComponent->BindAbilityInputAction(DataAsset_InputConfig, this, &AMageCharacter::Input_AbilityInputPressed, &AMageCharacter::Input_AbilityInputRelased);
 }
-#pragma endregion
 
-#pragma region Input
 void AMageCharacter::Input_Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();
@@ -93,75 +101,6 @@ void AMageCharacter::Input_Look(const FInputActionValue& InputActionValue)
 	}
 }
 
-void AMageCharacter::Input_Interactive()
-{
-	FHitResult HitResult;
-	FVector Start = GetActorLocation();
-	FVector End = Start;
-
-	float Radius = 300.0f;
-
-	ETraceTypeQuery TraceType = UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1);
-
-	TArray<AActor*> ActorsToIgnore;
-	ActorsToIgnore.Add(Cast<AActor>(this));
-
-	FHitResult Hit;
-
-	ActivatedProp = nullptr;
-
-	bool bHit = UKismetSystemLibrary::SphereTraceSingle
-	(
-		this, 
-		Start, 
-		End, 
-		Radius, 
-		TraceType,
-		false,
-		ActorsToIgnore,
-		bIsTraceShow ? EDrawDebugTrace::Persistent : EDrawDebugTrace::None,
-		Hit,
-		true
-	);
-
-	if (bHit && Hit.GetActor())
-	{
-		ActivatedProp = Cast<AActivatedProps>(Hit.GetActor());
-		ActivatedProp->ActivateProp();
-
-		GetMageUIComponent()->OnChangeShowUI.Broadcast(false);
-	}
-}
-
-void AMageCharacter::EndInteractive()
-{
-	if (IsValid(ActivatedProp))
-	{
-		GetMageUIComponent()->OnChangeShowUI.Broadcast(true);
-		ActivatedProp->DeactivateProp();
-	}
-}
-
-FGameplayTag AMageCharacter::ReturnAttackType()
-{
-	EBookType ElementalType = MageWeaponComponent->GetCurrentBookData().BookType;
-	switch (ElementalType)
-	{
-	case EBookType::Fire:
-		return MageAndSeekerGameplayTag::Shared_DamageType_Fire;
-		break;
-	case EBookType::Ice:
-		return MageAndSeekerGameplayTag::Shared_DamageType_Ice;
-		break;
-	case EBookType::Lightning:
-		return MageAndSeekerGameplayTag::Shared_DamageType_Lightning;
-		break;
-	default:
-		return MageAndSeekerGameplayTag::Shared_DamageType_Fire;
-		break;
-	}
-}
-
 void AMageCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
 {
 	MASAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
@@ -171,43 +110,7 @@ void AMageCharacter::Input_AbilityInputRelased(FGameplayTag InInputTag)
 {
 	MASAbilitySystemComponent->OnAbilityInputRelased(InInputTag);
 }
-#pragma endregion
 
-#pragma region DIP
-UPawnUIComponent* AMageCharacter::GetPawnUIComponent() const
-{
-	return MageUIComponent;
-}
-
-UMageUIComponent* AMageCharacter::GetMageUIComponent() const
-{
-	return MageUIComponent;
-}
-
-UPawnWeaponComponent* AMageCharacter::GetPawnWeaponComponent() const
-{
-	return MageWeaponComponent;
-}
-
-UMageWeaponComponent* AMageCharacter::GetMageWeaponComponent() const
-{
-	return MageWeaponComponent;
-}
-
-void AMageCharacter::CreateUIAndAdd()
-{
-	APlayerController* PC = Cast<APlayerController>(GetController());
-
-	if (HUDWidgetClass)
-	{
-		UUserWidget* HUD = CreateWidget<UUserWidget>(PC, HUDWidgetClass);
-
-		if (HUD) { HUD->AddToViewport(); }
-	}
-}
-#pragma endregion
-
-#pragma region privateFunc
 void AMageCharacter::MageInit()
 {
 	bUseControllerRotationPitch = false;
@@ -232,7 +135,21 @@ void AMageCharacter::MageInit()
 	MageAttributeSet = CreateDefaultSubobject<UMageAttributeSet>(TEXT("MageAttributeSet"));
 	ArtifactAttributeSet = CreateDefaultSubobject<UArtifactAttributeSet>(TEXT("ArtifactAttributeSet"));
 
-	MageUIComponent = CreateDefaultSubobject<UMageUIComponent>(TEXT("Mage UI Component"));
-	MageWeaponComponent = CreateDefaultSubobject<UMageWeaponComponent>(TEXT("Mage Weapon Component"));
+	MageCombatComponent = CreateDefaultSubobject<UMageCombatComponent>(TEXT("MageCombatComponent"));
+	MageRuneComponent = CreateDefaultSubobject<UMageRuneComponent>(TEXT("MageRuneComponent"));
+	MageUIComponent = CreateDefaultSubobject<UMageUIComponent>(TEXT("MageUIComponent"));
 }
-#pragma endregion
+
+void AMageCharacter::InitCharacterStatAndAbility()
+{
+	MageUIComponent->InitCharacterUI(this);
+
+	if (!CharacterStartUpData.IsNull())
+	{
+		if (UDataAsset_StartUp* LodedData = CharacterStartUpData.LoadSynchronous())
+		{
+			int32 AbilityApplyLevel = 1;
+			LodedData->GiveToAbilitySystemComponent(MASAbilitySystemComponent, AbilityApplyLevel);
+		}
+	}
+}

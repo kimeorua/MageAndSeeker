@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Type/MageAndSeekerEnum.h"
 #include "BaseProjectile.generated.h"
 
 class UProjectileMovementComponent;

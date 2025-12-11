@@ -34,13 +34,4 @@ void UMonsterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
         float NewLR = FMath::Clamp(GetLightningResistance(), 0.0f, 20.0f);
         SetLightningResistance(NewLR);
     }
-    else if (Data.EvaluatedData.Attribute == GetLevelAttribute())
-    {
-        float NewLevel = UMageAndSeekerFunctionLibrary::GetCurrentCycle(GetOwningActor());
-
-        if (NewLevel > 5) { NewLevel = 5; }
-
-        float Cap = FMath::Max(NewLevel, 1.0f);
-        SetLevel(Cap);
-    }
 }

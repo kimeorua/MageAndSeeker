@@ -7,7 +7,7 @@
 #include "MageGameplayAbility.generated.h"
 
 class AMageCharacter;
-class UMageWeaponComponent;
+class UMageCombatComponent;
 class UMageUIComponent;
 
 UCLASS()
@@ -19,11 +19,11 @@ public:
 	AMageCharacter* GetMageCharacterFromActorInfo();
 
 	UFUNCTION(BlueprintPure, Category = "MagicAndSeeker | Ability")
-	UMageWeaponComponent* GetMageWeaponComponentFromActorInfo();
+	UMageCombatComponent* GetMageCombatComponentFromActorInfo();
 
 	UFUNCTION(BlueprintPure, Category = "MagicAndSeeker | Ability")
 	UMageUIComponent* GetMageUIComponentFromActorInfo();
 
 private:
-	TWeakObjectPtr<AMageCharacter> CachedWarriorHeroCharacter;
+	TWeakObjectPtr<AMageCharacter> CachedMageCharacter;
 };

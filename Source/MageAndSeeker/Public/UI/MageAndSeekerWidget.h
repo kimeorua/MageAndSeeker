@@ -16,6 +16,6 @@ class MAGEANDSEEKER_API UMageAndSeekerWidget : public UUserWidget
 protected:
 	virtual void NativeOnInitialized() override;
 
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Owning Mage UIComponent Initalized"))
-	void BP_OnOwningMageUIComponentInitalized(UMageUIComponent* OwingHeroUIComponent);
+	//UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Owning Mage UIComponent Initalized"))
+	//void BP_OnOwningMageUIComponentInitalized(UMageUIComponent* OwingHeroUIComponent);
 };

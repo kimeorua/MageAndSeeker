@@ -13,7 +13,7 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-class IPawnUIInterface;
+class IUIBaseInterface;
 
 UCLASS()
 class MAGEANDSEEKER_API UMASBaseAttributeSet : public UAttributeSet
@@ -27,8 +27,6 @@ protected:
 	FGameplayAttributeData MaxHP;
 	UPROPERTY(BlueprintReadOnly, Category = "Attack Power", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData AttackPower;
-	UPROPERTY(BlueprintReadOnly, Category = "Defence Power", meta = (AllowPrivateAccess = "true"))
-	FGameplayAttributeData DefensivePower;
 
 public:
 	UMASBaseAttributeSet();
@@ -38,8 +36,4 @@ public:
 	ATTRIBUTE_ACCESSORS(UMASBaseAttributeSet, CurrentHP);
 	ATTRIBUTE_ACCESSORS(UMASBaseAttributeSet, MaxHP);
 	ATTRIBUTE_ACCESSORS(UMASBaseAttributeSet, AttackPower);
-	ATTRIBUTE_ACCESSORS(UMASBaseAttributeSet, DefensivePower);
-
-private:
-	TWeakInterfacePtr<IPawnUIInterface>CachedPawnUIInterface;
 };
