@@ -109,5 +109,8 @@ void USaveLoadSubsystem::OnLoadCompleted(const FString& SlotName, int32 UserInde
 {
     DebugHelper::Print("Load End");
 
-    CurrentSaveGame = Cast<UMageAndSeekerSaveGame>(LoadedGame);
+    UMageAndSeekerSaveGame* LoadedSaveGame = Cast<UMageAndSeekerSaveGame>(LoadedGame);
+
+    CurrentSaveGame->MageStat.HPLevel = LoadedSaveGame->MageStat.HPLevel;
+    CurrentSaveGame->MageStat.AttackLevel = LoadedSaveGame->MageStat.AttackLevel;
 }
