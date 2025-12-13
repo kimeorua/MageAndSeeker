@@ -8,8 +8,6 @@
 
 class UMageAndSeekerSaveGame;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFinshedSvaeGameDelegate);
-
 UCLASS()
 class MAGEANDSEEKER_API USaveLoadSubsystem : public UGameInstanceSubsystem
 {
