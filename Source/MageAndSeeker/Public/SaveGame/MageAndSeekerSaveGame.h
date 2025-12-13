@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "Type/Structs/SaveDataStructs.h"
 #include "MageAndSeekerSaveGame.generated.h"
 
 class UBaseArtifact;
@@ -14,5 +15,6 @@ class MAGEANDSEEKER_API UMageAndSeekerSaveGame : public USaveGame
 	GENERATED_BODY()
 
 public:
-
+	UPROPERTY()
+	FStatSaveData MageStat;
 };
