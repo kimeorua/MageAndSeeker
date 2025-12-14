@@ -57,7 +57,7 @@ void UMageCombatComponent::BookInit()
 		EElementalType Type = static_cast<EElementalType>(i);
 
 		FBookData TempData;
-		TempData.BookLevel = 4;
+		TempData.BookLevel = 1;
 		TempData.Type = Type;
 
 		MagicBookDatas.Add(Type, TempData);

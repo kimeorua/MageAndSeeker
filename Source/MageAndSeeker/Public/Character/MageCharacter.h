@@ -18,6 +18,7 @@ class AActivatedProps;
 class UMageCombatComponent;
 class UMageRuneComponent;
 class UMageUIComponent;
+class USaveLoadComponent;
 
 UCLASS()
 class MAGEANDSEEKER_API AMageCharacter : public ABaseCharacter
