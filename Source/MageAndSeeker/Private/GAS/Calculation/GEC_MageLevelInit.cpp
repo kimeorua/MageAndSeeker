@@ -3,7 +3,10 @@
 
 #include "GAS/Calculation/GEC_MageLevelInit.h"
 #include "Subsystem/SaveLoadSubsystem.h"
+#include "Type/Structs/SaveDataStructs.h"
 #include "GAS/AttributeSet/MageAttributeSet.h"
+
+#include "DebugHelper.h"
 
 void UGEC_MageLevelInit::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
@@ -12,18 +15,14 @@ void UGEC_MageLevelInit::Execute_Implementation(const FGameplayEffectCustomExecu
 
 	if (USaveLoadSubsystem* SaveLoadSubsystem = World->GetGameInstance()->GetSubsystem<USaveLoadSubsystem>())
 	{
-		int32 Slot = SaveLoadSubsystem->GetCurrentSlotIndex();
-		int32 HP_LV;
-		int32 Attack_LV;
+		FStatSaveData StatSaveData = SaveLoadSubsystem->CurrentSaveDataFromStat();
 
-		float HPLevelValue = 0.f;
-		float AttackLevelValue = 0.f;
+		float HPLevelValue = StatSaveData.HPLevel;
+		float AttackLevelValue = StatSaveData.AttackLevel;
 
-		if (SaveLoadSubsystem->GetMageStat(Slot, HP_LV, Attack_LV))
-		{
-			HPLevelValue = HP_LV;
-			AttackLevelValue = Attack_LV;
-		}
+		DebugHelper::Print("HP LV :", HPLevelValue);
+		DebugHelper::Print("Attack LV :", AttackLevelValue);
+
 		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(UMageAttributeSet::GetHPLevelAttribute(), EGameplayModOp::Override, HPLevelValue));
 		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(UMageAttributeSet::GetAttackLevelAttribute(), EGameplayModOp::Override, AttackLevelValue));
 	}

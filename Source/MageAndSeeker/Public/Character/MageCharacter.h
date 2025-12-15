@@ -18,7 +18,7 @@ class AActivatedProps;
 class UMageCombatComponent;
 class UMageRuneComponent;
 class UMageUIComponent;
-class USaveLoadComponent;
+class UMageStatSaveComponent;
 
 UCLASS()
 class MAGEANDSEEKER_API AMageCharacter : public ABaseCharacter
@@ -62,6 +62,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Component", meta = (AllowPrivateAccess = "true"))
 	UMageUIComponent* MageUIComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Component", meta = (AllowPrivateAccess = "true"))
+	UMageStatSaveComponent* MageStatSaveComponent;
 
 	void Input_Move(const FInputActionValue& InputActionValue);
 	void Input_Look(const FInputActionValue& InputActionValue);

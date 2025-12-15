@@ -17,4 +17,7 @@ class MAGEANDSEEKER_API UMageAndSeekerSaveGame : public USaveGame
 public:
 	UPROPERTY()
 	FStatSaveData MageStat;
+
+	UPROPERTY()
+	FBookLevelData BookLevelData;
 };

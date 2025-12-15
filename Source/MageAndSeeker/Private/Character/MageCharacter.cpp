@@ -11,6 +11,7 @@
 #include "Component/MageAndSeekerInputComponent.h"
 #include "Component/Rune/MageRuneComponent.h"
 #include "Component/UI/MageUIComponent.h"
+#include "Component/StatSave/MageStatSaveComponent.h"
 //------------------------ Component ------------------------//
 
 //------------------------ AttributeSet ------------------------//
@@ -25,6 +26,7 @@
 
 //------------------------ Subsystem ------------------------//
 #include "EnhancedInputSubsystems.h"
+#include "Subsystem/SaveLoadSubsystem.h"
 //------------------------ Subsystem ------------------------//
 
 //------------------------ etc ------------------------//
@@ -138,11 +140,19 @@ void AMageCharacter::MageInit()
 	MageCombatComponent = CreateDefaultSubobject<UMageCombatComponent>(TEXT("MageCombatComponent"));
 	MageRuneComponent = CreateDefaultSubobject<UMageRuneComponent>(TEXT("MageRuneComponent"));
 	MageUIComponent = CreateDefaultSubobject<UMageUIComponent>(TEXT("MageUIComponent"));
+	MageStatSaveComponent = CreateDefaultSubobject<UMageStatSaveComponent>(TEXT("MageStatSaveComponent"));
 }
 
 void AMageCharacter::InitCharacterStatAndAbility()
 {
 	MageUIComponent->InitCharacterUI(this);
+
+	USaveLoadSubsystem* SaveSubsystem = GetGameInstance()->GetSubsystem<USaveLoadSubsystem>();
+
+	if (SaveSubsystem)
+	{
+		SaveSubsystem->LoadGameAsync(SaveSubsystem->GetSlotIndex(), this);
+	}
 
 	if (!CharacterStartUpData.IsNull())
 	{

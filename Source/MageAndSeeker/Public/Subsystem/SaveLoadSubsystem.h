@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Type/Structs/SaveDataStructs.h"
 #include "SaveLoadSubsystem.generated.h"
 
 class UMageAndSeekerSaveGame;
@@ -18,28 +19,33 @@ public:
 	virtual void Deinitialize() override;
 
 	UFUNCTION(BlueprintCallable)
-	void SaveGameAsync(const int32 SlotNum, bool bIsNewGame);
+	void SaveGameAsync(const int32 SlotNum, bool bIsNewGame, AActor* TargetActor);
 
 	UFUNCTION(BlueprintCallable)
-	void LoadGameAsync(const int32 SlotNum);
+	void LoadGameAsync(const int32 SlotNum, AActor* TargetActor);
 
-	UFUNCTION(BlueprintPure)
-	bool GetMageStat(int32 Slot, int32& HPLevel, int32& AttackLevel);
+	FORCEINLINE int32 GetSlotIndex() const { return SlotIndex; }
 
-	UFUNCTION(BlueprintPure)
-	FORCEINLINE int32 GetCurrentSlotIndex() const { return CurrentSlotIndex; }
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetSlotIndex(const int32 Slot)  { SlotIndex = Slot; }
+
+	UFUNCTION(BlueprintCallable)
+	bool GetMageStatFromSlot(int32 SaveSlot, int32& OutHPLevel,int32& OutAttackLevel);
+
+	FStatSaveData CurrentSaveDataFromStat() const;
 
 private:
 	UPROPERTY()
 	UMageAndSeekerSaveGame* CurrentSaveGame;
 
-	int32 CurrentSlotIndex;
-
-	void CollectStatData(bool IsNew);
+	UPROPERTY()
+	int32 SlotIndex;
 
 	UFUNCTION()
 	void OnSaveCompleted(const FString& SlotName, int32 UserIndex, bool bSuccess);
 
-	UFUNCTION()
-	void OnLoadCompleted(const FString& SlotName, int32 UserIndex, USaveGame* LoadedGame);
+	void CollectSaveData(AActor* TargetActor, UMageAndSeekerSaveGame* SaveGame);
+	void ApplyLoadData(AActor* TargetActor, UMageAndSeekerSaveGame* SaveGame);
+
+	void MakeNewGame();
 };

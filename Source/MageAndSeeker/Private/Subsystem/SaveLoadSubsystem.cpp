@@ -6,7 +6,7 @@
 #include "Character/MageCharacter.h"
 
 #include "GAS/MASAbilitySystemComponent.h"
-
+#include "Interface/SaveLoadInterface.h"
 #include "GAS/AttributeSet/MageAttributeSet.h"
 
 #include "DebugHelper.h"
@@ -22,14 +22,26 @@ void USaveLoadSubsystem::Deinitialize()
 {
 }
 
-void USaveLoadSubsystem::SaveGameAsync(const int32 SlotNum, bool bIsNewGame)
+void USaveLoadSubsystem::SaveGameAsync(const int32 SlotNum, bool bIsNewGame, AActor* TargetActor)
 {
+    if (!IsValid(TargetActor)) { return; }
+
     CurrentSaveGame = Cast<UMageAndSeekerSaveGame>(UGameplayStatics::CreateSaveGameObject(UMageAndSeekerSaveGame::StaticClass()));
 
-    CurrentSlotIndex = SlotNum;
-    FString SlotName = TEXT("SaveSlot") + FString::FromInt(SlotNum);
+    if (!CurrentSaveGame) { return; }
 
-    CollectStatData(bIsNewGame);
+    if (bIsNewGame)
+    {
+        MakeNewGame();
+    }
+    else
+    {
+        CollectSaveData(TargetActor, CurrentSaveGame);
+    }
+
+    SlotIndex = SlotNum;
+
+    FString SlotName = TEXT("SaveSlot") + FString::FromInt(SlotNum);
 
     UGameplayStatics::AsyncSaveGameToSlot
     (
@@ -40,64 +52,60 @@ void USaveLoadSubsystem::SaveGameAsync(const int32 SlotNum, bool bIsNewGame)
     );
 }
 
-void USaveLoadSubsystem::LoadGameAsync(const int32 SlotNum)
+void USaveLoadSubsystem::LoadGameAsync(const int32 SlotNum, AActor* TargetActor)
 {
-    CurrentSlotIndex = SlotNum;
+    if (!IsValid(TargetActor)) { return; }
+
     FString SlotName = TEXT("SaveSlot") + FString::FromInt(SlotNum);
 
     UGameplayStatics::AsyncLoadGameFromSlot
     (
         SlotName,
         0,
-        FAsyncLoadGameFromSlotDelegate::CreateUObject(this, &USaveLoadSubsystem::OnLoadCompleted)
+        FAsyncLoadGameFromSlotDelegate::CreateLambda
+        (
+            [this, TargetActor](const FString&, int32, USaveGame* LoadedGame)
+            {
+                UMageAndSeekerSaveGame* SaveGame = Cast<UMageAndSeekerSaveGame>(LoadedGame);
+                if (!SaveGame || !IsValid(TargetActor)) { return; }
+                ApplyLoadData(TargetActor, SaveGame);
+            }
+        )
     );
 }
 
-bool USaveLoadSubsystem::GetMageStat(int32 Slot, int32& HPLevel, int32& AttackLevel)
+bool USaveLoadSubsystem::GetMageStatFromSlot(int32 SaveSlot, int32& OutHPLevel, int32& OutAttackLevel)
 {
-    FString SlotName = TEXT("SaveSlot") + FString::FromInt(Slot);
-    if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
-    {
-        UMageAndSeekerSaveGame* LoadGameInstance = Cast<UMageAndSeekerSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
+    FString SlotName = TEXT("SaveSlot") + FString::FromInt(SaveSlot);
 
-        if (LoadGameInstance)
-        {
-            HPLevel = LoadGameInstance->MageStat.HPLevel;
-            AttackLevel = LoadGameInstance->MageStat.AttackLevel;
-            return true;
-        }
+    if (!UGameplayStatics::DoesSaveGameExist(SlotName, 0))
+    {
+        return false;
     }
-    return false;
+
+    USaveGame* LoadedGame = UGameplayStatics::LoadGameFromSlot(SlotName, 0);
+    UMageAndSeekerSaveGame* SaveGame = Cast<UMageAndSeekerSaveGame>(LoadedGame);
+
+    if (!SaveGame) { return false; }
+
+    OutHPLevel = SaveGame->MageStat.HPLevel;
+    OutAttackLevel = SaveGame->MageStat.AttackLevel;
+
+    return true;
 }
 
-void USaveLoadSubsystem::CollectStatData(bool IsNew)
+FStatSaveData USaveLoadSubsystem::CurrentSaveDataFromStat() const
 {
-    APlayerController* PC = GetWorld()->GetFirstPlayerController();
-    APawn* Pawn = PC->GetPawn();
+    FString SlotName = TEXT("SaveSlot") + FString::FromInt(SlotIndex);
 
-    if (IsNew)
-    {
-        CurrentSaveGame->MageStat.AttackLevel = 0;
-        CurrentSaveGame->MageStat.HPLevel = 0;
-    }
-    else
-    {
-        UAbilitySystemComponent* ASC = Pawn->FindComponentByClass<UAbilitySystemComponent>();
+    if (!UGameplayStatics::DoesSaveGameExist(SlotName, 0)) {return FStatSaveData(); }
 
-        if (!ASC) return;
+    USaveGame* LoadedGame = UGameplayStatics::LoadGameFromSlot(SlotName, 0);
+    UMageAndSeekerSaveGame* SaveGame = Cast<UMageAndSeekerSaveGame>(LoadedGame);
 
-        const UMageAttributeSet* MageAttributeSet = ASC->GetSet<UMageAttributeSet>();
+    if (!SaveGame) { return FStatSaveData(); }
 
-        if (!MageAttributeSet) { return; }
-
-       // CurrentSaveGame->MageStat.AttackLevel = MageAttributeSet->GetAttackLevel();
-       // CurrentSaveGame->MageStat.HPLevel = MageAttributeSet->GetHPLevel();
-
-        // Test
-        CurrentSaveGame->MageStat.AttackLevel = MageAttributeSet->GetAttackLevel() + 1;
-        CurrentSaveGame->MageStat.HPLevel = MageAttributeSet->GetHPLevel() + 1;
-        // Test
-    }
+    return SaveGame->MageStat;
 }
 
 void USaveLoadSubsystem::OnSaveCompleted(const FString& SlotName, int32 UserIndex, bool bSuccess)
@@ -105,12 +113,36 @@ void USaveLoadSubsystem::OnSaveCompleted(const FString& SlotName, int32 UserInde
     DebugHelper::Print("Save End");
 }
 
-void USaveLoadSubsystem::OnLoadCompleted(const FString& SlotName, int32 UserIndex, USaveGame* LoadedGame)
+void USaveLoadSubsystem::CollectSaveData(AActor* TargetActor, UMageAndSeekerSaveGame* SaveGame)
 {
-    DebugHelper::Print("Load End");
+    TArray<UActorComponent*> Components;
+    TargetActor->GetComponents(Components);
 
-    UMageAndSeekerSaveGame* LoadedSaveGame = Cast<UMageAndSeekerSaveGame>(LoadedGame);
+    for (UActorComponent* Comp : Components)
+    {
+        if (Comp->Implements<USaveLoadInterface>())
+        {
+            ISaveLoadInterface::Execute_SaveData(Comp, SaveGame);
+        }
+    }
+}
 
-    CurrentSaveGame->MageStat.HPLevel = LoadedSaveGame->MageStat.HPLevel;
-    CurrentSaveGame->MageStat.AttackLevel = LoadedSaveGame->MageStat.AttackLevel;
+void USaveLoadSubsystem::ApplyLoadData(AActor* TargetActor, UMageAndSeekerSaveGame* SaveGame)
+{
+    TArray<UActorComponent*> Components;
+    TargetActor->GetComponents(Components);
+
+    for (UActorComponent* Comp : Components)
+    {
+        if (Comp->Implements<USaveLoadInterface>())
+        {
+            ISaveLoadInterface::Execute_LoadData(Comp, SaveGame);
+        }
+    }
+}
+
+void USaveLoadSubsystem::MakeNewGame()
+{
+    CurrentSaveGame->MageStat.HPLevel = 0;
+    CurrentSaveGame->MageStat.AttackLevel = 0;
 }

@@ -14,3 +14,18 @@ struct FStatSaveData
 	UPROPERTY()
 	int32 AttackLevel = 0;
 };
+
+USTRUCT(BlueprintType)
+struct FBookLevelData
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	int32 FireBookLevel = 1;
+
+	UPROPERTY()
+	int32 IceBookLevel  = 1;
+
+	UPROPERTY()
+	int32 LightningBookLevel  = 1;
+};
