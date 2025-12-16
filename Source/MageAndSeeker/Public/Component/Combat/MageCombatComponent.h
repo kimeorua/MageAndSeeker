@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Component/Combat/CombatComponent.h"
 #include "Type/Structs/GamePlayStructs.h"
+#include "Interface/SaveLoadInterface.h"
 #include "MageCombatComponent.generated.h"
 
 class AMagicBook;
 class AWeaponBase;
 
 UCLASS()
-class MAGEANDSEEKER_API UMageCombatComponent : public UCombatComponent
+class MAGEANDSEEKER_API UMageCombatComponent : public UCombatComponent, public ISaveLoadInterface
 {
 	GENERATED_BODY()
 	
@@ -23,7 +24,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void BookChange(EElementalType Type);
 
-	FBookData GetCurrentBookData() const { return CurrentBookData;  }
+	FBookData GetBookDataFromType(EElementalType Type) const;
+
+	void SaveData_Implementation(UMageAndSeekerSaveGame* SaveGame) override;
+
+	void LoadData_Implementation(const UMageAndSeekerSaveGame* SaveGame) override;
 
 protected:
 	virtual void BeginPlay() override;

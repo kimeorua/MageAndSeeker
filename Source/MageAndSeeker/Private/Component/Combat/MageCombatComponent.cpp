@@ -6,6 +6,7 @@
 #include "Props/WeaponBase.h"
 #include "Props/MagicBook.h"
 #include "MageAndSeekerFunctionLibrary.h"
+#include "SaveGame/MageAndSeekerSaveGame.h"
 
 #include "DebugHelper.h"
 
@@ -34,9 +35,72 @@ void UMageCombatComponent::BookChange(EElementalType Type)
 {
 	if (IsValid(MagicBook))
 	{
+		CurrentBookData = MagicBookDatas[Type];
 		MagicBook->PlayBookAnim();
 		MagicBook->BookMatterIntanceUpdatae(Type, CurrentBookData.BookLevel);
-		CurrentBookData = MagicBookDatas[Type];
+	}
+}
+
+FBookData UMageCombatComponent::GetBookDataFromType(EElementalType Type) const
+{
+	if (MagicBookDatas.Contains(Type))
+	{
+		return MagicBookDatas[Type];
+	}
+	return FBookData();
+}
+
+void UMageCombatComponent::SaveData_Implementation(UMageAndSeekerSaveGame* SaveGame)
+{
+	if (MagicBookDatas.Contains(EElementalType::Fire))
+	{
+		SaveGame->BookLevelData.FireBookLevel = MagicBookDatas[EElementalType::Fire].BookLevel + 1;
+	}
+
+	if (MagicBookDatas.Contains(EElementalType::Ice))
+	{
+		SaveGame->BookLevelData.IceBookLevel = MagicBookDatas[EElementalType::Ice].BookLevel;
+	}
+
+	if (MagicBookDatas.Contains(EElementalType::Lightning))
+	{
+		SaveGame->BookLevelData.LightningBookLevel = MagicBookDatas[EElementalType::Lightning].BookLevel + 1;
+	}
+}
+
+void UMageCombatComponent::LoadData_Implementation(const UMageAndSeekerSaveGame* SaveGame)
+{
+	FBookData SavedData;
+
+	if (MagicBookDatas.Contains(EElementalType::Fire))
+	{
+		SavedData.Type = EElementalType::Fire;
+		SavedData.BookLevel = SaveGame->BookLevelData.FireBookLevel;
+
+		MagicBookDatas.Add(EElementalType::Fire, SavedData);
+	}
+
+	if (MagicBookDatas.Contains(EElementalType::Ice))
+	{
+		SavedData.Type = EElementalType::Ice;
+		SavedData.BookLevel = SaveGame->BookLevelData.IceBookLevel;
+
+		MagicBookDatas.Add(EElementalType::Ice, SavedData);
+	}
+
+	if (MagicBookDatas.Contains(EElementalType::Lightning))
+	{
+		SavedData.Type = EElementalType::Lightning;
+		SavedData.BookLevel = SaveGame->BookLevelData.LightningBookLevel;
+
+		MagicBookDatas.Add(EElementalType::Lightning, SavedData);
+	}
+
+	CurrentBookData = MagicBookDatas[EElementalType::Fire];
+
+	if (IsValid(MagicBook))
+	{
+		MagicBook->BookMatterIntanceUpdatae(CurrentBookData.Type, CurrentBookData.BookLevel);
 	}
 }
 
@@ -45,7 +109,6 @@ void UMageCombatComponent::BeginPlay()
 	Super::BeginPlay();
 
 	BookInit();
-	//TODO : Save파일에서 정보 받아 초기화 하기.
 }
 
 void UMageCombatComponent::BookInit()

@@ -145,4 +145,8 @@ void USaveLoadSubsystem::MakeNewGame()
 {
     CurrentSaveGame->MageStat.HPLevel = 0;
     CurrentSaveGame->MageStat.AttackLevel = 0;
+
+    CurrentSaveGame->BookLevelData.FireBookLevel = 1;
+    CurrentSaveGame->BookLevelData.IceBookLevel = 1;
+    CurrentSaveGame->BookLevelData.LightningBookLevel = 1;
 }

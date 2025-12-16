@@ -180,7 +180,7 @@ void URuneSettingUI::RuneSelectedSlotInit()
     if (TargetActor)
     {
         UMageCombatComponent* MageCombatComponent = TargetActor->GetComponentByClass<UMageCombatComponent>();
-        FBookData BookData = MageCombatComponent->GetCurrentBookData();
+        FBookData BookData = MageCombatComponent->GetBookDataFromType(Elemental);
 
         if (BookData.BookLevel < MAX_BOOK_LEVEL)
         {
