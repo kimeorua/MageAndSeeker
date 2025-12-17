@@ -16,7 +16,25 @@ UMageRuneComponent::UMageRuneComponent()
 void UMageRuneComponent::RegisterRunes(EElementalType ElementalType, const TArray<FRuneCreateData>& InDatas)
 {
 	EquipedRunes[ElementalType].EquipedRunes.Empty();
-	RuneCreateData_Equiped.AllEmpty();
+
+	switch (ElementalType)
+	{
+	case EElementalType::None:
+		break;
+	case EElementalType::Fire:
+		RuneCreateData_Equiped.FireRuneData.Empty();
+		break;
+	case EElementalType::Ice:
+		RuneCreateData_Equiped.IceRuneData.Empty();
+		break;
+	case EElementalType::Lightning:
+		RuneCreateData_Equiped.LightningRuneData.Empty();
+		break;
+	case EElementalType::MAX:
+		break;
+	default:
+		break;
+	}
 
 	for (FRuneCreateData Data : InDatas)
 	{
