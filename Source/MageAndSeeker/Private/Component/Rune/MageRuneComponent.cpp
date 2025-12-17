@@ -5,6 +5,8 @@
 
 #include "Props/Rune/MagicRune.h"
 
+#include "SaveGame/MageAndSeekerSaveGame.h"
+
 #include "DebugHelper.h"
 
 UMageRuneComponent::UMageRuneComponent()
@@ -14,6 +16,7 @@ UMageRuneComponent::UMageRuneComponent()
 void UMageRuneComponent::RegisterRunes(EElementalType ElementalType, const TArray<FRuneCreateData>& InDatas)
 {
 	EquipedRunes[ElementalType].EquipedRunes.Empty();
+	RuneCreateData_Equiped.AllEmpty();
 
 	for (FRuneCreateData Data : InDatas)
 	{
@@ -30,6 +33,25 @@ void UMageRuneComponent::RegisterRunes(EElementalType ElementalType, const TArra
 
 		EquipedRunes[ElementalType].EquipedRunes.Add(NewRune);
 
+		switch (ElementalType)
+		{
+		case EElementalType::None:
+			break;
+		case EElementalType::Fire:
+			RuneCreateData_Equiped.FireRuneData.Add(Data);
+			break;
+		case EElementalType::Ice:
+			RuneCreateData_Equiped.IceRuneData.Add(Data);
+			break;
+		case EElementalType::Lightning:
+			RuneCreateData_Equiped.LightningRuneData.Add(Data);
+			break;
+		case EElementalType::MAX:
+			break;
+		default:
+			break;
+		}
+
 		for (UMagicRune* InventoryRune : InventoryRunes[ElementalType].EquipedRunes)
 		{
 			if (InventoryRune->GetRuneData().RuneID == Data.RuneID)
@@ -39,7 +61,29 @@ void UMageRuneComponent::RegisterRunes(EElementalType ElementalType, const TArra
 				break;
 			}
 		}
-		if (!FindSame) { InventoryRunes[ElementalType].EquipedRunes.Add(NewRune); }
+		if (!FindSame) 
+		{
+			InventoryRunes[ElementalType].EquipedRunes.Add(NewRune); 
+
+			switch (ElementalType)
+			{
+			case EElementalType::None:
+				break;
+			case EElementalType::Fire:
+				RuneCreateData_Inventorty.FireRuneData.Add(Data);
+				break;
+			case EElementalType::Ice:
+				RuneCreateData_Inventorty.IceRuneData.Add(Data);
+				break;
+			case EElementalType::Lightning:
+				RuneCreateData_Inventorty.LightningRuneData.Add(Data);
+				break;
+			case EElementalType::MAX:
+				break;
+			default:
+				break;
+			}
+		}
 	}
 }
 
@@ -67,6 +111,51 @@ FEquipedRunes UMageRuneComponent::GetInventoryRuneDatas(EElementalType Type)
 	}
 }
 
+void UMageRuneComponent::SaveData_Implementation(UMageAndSeekerSaveGame* SaveGame)
+{
+	SaveGame->SavedEquipedRuneData.FireRuneData = RuneCreateData_Equiped.FireRuneData;
+	SaveGame->SavedEquipedRuneData.IceRuneData = RuneCreateData_Equiped.IceRuneData;
+	SaveGame->SavedEquipedRuneData.LightningRuneData = RuneCreateData_Equiped.LightningRuneData;
+
+	SaveGame->SavedInventoryRuneData.FireRuneData = RuneCreateData_Inventorty.FireRuneData;
+	SaveGame->SavedInventoryRuneData.IceRuneData = RuneCreateData_Inventorty.IceRuneData;
+	SaveGame->SavedInventoryRuneData.LightningRuneData = RuneCreateData_Inventorty.LightningRuneData;
+}
+
+void UMageRuneComponent::LoadData_Implementation(const UMageAndSeekerSaveGame* SaveGame)
+{
+	InventoryRuneCreate(EElementalType::Fire, SaveGame->SavedInventoryRuneData.FireRuneData);
+	InventoryRuneCreate(EElementalType::Ice, SaveGame->SavedInventoryRuneData.IceRuneData);
+	InventoryRuneCreate(EElementalType::Lightning, SaveGame->SavedInventoryRuneData.LightningRuneData);
+
+	if (!SaveGame->SavedEquipedRuneData.FireRuneData.IsEmpty())
+	{
+		RegisterRunes(EElementalType::Fire, SaveGame->SavedEquipedRuneData.FireRuneData);
+	}
+	else
+	{
+		EquipedRunes[EElementalType::Fire].EquipedRunes.Empty();
+	}
+
+	if (!SaveGame->SavedEquipedRuneData.IceRuneData.IsEmpty())
+	{
+		RegisterRunes(EElementalType::Ice, SaveGame->SavedEquipedRuneData.IceRuneData);
+	}
+	else
+	{
+		EquipedRunes[EElementalType::Ice].EquipedRunes.Empty();
+	}
+
+	if (!SaveGame->SavedEquipedRuneData.LightningRuneData.IsEmpty())
+	{
+		RegisterRunes(EElementalType::Lightning, SaveGame->SavedEquipedRuneData.LightningRuneData);
+	}
+	else
+	{
+		EquipedRunes[EElementalType::Lightning].EquipedRunes.Empty();
+	}
+}
+
 void UMageRuneComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -84,5 +173,41 @@ void UMageRuneComponent::RuneComponentInit()
 
 		EquipedRunes.FindOrAdd(Type, Temp);
 		InventoryRunes.FindOrAdd(Type, Temp);
+	}
+}
+
+void UMageRuneComponent::InventoryRuneCreate(EElementalType ElementalType, const TArray<FRuneCreateData>& InDatas)
+{
+	for (FRuneCreateData Data : InDatas)
+	{
+		if (!IsValid(Data.CreateRuneClass)) { continue; }
+
+		UMagicRune* NewRune = NewObject<UMagicRune>(GetWorld(), Data.CreateRuneClass);
+		FRuneData RuneData;
+		RuneData.RuneID = Data.RuneID;
+		RuneData.RuneLevel = Data.RuneLevel;
+		RuneData.RuneApplyType = Data.RuneApplyType;
+		NewRune->RuneInit(RuneData);
+
+		InventoryRunes[ElementalType].EquipedRunes.Add(NewRune);
+
+		switch (ElementalType)
+		{
+		case EElementalType::None:
+			break;
+		case EElementalType::Fire:
+			RuneCreateData_Inventorty.FireRuneData.Add(Data);
+			break;
+		case EElementalType::Ice:
+			RuneCreateData_Inventorty.IceRuneData.Add(Data);
+			break;
+		case EElementalType::Lightning:
+			RuneCreateData_Inventorty.LightningRuneData.Add(Data);
+			break;
+		case EElementalType::MAX:
+			break;
+		default:
+			break;
+		}
 	}
 }

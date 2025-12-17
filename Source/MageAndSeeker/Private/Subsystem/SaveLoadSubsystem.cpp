@@ -78,10 +78,7 @@ bool USaveLoadSubsystem::GetMageStatFromSlot(int32 SaveSlot, int32& OutHPLevel, 
 {
     FString SlotName = TEXT("SaveSlot") + FString::FromInt(SaveSlot);
 
-    if (!UGameplayStatics::DoesSaveGameExist(SlotName, 0))
-    {
-        return false;
-    }
+    if (!UGameplayStatics::DoesSaveGameExist(SlotName, 0)) { return false; }
 
     USaveGame* LoadedGame = UGameplayStatics::LoadGameFromSlot(SlotName, 0);
     UMageAndSeekerSaveGame* SaveGame = Cast<UMageAndSeekerSaveGame>(LoadedGame);
@@ -149,4 +146,7 @@ void USaveLoadSubsystem::MakeNewGame()
     CurrentSaveGame->BookLevelData.FireBookLevel = 1;
     CurrentSaveGame->BookLevelData.IceBookLevel = 1;
     CurrentSaveGame->BookLevelData.LightningBookLevel = 1;
+
+    CurrentSaveGame->SavedEquipedRuneData.AllEmpty();
+    CurrentSaveGame->SavedInventoryRuneData.AllEmpty();
 }

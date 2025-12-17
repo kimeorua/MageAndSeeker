@@ -7,8 +7,6 @@
 #include "Type/Structs/SaveDataStructs.h"
 #include "MageAndSeekerSaveGame.generated.h"
 
-class UBaseArtifact;
-
 UCLASS()
 class MAGEANDSEEKER_API UMageAndSeekerSaveGame : public USaveGame
 {
@@ -20,4 +18,10 @@ public:
 
 	UPROPERTY()
 	FBookLevelData BookLevelData;
+
+	UPROPERTY()
+	FSavedBookRuneData SavedEquipedRuneData;
+
+	UPROPERTY()
+	FSavedBookRuneData SavedInventoryRuneData;
 };

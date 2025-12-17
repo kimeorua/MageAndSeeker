@@ -5,12 +5,14 @@
 #include "CoreMinimal.h"
 #include "Component/PawnExtensionComponent.h"
 #include "Component/Rune/Interface/RuneManagementInterface.h"
+#include "Interface/SaveLoadInterface.h"
+#include "Type/Structs/SaveDataStructs.h"
 #include "MageRuneComponent.generated.h"
 
 class UMagicRune;
 
 UCLASS()
-class MAGEANDSEEKER_API UMageRuneComponent : public UPawnExtensionComponent, public IRuneManagementInterface
+class MAGEANDSEEKER_API UMageRuneComponent : public UPawnExtensionComponent, public IRuneManagementInterface, public ISaveLoadInterface
 {
 	GENERATED_BODY()
 
@@ -23,6 +25,10 @@ public:
 
 	FEquipedRunes GetInventoryRuneDatas(EElementalType Type);
 
+	void SaveData_Implementation(UMageAndSeekerSaveGame* SaveGame) override;
+
+	void LoadData_Implementation(const UMageAndSeekerSaveGame* SaveGame) override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -33,5 +39,11 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Runes")
 	TMap<EElementalType, FEquipedRunes> InventoryRunes;
 
+	FSavedBookRuneData RuneCreateData_Equiped;
+
+	FSavedBookRuneData RuneCreateData_Inventorty;
+
 	void RuneComponentInit();
+
+	void InventoryRuneCreate(EElementalType ElementalType, const TArray<FRuneCreateData>& InDatas);
 };
