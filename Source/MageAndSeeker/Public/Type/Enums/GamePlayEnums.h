@@ -34,3 +34,37 @@ enum class ERuneApplyType : uint8
 	OnUseArtifact UMETA(DisplayName = "OnUseArtifact"),
 	MAX UMETA(Hidden)
 };
+
+UENUM(BlueprintType)
+enum class EDungeonOptionType : uint8
+{
+	Elemental UMETA(DisplayName = "Elemental"),
+	DropItem UMETA(DisplayName = "DropItem"),
+	MonsterLevel UMETA(DisplayName = "MonsterLevel")
+};
+
+UENUM(BlueprintType)
+enum class EDungeonElemental : uint8
+{
+	Fire,
+	Ice,
+	Lightning
+};
+
+UENUM(BlueprintType)
+enum class EDungeonDropItem : uint8
+{
+	BookMaterial,
+	WeaponMaterial,
+	ArtifactMaterial,
+	Gold
+};
+
+UENUM(BlueprintType)
+enum class EDungeonMonsterLevel : uint8
+{
+	Level1,
+	Level2,
+	Level3,
+	Boss
+};

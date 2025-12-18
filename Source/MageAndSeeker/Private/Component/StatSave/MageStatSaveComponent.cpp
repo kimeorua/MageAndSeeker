@@ -18,6 +18,7 @@ void UMageStatSaveComponent::SaveData_Implementation(UMageAndSeekerSaveGame* Sav
 {
 	if (SaveGame)
 	{
+		// TODO: Test 용으로 +1 함 정식 에선 +1 제거
 		SaveGame->MageStat.HPLevel = ASC->GetNumericAttribute(UMageAttributeSet::GetHPLevelAttribute()) + 1;
 		SaveGame->MageStat.AttackLevel = ASC->GetNumericAttribute(UMageAttributeSet::GetAttackLevelAttribute()) + 1;
 	}

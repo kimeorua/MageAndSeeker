@@ -70,9 +70,6 @@ public:
     UPROPERTY(meta = (BindWidget))
     UUserWidget* MassageWidget;
 
-    /*UFUNCTION(BlueprintCallable)
-    FORCEINLINE void SetElementalType(const EElementalType Type) { Elemental = Type; }*/
-
 protected:
     virtual void NativeConstruct() override;
 

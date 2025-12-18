@@ -20,9 +20,6 @@ void UGEC_MageLevelInit::Execute_Implementation(const FGameplayEffectCustomExecu
 		float HPLevelValue = StatSaveData.HPLevel;
 		float AttackLevelValue = StatSaveData.AttackLevel;
 
-		DebugHelper::Print("HP LV :", HPLevelValue);
-		DebugHelper::Print("Attack LV :", AttackLevelValue);
-
 		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(UMageAttributeSet::GetHPLevelAttribute(), EGameplayModOp::Override, HPLevelValue));
 		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(UMageAttributeSet::GetAttackLevelAttribute(), EGameplayModOp::Override, AttackLevelValue));
 	}
