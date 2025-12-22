@@ -5,6 +5,7 @@
 #include "DataTableStructs.generated.h"
 
 class UMagicRune;
+class AMonsterCharacter;
 
 USTRUCT(BlueprintType)
 struct FMagicRuneDataTable : public FTableRowBase
@@ -28,4 +29,26 @@ struct FMagicRuneDataTable : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture2D* Icon;
+};
+
+USTRUCT(BlueprintType)
+struct FMonsterData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 SpwnNum;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<AMonsterCharacter> Monster_BP;
+};
+
+
+USTRUCT(BlueprintType)
+struct FMonsterDataTable : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TArray<FMonsterData> MonsterArr;
 };

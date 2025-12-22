@@ -4,6 +4,7 @@
 #include "UI/DungeonMakerUI.h"
 #include "Components/Button.h"
 #include "UI/DungeonOption.h"
+#include "Subsystem/DungeonMakerSubsystem.h"
 
 #include "DebugHelper.h"
 
@@ -26,18 +27,13 @@ void UDungeonMakerUI::OnOpenButton()
 {
 	InteractionEnd();
 
-	const UEnum* EnumPtr_Elemntal = StaticEnum<EDungeonElemental>();
-	FString Str1 = EnumPtr_Elemntal->GetDisplayNameTextByValue((int64)SelectedElemental).ToString();
+	UDungeonMakerSubsystem* DungeonMakerSubsystem = GetGameInstance()->GetSubsystem<UDungeonMakerSubsystem>();
 
-	const UEnum* EnumPtr_Drop = StaticEnum<EDungeonDropItem>();
-	FString Str2 = EnumPtr_Drop->GetDisplayNameTextByValue((int64)SelectedDropItem).ToString();
+	if (!DungeonMakerSubsystem) { return; }
 
-	const UEnum* EnumPtr_Level = StaticEnum<EDungeonMonsterLevel>();
-	FString Str3 = EnumPtr_Level->GetDisplayNameTextByValue((int64)SelectedMonsterLevel).ToString();
+	DungeonMakerSubsystem->MoveToDungeon();
 
-	DebugHelper::Print(Str1);
-	DebugHelper::Print(Str2);
-	DebugHelper::Print(Str3);
+	DungeonMakerSubsystem->SpawnMonster(SelectedElemental, SelectedDropItem, SelectedMonsterLevel);
 }
 
 void UDungeonMakerUI::OnDungeonOptionChanged(EDungeonOptionType Type, int32 Index)
