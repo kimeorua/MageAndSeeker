@@ -16,5 +16,5 @@ void UMonsterUIComponent::BindWidget(UCharacterHUD* UI)
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwningCharacter_Base());
 	if (!ASC) return;
 
-	ASC->GetGameplayAttributeValueChangeDelegate(UMASBaseAttributeSet::GetCurrentHPAttribute()).AddUObject(this, &UUIComponent::OnCurrentHPChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UMASBaseAttributeSet::GetCurrentHPAttribute()).AddUObject(this, &UMonsterUIComponent::OnCurrentHPChanged);
 }
