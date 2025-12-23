@@ -24,8 +24,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnChangedBookIcon(EElementalType Type);
 
+	virtual void InitCharacterUI(ABaseCharacter* Owenr) override;
+
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void OnMaxHPChanged(const FOnAttributeChangeData& Data) override;
 
 private:
 	void OnCurrentAPChanged(const FOnAttributeChangeData& Data);

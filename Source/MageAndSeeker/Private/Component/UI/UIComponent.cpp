@@ -8,17 +8,13 @@
 #include "Blueprint/UserWidget.h"
 
 #include "GAS/AttributeSet/MASBaseAttributeSet.h"
-#include "GAS/AttributeSet/MageAttributeSet.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 
+#include "DebugHelper.h"
+
 void UUIComponent::InitCharacterUI(ABaseCharacter* Owenr)
 {
-	if (CharacterHUDClass)
-	{
-		HUD = Cast<UCharacterHUD>(CreateWidget(Owenr->GetWorld(), CharacterHUDClass));
-		HUD->AddToViewport();
-	}
 }
 
 void UUIComponent::BeginPlay()
@@ -44,10 +40,5 @@ void UUIComponent::OnCurrentHPChanged(const FOnAttributeChangeData& Data)
 
 void UUIComponent::OnMaxHPChanged(const FOnAttributeChangeData& Data)
 {
-	if (HUD)
-	{
-		UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwningCharacter_Base());
-		const UMageAttributeSet* MageAttributeSet = ASC->GetSet<UMageAttributeSet>();
-		HUD->UpdateMaxHPBar(MageAttributeSet->GetHPLevel());
-	}
+	
 }

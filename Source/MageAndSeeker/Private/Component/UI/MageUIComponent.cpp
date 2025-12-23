@@ -33,6 +33,15 @@ void UMageUIComponent::OnChangedBookIcon(EElementalType Type)
 	MageHud->UpdateBookIcon(Type);
 }
 
+void UMageUIComponent::InitCharacterUI(ABaseCharacter* Owenr)
+{
+	if (CharacterHUDClass)
+	{
+		HUD = Cast<UCharacterHUD>(CreateWidget(Owenr->GetWorld(), CharacterHUDClass));
+		HUD->AddToViewport();
+	}
+}
+
 void UMageUIComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -43,6 +52,16 @@ void UMageUIComponent::BeginPlay()
 	ASC->GetGameplayAttributeValueChangeDelegate(UArtifactAttributeSet::GetCurrentAPAttribute()).AddUObject(this, &UMageUIComponent::OnCurrentAPChanged);
 	ASC->GetGameplayAttributeValueChangeDelegate(UMageAttributeSet::GetCurrentMPAttribute()).AddUObject(this, &UMageUIComponent::OnCurrentManaChanged);
 	ASC->GetGameplayAttributeValueChangeDelegate(UMageAttributeSet::GetMaxMPAttribute()).AddUObject(this, &UMageUIComponent::OnMaxManaChanged);
+}
+
+void UMageUIComponent::OnMaxHPChanged(const FOnAttributeChangeData& Data)
+{
+	if (HUD)
+	{
+		UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwningCharacter_Base());
+		const UMageAttributeSet* MageAttributeSet = ASC->GetSet<UMageAttributeSet>();
+		HUD->UpdateMaxHPBar(MageAttributeSet->GetHPLevel());
+	}
 }
 
 void UMageUIComponent::OnCurrentAPChanged(const FOnAttributeChangeData& Data)

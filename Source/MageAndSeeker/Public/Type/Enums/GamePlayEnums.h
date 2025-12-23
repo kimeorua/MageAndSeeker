@@ -63,8 +63,8 @@ enum class EDungeonDropItem : uint8
 UENUM(BlueprintType)
 enum class EDungeonMonsterLevel : uint8
 {
-	Level1,
-	Level2,
-	Level3,
-	Boss
+	Level1 = 0,
+	Level2 = 1,
+	Level3 = 2,
+	Boss = 3
 };

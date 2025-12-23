@@ -21,17 +21,17 @@ void UMonsterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 
     if (Data.EvaluatedData.Attribute == GetFireResistanceAttribute())
     {
-        float NewFR = FMath::Clamp(GetFireResistance(), 0.0f, 20.0f);
+        float NewFR = FMath::Clamp(GetFireResistance(), 0.0f, 50.0f);
         SetFireResistance(NewFR);
     }
     else if (Data.EvaluatedData.Attribute == GetIceResistanceAttribute())
     {
-        float NewIR = FMath::Clamp(GetIceResistance(), 0.0f, 20.0f);
+        float NewIR = FMath::Clamp(GetIceResistance(), 0.0f, 50.0f);
         SetIceResistance(NewIR);
     }
     else if (Data.EvaluatedData.Attribute == GetLightningResistanceAttribute())
     {
-        float NewLR = FMath::Clamp(GetLightningResistance(), 0.0f, 20.0f);
+        float NewLR = FMath::Clamp(GetLightningResistance(), 0.0f, 50.0f);
         SetLightningResistance(NewLR);
     }
 }

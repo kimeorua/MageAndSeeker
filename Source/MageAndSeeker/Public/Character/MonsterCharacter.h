@@ -9,6 +9,7 @@
 class UMonsterAttributeSet;
 class UMonsterCombatComponent;
 class UMonsterUIComponent;
+class UWidgetComponent;
 
 UCLASS()
 class MAGEANDSEEKER_API AMonsterCharacter : public ABaseCharacter
@@ -17,6 +18,8 @@ class MAGEANDSEEKER_API AMonsterCharacter : public ABaseCharacter
 	
 public:
 	AMonsterCharacter();
+
+	FORCEINLINE void SetMonsterLV(const int32 LV = 1) { MonsterLV = LV; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -32,5 +35,13 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
 	UMonsterUIComponent* MonsterUIComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
+	UWidgetComponent* HPBarWidgetComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> HPBarWidgetClass;
+
 	virtual void InitCharacterStatAndAbility() override;
+
+	int32 MonsterLV;
 };

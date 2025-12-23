@@ -23,11 +23,10 @@ protected:
 	UPROPERTY()
 	UCharacterHUD* HUD;
 
-private:
 	UPROPERTY(EditDefaultsOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UCharacterHUD> CharacterHUDClass;
 
-	void OnCurrentHPChanged(const FOnAttributeChangeData& Data);
+	virtual void OnCurrentHPChanged(const FOnAttributeChangeData& Data);
 
-	void OnMaxHPChanged(const FOnAttributeChangeData& Data);
+	virtual void OnMaxHPChanged(const FOnAttributeChangeData& Data);
 };

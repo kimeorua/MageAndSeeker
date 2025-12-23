@@ -37,9 +37,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Monster Spawn Table", meta = (AllowPrivateAccess = "true"))
 	FVector BossSpawnLocation;
 
-	void SpawnNormalMonster(EDungeonElemental DungeonElemental);
+	void SpawnNormalMonster(EDungeonElemental DungeonElemental, EDungeonMonsterLevel DungeonMonsterLevel);
 
-	void SpawnMatterMonster(EDungeonDropItem DungeonDropItem);
+	void SpawnMatterMonster(EDungeonDropItem DungeonDropItem, EDungeonMonsterLevel DungeonMonsterLevel);
 
 	void SpawnBossMonster(EDungeonElemental DungeonElemental);
 
@@ -47,7 +47,7 @@ private:
 
 	int32 CurrentMonsterCount;
 
-	FActorSpawnParameters SpawnParameters;
+	ESpawnActorCollisionHandlingMethod SpawnParameters;
 
 	UPROPERTY()
 	ATargetPoint* DungeonStartPoint;

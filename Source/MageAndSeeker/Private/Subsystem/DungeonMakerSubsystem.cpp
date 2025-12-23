@@ -16,8 +16,8 @@
 void UDungeonMakerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
-	CurrentStage = 4;
-	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	CurrentStage = 1;
+	SpawnParameters = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	CurrentMonsterCount = 0;
 
 	DebugHelper::Print("UDungeonMakerSubsystem Init");
@@ -32,11 +32,13 @@ void UDungeonMakerSubsystem::SpawnMonster(EDungeonElemental DungeonElemental, ED
 	if (DungeonMonsterLevel == EDungeonMonsterLevel::Boss)
 	{
 		SpawnBossMonster(DungeonElemental);
+
+		DebugHelper::Print("HI");
 	}
 	else
 	{
-		SpawnNormalMonster(DungeonElemental);
-		SpawnMatterMonster(DungeonDropItem);
+		SpawnNormalMonster(DungeonElemental, DungeonMonsterLevel);
+		SpawnMatterMonster(DungeonDropItem, DungeonMonsterLevel);
 	}
 }
 
@@ -56,7 +58,7 @@ void UDungeonMakerSubsystem::MoveToDungeon()
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Mage, MageAndSeekerGameplayTag::Mage_Event_ModeChange, Payload);
 }
 
-void UDungeonMakerSubsystem::SpawnNormalMonster(EDungeonElemental DungeonElemental)
+void UDungeonMakerSubsystem::SpawnNormalMonster(EDungeonElemental DungeonElemental, EDungeonMonsterLevel DungeonMonsterLevel)
 {
 	static const FString Context(TEXT("Monster Spawn Normal"));
 
@@ -75,13 +77,15 @@ void UDungeonMakerSubsystem::SpawnNormalMonster(EDungeonElemental DungeonElement
 			SpawnTransform.SetLocation(SpawnLocation[CurrentMonsterCount]);
 			SpawnTransform.SetRotation(FRotator(0.f, 180.f, 0.f).Quaternion());
 
-			AMonsterCharacter* SpawnMatterMonster = GetWorld()->SpawnActor<AMonsterCharacter>(Data.Monster_BP, SpawnTransform, SpawnParameters);
+			AMonsterCharacter* SpawnMatterMonster = GetWorld()->SpawnActorDeferred<AMonsterCharacter>(Data.Monster_BP, SpawnTransform, nullptr, nullptr, SpawnParameters);
+			SpawnMatterMonster->SetMonsterLV(static_cast<int32>(DungeonMonsterLevel) + 1);
+			SpawnMatterMonster->FinishSpawning(SpawnTransform);
 			CurrentMonsterCount++;
 		}
 	}
 }
 
-void UDungeonMakerSubsystem::SpawnMatterMonster(EDungeonDropItem DungeonDropItem)
+void UDungeonMakerSubsystem::SpawnMatterMonster(EDungeonDropItem DungeonDropItem, EDungeonMonsterLevel DungeonMonsterLevel)
 {
 	static const FString Context(TEXT("Monster Spawn Matter"));
 
@@ -107,7 +111,9 @@ void UDungeonMakerSubsystem::SpawnMatterMonster(EDungeonDropItem DungeonDropItem
 			SpawnTransform.SetLocation(SpawnLocation[CurrentMonsterCount]);
 			SpawnTransform.SetRotation(FRotator(0.f, 180.f, 0.f).Quaternion());
 
-			AMonsterCharacter* SpawnMatterMonster = GetWorld()->SpawnActor<AMonsterCharacter>(Data.Monster_BP, SpawnTransform, SpawnParameters);
+			AMonsterCharacter* SpawnMatterMonster = GetWorld()->SpawnActorDeferred<AMonsterCharacter>(Data.Monster_BP, SpawnTransform, nullptr, nullptr, SpawnParameters);
+			SpawnMatterMonster->SetMonsterLV(static_cast<int32>(DungeonMonsterLevel) + 1);
+			SpawnMatterMonster->FinishSpawning(SpawnTransform);
 			CurrentMonsterCount++;
 		}
 	}
@@ -143,7 +149,8 @@ void UDungeonMakerSubsystem::SpawnBossMonster(EDungeonElemental DungeonElemental
 	SpawnTransform.SetLocation(BossSpawnLocation);
 	SpawnTransform.SetRotation(FRotator(0.f, 180.f, 0.f).Quaternion());
 
-	AMonsterCharacter* SpawnBoss = GetWorld()->SpawnActor<AMonsterCharacter>(SpawnData[0].Monster_BP, SpawnTransform, SpawnParameters);
-
+	AMonsterCharacter* SpawnMatterMonster = GetWorld()->SpawnActorDeferred<AMonsterCharacter>(SpawnData[0].Monster_BP, SpawnTransform, nullptr, nullptr, SpawnParameters);
+	SpawnMatterMonster->SetMonsterLV();
+	SpawnMatterMonster->FinishSpawning(SpawnTransform);
 	CurrentMonsterCount++;
 }

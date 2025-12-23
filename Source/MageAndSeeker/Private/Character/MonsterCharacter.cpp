@@ -5,6 +5,7 @@
 #include "Component/Combat/MonsterCombatComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Component/UI/MonsterUIComponent.h"
+#include "Components/WidgetComponent.h"
 //------------------------ Component ------------------------//
 
 //------------------------ AttributeSet ------------------------//
@@ -21,6 +22,10 @@ AMonsterCharacter::AMonsterCharacter()
 	MonsterCombatComponent = CreateDefaultSubobject<UMonsterCombatComponent>(TEXT("MonsterCombatComponent"));
 	MonsterUIComponent = CreateDefaultSubobject<UMonsterUIComponent>(TEXT("MonsterUIComponent"));
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Block);
+
+	HPBarWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWigetComponent"));
+	HPBarWidgetComponent->SetupAttachment(GetMesh());
+	HPBarWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
 }
 
 void AMonsterCharacter::BeginPlay()
@@ -35,13 +40,24 @@ void AMonsterCharacter::PossessedBy(AController* NewController)
 
 void AMonsterCharacter::InitCharacterStatAndAbility()
 {
+	if (HPBarWidgetClass)
+	{
+		HPBarWidgetComponent->SetWidgetClass(HPBarWidgetClass);
+		HPBarWidgetComponent->InitWidget();
+	}
+	UCharacterHUD* HPBar =Cast<UCharacterHUD>(HPBarWidgetComponent->GetUserWidgetObject());
+
+	if (HPBar && MonsterUIComponent)
+	{
+		MonsterUIComponent->InitCharacterUI(this);
+		MonsterUIComponent->BindWidget(HPBar);
+	}
+
 	if (!CharacterStartUpData.IsNull())
 	{
 		if (UDataAsset_StartUp* LodedData = CharacterStartUpData.LoadSynchronous())
 		{
-			int32 AbilityApplyLevel = 1;
-
-			//TODO: 던전 생성시 선택한 몬스터 레벨에 따라, Ablity 및 AttributeSet LV 설정!
+			int32 AbilityApplyLevel = MonsterLV;
 
 			LodedData->GiveToAbilitySystemComponent(MASAbilitySystemComponent, AbilityApplyLevel);
 		}
