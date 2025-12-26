@@ -2,6 +2,7 @@
 
 #pragma once
 #include "Type/Enums/GamePlayEnums.h"
+#include "GameplayTagContainer.h"
 #include "GamePlayStructs.generated.h"
 
 class UMagicRune;
@@ -67,4 +68,25 @@ struct FEquipedRunes
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<UMagicRune*> EquipedRunes;
+};
+
+USTRUCT(BlueprintType)
+struct FProjectileSpec
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Count;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Size;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ProjectileSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CastSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTagContainer HitEventTags;
 };

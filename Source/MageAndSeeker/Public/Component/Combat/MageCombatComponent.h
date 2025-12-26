@@ -10,6 +10,7 @@
 
 class AMagicBook;
 class AWeaponBase;
+class UMageRuneComponent;
 
 UCLASS()
 class MAGEANDSEEKER_API UMageCombatComponent : public UCombatComponent, public ISaveLoadInterface
@@ -29,6 +30,12 @@ public:
 	void SaveData_Implementation(UMageAndSeekerSaveGame* SaveGame) override;
 
 	void LoadData_Implementation(const UMageAndSeekerSaveGame* SaveGame) override;
+
+	UFUNCTION(BlueprintCallable)
+	void RuneEffectApply();
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnProjectile();
 
 protected:
 	virtual void BeginPlay() override;
@@ -59,4 +66,9 @@ private:
 	FBookData CurrentBookData;
 
 	void BookInit();
+
+	FProjectileSpec ProjectileSpec;
+
+	UPROPERTY()
+	UMageRuneComponent* MageRuneComponent;
 };

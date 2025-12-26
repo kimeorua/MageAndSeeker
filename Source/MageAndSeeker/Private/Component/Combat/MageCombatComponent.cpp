@@ -7,6 +7,7 @@
 #include "Props/MagicBook.h"
 #include "MageAndSeekerFunctionLibrary.h"
 #include "SaveGame/MageAndSeekerSaveGame.h"
+#include "Component/Rune/MageRuneComponent.h"
 
 #include "DebugHelper.h"
 
@@ -101,6 +102,30 @@ void UMageCombatComponent::LoadData_Implementation(const UMageAndSeekerSaveGame*
 	if (IsValid(MagicBook))
 	{
 		MagicBook->BookMatterIntanceUpdatae(CurrentBookData.Type, CurrentBookData.BookLevel);
+	}
+}
+
+void UMageCombatComponent::RuneEffectApply()
+{
+	if (!MageRuneComponent)
+	{
+		MageRuneComponent = GetOwner()->FindComponentByClass<UMageRuneComponent>();
+	}
+
+	ProjectileSpec.Count = 1;
+	ProjectileSpec.CastSpeed = 1.0f;
+	ProjectileSpec.ProjectileSpeed = 1500.0f;
+	ProjectileSpec.Size = 1.0f;
+	ProjectileSpec.HitEventTags.Reset();
+
+	MageRuneComponent->RuneApply(CurrentBookData.Type, ProjectileSpec);
+}
+
+void UMageCombatComponent::SpawnProjectile()
+{
+	for (int32 i = 0; i < ProjectileSpec.Count; i++)
+	{
+		//TODO 투사체 스폰 하기
 	}
 }
 

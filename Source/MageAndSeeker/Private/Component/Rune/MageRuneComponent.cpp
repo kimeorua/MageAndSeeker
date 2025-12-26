@@ -42,7 +42,7 @@ void UMageRuneComponent::RegisterRunes(EElementalType ElementalType, const TArra
 
 		bool FindSame = false;
 
-		UMagicRune* NewRune = NewObject<UMagicRune>(GetWorld(), Data.CreateRuneClass);
+		UMagicRune* NewRune = NewObject<UMagicRune>(GetOwner(), Data.CreateRuneClass);
 		FRuneData RuneData;
 		RuneData.RuneID = Data.RuneID;
 		RuneData.RuneLevel = Data.RuneLevel;
@@ -171,6 +171,17 @@ void UMageRuneComponent::LoadData_Implementation(const UMageAndSeekerSaveGame* S
 	else
 	{
 		EquipedRunes[EElementalType::Lightning].EquipedRunes.Empty();
+	}
+}
+
+void UMageRuneComponent::RuneApply(EElementalType Type, FProjectileSpec& Spec)
+{
+	if (const FEquipedRunes* EquipedRuneArr = EquipedRunes.Find(Type))
+	{
+		for (UMagicRune* Rune : EquipedRuneArr->EquipedRunes)
+		{
+			Rune->RuneEffect(Spec);
+		}
 	}
 }
 

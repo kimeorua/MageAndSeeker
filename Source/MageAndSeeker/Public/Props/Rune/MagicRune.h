@@ -16,6 +16,10 @@ public:
 	void RuneInit(FRuneData Data);
 
 	FRuneData GetRuneData() const { return RuneData; }
+
+	UFUNCTION(BlueprintNativeEvent)
+	FProjectileSpec RuneEffect(const FProjectileSpec& Spec);
+	virtual FProjectileSpec RuneEffect_Implementation(FProjectileSpec& Spec);
 	
 private:
 	UPROPERTY(EditAnywhere, Category = "Data",  meta = (AllowPrivateAccess = "true"))

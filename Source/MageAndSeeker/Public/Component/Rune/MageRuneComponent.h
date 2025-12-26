@@ -7,6 +7,7 @@
 #include "Component/Rune/Interface/RuneManagementInterface.h"
 #include "Interface/SaveLoadInterface.h"
 #include "Type/Structs/SaveDataStructs.h"
+#include "Type/Structs/GamePlayStructs.h"
 #include "MageRuneComponent.generated.h"
 
 class UMagicRune;
@@ -28,6 +29,8 @@ public:
 	void SaveData_Implementation(UMageAndSeekerSaveGame* SaveGame) override;
 
 	void LoadData_Implementation(const UMageAndSeekerSaveGame* SaveGame) override;
+
+	void RuneApply(EElementalType Type, FProjectileSpec& Spec);
 
 protected:
 	virtual void BeginPlay() override;
