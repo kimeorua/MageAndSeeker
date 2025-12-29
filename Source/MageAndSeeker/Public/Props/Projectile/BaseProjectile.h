@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Type/Structs/GamePlayStructs.h"
 #include "BaseProjectile.generated.h"
 
 class UProjectileMovementComponent;
@@ -21,7 +22,7 @@ public:
 	UFUNCTION()
 	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	void InitProjectile(const FVector& ShootDirection, float Speed);
+	void InitProjectile(const FVector& ShootDirection, const FProjectileSpec& Spec);
 
 protected:
 	virtual void BeginPlay() override;
@@ -35,4 +36,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Collision", meta = (AllowPrivateAccess = "true"))
 	USphereComponent* SphereCollision;
+
+	FVector BaseScale;
 };

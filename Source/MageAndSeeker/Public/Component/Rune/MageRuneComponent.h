@@ -30,7 +30,7 @@ public:
 
 	void LoadData_Implementation(const UMageAndSeekerSaveGame* SaveGame) override;
 
-	void RuneApply(EElementalType Type, FProjectileSpec& Spec);
+	FProjectileSpec RuneApply(EElementalType Type, FProjectileSpec& Spec);
 
 protected:
 	virtual void BeginPlay() override;

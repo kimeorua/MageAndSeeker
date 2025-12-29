@@ -11,6 +11,11 @@ AWeaponBase::AWeaponBase()
 	SetRootComponent(Mesh);
 }
 
+UStaticMeshComponent* AWeaponBase::GetWeaponMesh() const
+{
+	return Mesh;
+}
+
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {

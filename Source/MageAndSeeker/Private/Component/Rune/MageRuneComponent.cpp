@@ -174,15 +174,16 @@ void UMageRuneComponent::LoadData_Implementation(const UMageAndSeekerSaveGame* S
 	}
 }
 
-void UMageRuneComponent::RuneApply(EElementalType Type, FProjectileSpec& Spec)
+FProjectileSpec UMageRuneComponent::RuneApply(EElementalType Type, FProjectileSpec& Spec)
 {
 	if (const FEquipedRunes* EquipedRuneArr = EquipedRunes.Find(Type))
 	{
 		for (UMagicRune* Rune : EquipedRuneArr->EquipedRunes)
 		{
-			Rune->RuneEffect(Spec);
+			Spec = Rune->RuneEffect(Spec);
 		}
 	}
+	return Spec;
 }
 
 void UMageRuneComponent::BeginPlay()

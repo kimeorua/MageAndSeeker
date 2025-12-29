@@ -40,14 +40,19 @@ void ABaseProjectile::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 	}
 }
 
-void ABaseProjectile::InitProjectile(const FVector& ShootDirection, float Speed)
+void ABaseProjectile::InitProjectile(const FVector& ShootDirection, const FProjectileSpec& Spec)
 {
 	if (ProjectileMovementComponent)
 	{
 		FVector NormalizedDir = ShootDirection.GetSafeNormal();
-		ProjectileMovementComponent->Velocity = NormalizedDir * Speed;
+		ProjectileMovementComponent->Velocity = NormalizedDir * Spec.ProjectileSpeed;
 
-		ProjectileFX->SetVariableFloat(FName("Size"), GetActorScale3D().X);
+		SetActorScale3D(BaseScale * Spec.Size);
+		const float VisualSize = BaseScale.X * Spec.Size;
+
+		ProjectileFX->SetVariableFloat(FName("Size"), VisualSize);
+
+		// TODO : 전달받은 Spec을 통해 발송될 GameplayEvent Tag 저장 하기.
 	}
 }
 
@@ -58,4 +63,6 @@ void ABaseProjectile::BeginPlay()
 	SphereCollision->SetCollisionObjectType(ECC_GameTraceChannel2);
 
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnComponentBeginOverlap);
+
+	BaseScale = GetActorScale3D();
 }

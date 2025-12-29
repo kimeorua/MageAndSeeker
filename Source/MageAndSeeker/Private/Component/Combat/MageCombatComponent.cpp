@@ -8,8 +8,11 @@
 #include "MageAndSeekerFunctionLibrary.h"
 #include "SaveGame/MageAndSeekerSaveGame.h"
 #include "Component/Rune/MageRuneComponent.h"
+#include "Props/Projectile/BaseProjectile.h"
 
 #include "DebugHelper.h"
+
+const float PROJECTILE_ANGLE = 90.0f;
 
 UMageCombatComponent::UMageCombatComponent()
 {
@@ -117,15 +120,61 @@ void UMageCombatComponent::RuneEffectApply()
 	ProjectileSpec.ProjectileSpeed = 1500.0f;
 	ProjectileSpec.Size = 1.0f;
 	ProjectileSpec.HitEventTags.Reset();
+	ProjectileSpec.ManaCostRate = 0.0f;
 
-	MageRuneComponent->RuneApply(CurrentBookData.Type, ProjectileSpec);
+	ProjectileSpec = MageRuneComponent->RuneApply(CurrentBookData.Type, ProjectileSpec);
 }
 
 void UMageCombatComponent::SpawnProjectile()
 {
+	TSubclassOf<ABaseProjectile>SpawnedClass;
+
+	switch (CurrentBookData.Type)
+	{
+	case EElementalType::Fire :
+		SpawnedClass = FireProjectile;
+		break;
+	case EElementalType::Ice:
+		SpawnedClass = IceProjectile;
+		break;
+	case EElementalType::Lightning:
+		SpawnedClass = LightningProjectile;
+		break;
+	default:
+		break;
+	}
+
+	if (!SpawnedClass) return;
+
+	float SpreadAngle = PROJECTILE_ANGLE;
+
+	FVector MuzzleLocation = Staff->GetWeaponMesh()->GetSocketLocation("Orb Spawn Socket");
+	FRotator MuzzleRotation = GetOwningCharacter_Base()->GetControlRotation();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
 	for (int32 i = 0; i < ProjectileSpec.Count; i++)
 	{
-		//TODO 투사체 스폰 하기
+		float AngleOffset = 0.0f;
+
+		if (ProjectileSpec.Count > 1)
+		{
+			float Step = SpreadAngle / (ProjectileSpec.Count - 1);
+			AngleOffset = -SpreadAngle / 2 + Step * i;
+		}
+
+		FRotator SpawnRotation = MuzzleRotation;
+		SpawnRotation.Yaw += AngleOffset;
+
+		FVector SpawnLocation = MuzzleLocation + SpawnRotation.Vector() * 50.f;
+
+		ABaseProjectile* Projectile = World->SpawnActor<ABaseProjectile>(SpawnedClass, SpawnLocation, SpawnRotation);
+
+		if (Projectile)
+		{
+			Projectile->InitProjectile(SpawnRotation.Vector(), ProjectileSpec);
+		}
 	}
 }
 

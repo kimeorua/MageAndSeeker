@@ -36,6 +36,7 @@ namespace MageAndSeekerGameplayTag
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaChargePer, "Mage.Data.ManaChargePer");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_APChargePer, "Mage.Data.APChargePer");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaCost, "Mage.Data.ManaCost");
 
 	/*Shared Tag*/
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Ability_TakeDamage, "Shared.Ability.TakeDamage");

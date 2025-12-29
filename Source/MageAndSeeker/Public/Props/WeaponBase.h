@@ -15,6 +15,7 @@ class MAGEANDSEEKER_API AWeaponBase : public AActor
 	
 public:	
 	AWeaponBase();
+	UStaticMeshComponent* GetWeaponMesh() const;
 
 protected:
 	virtual void BeginPlay() override;

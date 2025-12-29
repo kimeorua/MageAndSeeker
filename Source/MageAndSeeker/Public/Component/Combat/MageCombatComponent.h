@@ -11,6 +11,7 @@
 class AMagicBook;
 class AWeaponBase;
 class UMageRuneComponent;
+class ABaseProjectile;
 
 UCLASS()
 class MAGEANDSEEKER_API UMageCombatComponent : public UCombatComponent, public ISaveLoadInterface
@@ -36,6 +37,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SpawnProjectile();
+
+	UFUNCTION(BlueprintPure)
+	float GetManaCost() const { return ProjectileSpec.GetManaCost(); }
+
+	UFUNCTION(BlueprintPure)
+	float GetCastSpeed() const { return ProjectileSpec.CastSpeed; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -64,6 +71,15 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Book Data", meta = (AllowPrivateAccess = "true"))
 	FBookData CurrentBookData;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MagicProjectile", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ABaseProjectile> FireProjectile;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MagicProjectile", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ABaseProjectile> IceProjectile;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MagicProjectile", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ABaseProjectile> LightningProjectile;
 
 	void BookInit();
 

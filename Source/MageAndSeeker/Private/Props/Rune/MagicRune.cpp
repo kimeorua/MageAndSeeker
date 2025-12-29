@@ -10,7 +10,7 @@ void UMagicRune::RuneInit(FRuneData Data)
 	RuneData.RuneApplyType = Data.RuneApplyType;
 }
 
-FProjectileSpec UMagicRune::RuneEffect_Implementation(FProjectileSpec& Spec)
+FProjectileSpec UMagicRune::RuneEffect_Implementation(const FProjectileSpec& Spec)
 {
 	UE_LOG(LogTemp, Warning, TEXT("C++ RuneEffect called"));
 	return Spec;

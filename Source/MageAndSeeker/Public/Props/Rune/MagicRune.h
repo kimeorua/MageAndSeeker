@@ -19,7 +19,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	FProjectileSpec RuneEffect(const FProjectileSpec& Spec);
-	virtual FProjectileSpec RuneEffect_Implementation(FProjectileSpec& Spec);
+	virtual FProjectileSpec RuneEffect_Implementation(const FProjectileSpec& Spec);
 	
 private:
 	UPROPERTY(EditAnywhere, Category = "Data",  meta = (AllowPrivateAccess = "true"))

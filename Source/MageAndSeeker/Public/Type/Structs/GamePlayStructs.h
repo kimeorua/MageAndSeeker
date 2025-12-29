@@ -88,5 +88,12 @@ struct FProjectileSpec
 	float CastSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ManaCostRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTagContainer HitEventTags;
+
+	static constexpr float BaseManaCost = 2.0f;
+
+	float GetManaCost() const;
 };
