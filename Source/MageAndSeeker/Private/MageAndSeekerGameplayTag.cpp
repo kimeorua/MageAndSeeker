@@ -22,11 +22,12 @@ namespace MageAndSeekerGameplayTag
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Status_Book_Ice, "Mage.Status.Book.Ice");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Status_Book_Lightning, "Mage.Status.Book.Lightning");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Status_CombatMode, "Mage.Status.CombatMode");
-	UE_DEFINE_GAMEPLAY_TAG(Mage_Status_ManaRecharging, "Mage.Status.ManaRecharging");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Status_ManaFull, "Mage.Status.ManaFull");
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_BookChange, "Mage.Ability.BookChange");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_Attack, "Mage.Ability.Attack");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_Interaction, "Mage.Ability.Interaction");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Ability_ManaRecovery, "Mage.Ability.ManaRecovery");
 
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_ActivateBookChangeEffect, "Mage.Event.ActivateBookChangeEffect");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_SpawnProjectile, "Mage.Event.SpawnProjectile");
@@ -34,9 +35,10 @@ namespace MageAndSeekerGameplayTag
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_APCharge, "Mage.Event.APCharge");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Event_InteractionEnd, "Mage.Event.InteractionEnd");
 
-	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaChargePer, "Mage.Data.ManaChargePer");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_APChargePer, "Mage.Data.APChargePer");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaCost, "Mage.Data.ManaCost");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaRecoveyTime, "Mage.Data.ManaRecoveyTime");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaRecoveyAmount, "Mage.Data.ManaRecoveyAmount");
 
 	/*Shared Tag*/
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Ability_TakeDamage, "Shared.Ability.TakeDamage");

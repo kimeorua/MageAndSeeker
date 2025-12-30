@@ -18,7 +18,7 @@ class MAGEANDSEEKER_API UMageAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 
-protected:
+public:
 	UPROPERTY(BlueprintReadOnly, Category = "LV", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData HPLevel;
 

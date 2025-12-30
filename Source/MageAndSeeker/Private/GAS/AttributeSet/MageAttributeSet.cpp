@@ -3,6 +3,8 @@
 
 #include "GAS/AttributeSet/MageAttributeSet.h"
 #include "GameplayEffectExtension.h"
+#include "MageAndSeekerFunctionLibrary.h"
+#include "MageAndSeekerGameplayTag.h"
 
 #include "DebugHelper.h"
 
@@ -22,6 +24,16 @@ void UMageAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if (Data.EvaluatedData.Attribute == GetCurrentMPAttribute())
 	{
 		float NewMP = FMath::Clamp(GetCurrentMP(), 0.0f, GetMaxMP());
+
+		if (NewMP < GetMaxMP())
+		{
+			UMageAndSeekerFunctionLibrary::RemoveGameplayTagToActorIfFind(Data.Target.GetAvatarActor(), MageAndSeekerGameplayTag::Mage_Status_ManaFull);
+		}
+		else if (NewMP >= GetMaxMP())
+		{
+			UMageAndSeekerFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), MageAndSeekerGameplayTag::Mage_Status_ManaFull);
+		}
+
 		SetCurrentMP(NewMP);
 	}
 	else if (Data.EvaluatedData.Attribute == GetMaxMPAttribute())
