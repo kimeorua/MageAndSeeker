@@ -91,7 +91,13 @@ struct FProjectileSpec
 	float ManaCostRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTagContainer HitEventTags;
+	float DamageRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTagContainer SendToPlayerEventTags;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTagContainer SendToMonsterEventTags;
 
 	static constexpr float BaseManaCost = 2.0f;
 

@@ -119,8 +119,10 @@ void UMageCombatComponent::RuneEffectApply()
 	ProjectileSpec.CastSpeed = 1.0f;
 	ProjectileSpec.ProjectileSpeed = 1500.0f;
 	ProjectileSpec.Size = 1.0f;
-	ProjectileSpec.HitEventTags.Reset();
 	ProjectileSpec.ManaCostRate = 0.0f;
+	ProjectileSpec.DamageRate = 0.0f;
+	ProjectileSpec.SendToPlayerEventTags.Reset();
+	ProjectileSpec.SendToMonsterEventTags.Reset();
 
 	ProjectileSpec = MageRuneComponent->RuneApply(CurrentBookData.Type, ProjectileSpec);
 }

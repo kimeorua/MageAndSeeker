@@ -15,6 +15,7 @@ class MAGEANDSEEKER_API UMagicRune : public UObject
 public:
 	void RuneInit(FRuneData Data);
 
+	UFUNCTION(BlueprintPure)
 	FRuneData GetRuneData() const { return RuneData; }
 
 	UFUNCTION(BlueprintNativeEvent)
