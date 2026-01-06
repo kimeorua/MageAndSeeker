@@ -121,8 +121,8 @@ void UMageCombatComponent::RuneEffectApply()
 	ProjectileSpec.Size = 1.0f;
 	ProjectileSpec.ManaCostRate = 0.0f;
 	ProjectileSpec.DamageRate = 0.0f;
-	ProjectileSpec.SendToPlayerEventTags.Reset();
 	ProjectileSpec.SendToMonsterEventTags.Reset();
+	ProjectileSpec.APChargeRate = 0.0f;
 
 	ProjectileSpec = MageRuneComponent->RuneApply(CurrentBookData.Type, ProjectileSpec);
 }
@@ -175,7 +175,7 @@ void UMageCombatComponent::SpawnProjectile()
 
 		if (Projectile)
 		{
-			Projectile->InitProjectile(SpawnRotation.Vector(), ProjectileSpec);
+			Projectile->InitProjectile(SpawnRotation.Vector(), ProjectileSpec, GetOwningCharacter_Base());
 		}
 	}
 }

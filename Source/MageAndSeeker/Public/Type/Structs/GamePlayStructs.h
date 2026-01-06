@@ -94,7 +94,7 @@ struct FProjectileSpec
 	float DamageRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTagContainer SendToPlayerEventTags;
+	float APChargeRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTagContainer SendToMonsterEventTags;

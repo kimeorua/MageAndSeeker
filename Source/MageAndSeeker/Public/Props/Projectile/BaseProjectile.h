@@ -22,7 +22,7 @@ public:
 	UFUNCTION()
 	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	void InitProjectile(const FVector& ShootDirection, const FProjectileSpec& Spec);
+	void InitProjectile(const FVector& ShootDirection, const FProjectileSpec& Spec, AActor* OwnerActor);
 
 protected:
 	virtual void BeginPlay() override;
@@ -38,4 +38,9 @@ private:
 	USphereComponent* SphereCollision;
 
 	FVector BaseScale;
+
+	AActor* Owner;
+
+	UPROPERTY()
+	FProjectileSpec ChacedSpec;
 };

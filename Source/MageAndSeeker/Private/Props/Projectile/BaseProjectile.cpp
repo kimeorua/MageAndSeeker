@@ -36,11 +36,17 @@ void ABaseProjectile::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 {
 	if (IsValid(OtherActor))
 	{
+		FGameplayEventData PlayerEventData;
+		PlayerEventData.Instigator = Owner;
+		PlayerEventData.Target = Owner;
+		PlayerEventData.EventMagnitude = ChacedSpec.APChargeRate;
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Owner, MageAndSeekerGameplayTag::Mage_Event_APCharge,PlayerEventData);
+
 		Destroy();
 	}
 }
 
-void ABaseProjectile::InitProjectile(const FVector& ShootDirection, const FProjectileSpec& Spec)
+void ABaseProjectile::InitProjectile(const FVector& ShootDirection, const FProjectileSpec& Spec, AActor* OwnerActor)
 {
 	if (ProjectileMovementComponent)
 	{
@@ -52,7 +58,9 @@ void ABaseProjectile::InitProjectile(const FVector& ShootDirection, const FProje
 
 		ProjectileFX->SetVariableFloat(FName("Size"), VisualSize);
 
-		// TODO : 전달받은 Spec을 통해 발송될 GameplayEvent Tag 저장 하기.
+		ChacedSpec = Spec;
+
+		Owner = OwnerActor;
 	}
 }
 
