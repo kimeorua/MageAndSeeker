@@ -34,13 +34,10 @@ ABaseProjectile::ABaseProjectile()
 
 void ABaseProjectile::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (IsValid(OtherActor))
+	if (IsValid(OtherActor) && IsValid(Owner))
 	{
-		FGameplayEventData PlayerEventData;
-		PlayerEventData.Instigator = Owner;
-		PlayerEventData.Target = Owner;
-		PlayerEventData.EventMagnitude = ChacedSpec.APChargeRate;
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Owner, MageAndSeekerGameplayTag::Mage_Event_APCharge,PlayerEventData);
+		SendPlayerEvent(Owner);
+		SendMonsterEvent_Damage(OtherActor, Owner);
 
 		Destroy();
 	}
@@ -48,6 +45,8 @@ void ABaseProjectile::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 
 void ABaseProjectile::InitProjectile(const FVector& ShootDirection, const FProjectileSpec& Spec, AActor* OwnerActor)
 {
+	ChacedSpec = FProjectileSpec();
+
 	if (ProjectileMovementComponent)
 	{
 		FVector NormalizedDir = ShootDirection.GetSafeNormal();
@@ -73,4 +72,24 @@ void ABaseProjectile::BeginPlay()
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnComponentBeginOverlap);
 
 	BaseScale = GetActorScale3D();
+}
+
+void ABaseProjectile::SendPlayerEvent(AActor* Player)
+{
+	FGameplayEventData PlayerEventData;
+	PlayerEventData.Instigator = Player;
+	PlayerEventData.Target = Player;
+	PlayerEventData.EventMagnitude = ChacedSpec.APChargeRate;
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Player, MageAndSeekerGameplayTag::Mage_Event_APCharge, PlayerEventData);
+}
+
+void ABaseProjectile::SendMonsterEvent_Damage(AActor* Monster, AActor* Player)
+{
+	FGameplayEventData MonsterEventData;
+	MonsterEventData.Instigator = Player;
+	MonsterEventData.InstigatorTags.AddTag(DamageTypeTag);
+	MonsterEventData.Target = Monster;
+	MonsterEventData.EventMagnitude = ChacedSpec.DamageRate;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Monster, MageAndSeekerGameplayTag::Shared_Event_TakeDamage, MonsterEventData);
 }

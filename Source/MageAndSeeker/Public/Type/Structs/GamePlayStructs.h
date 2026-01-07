@@ -97,7 +97,7 @@ struct FProjectileSpec
 	float APChargeRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTagContainer SendToMonsterEventTags;
+	FGameplayTag SendToMonsterEventTags;
 
 	static constexpr float BaseManaCost = 2.0f;
 

@@ -37,10 +37,17 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Collision", meta = (AllowPrivateAccess = "true"))
 	USphereComponent* SphereCollision;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage Type", meta = (AllowPrivateAccess = "true"))
+	FGameplayTag DamageTypeTag;
+
 	FVector BaseScale;
 
 	AActor* Owner;
 
 	UPROPERTY()
 	FProjectileSpec ChacedSpec;
+
+	void SendPlayerEvent(AActor* Player);
+
+	void SendMonsterEvent_Damage(AActor* Monster, AActor* Player);
 };
