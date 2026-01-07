@@ -28,6 +28,35 @@ AMonsterCharacter::AMonsterCharacter()
 	HPBarWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
 }
 
+void AMonsterCharacter::SettingMonsterColor(EDungeonElemental DungeonElemental)
+{
+	UMaterialInstanceDynamic* DynMat = GetMesh()->CreateDynamicMaterialInstance(0);
+
+	if (!DynMat) return;
+
+	FLinearColor Color;
+
+	switch (DungeonElemental)
+	{
+	case EDungeonElemental::Fire:
+		Color = FLinearColor(1.f, 0.14f, 0.f);
+		break;
+
+	case EDungeonElemental::Ice:
+		Color = FLinearColor(0.0f, 0.27f, 1.f);
+		break;
+
+	case EDungeonElemental::Lightning:
+		Color = FLinearColor(1.0f, 0.92f, 0.f);
+		break;
+
+	default:
+		Color = FLinearColor::White;
+		break;
+	}
+	DynMat->SetVectorParameterValue(TEXT("Elemental Color"), Color);
+}
+
 void AMonsterCharacter::BeginPlay()
 {
 	Super::BeginPlay();

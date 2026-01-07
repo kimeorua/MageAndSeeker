@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/BaseCharacter.h"
+#include "Type/Enums/GamePlayEnums.h"
 #include "MonsterCharacter.generated.h"
 
 class UMonsterAttributeSet;
@@ -20,6 +21,8 @@ public:
 	AMonsterCharacter();
 
 	FORCEINLINE void SetMonsterLV(const int32 LV = 1) { MonsterLV = LV; }
+
+	void SettingMonsterColor(EDungeonElemental DungeonElemental);
 
 protected:
 	virtual void BeginPlay() override;

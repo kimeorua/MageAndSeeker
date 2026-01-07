@@ -32,8 +32,6 @@ void UDungeonMakerSubsystem::SpawnMonster(EDungeonElemental DungeonElemental, ED
 	if (DungeonMonsterLevel == EDungeonMonsterLevel::Boss)
 	{
 		SpawnBossMonster(DungeonElemental);
-
-		DebugHelper::Print("HI");
 	}
 	else
 	{
@@ -77,9 +75,10 @@ void UDungeonMakerSubsystem::SpawnNormalMonster(EDungeonElemental DungeonElement
 			SpawnTransform.SetLocation(SpawnLocation[CurrentMonsterCount]);
 			SpawnTransform.SetRotation(FRotator(0.f, 180.f, 0.f).Quaternion());
 
-			AMonsterCharacter* SpawnMatterMonster = GetWorld()->SpawnActorDeferred<AMonsterCharacter>(Data.Monster_BP, SpawnTransform, nullptr, nullptr, SpawnParameters);
-			SpawnMatterMonster->SetMonsterLV(static_cast<int32>(DungeonMonsterLevel) + 1);
-			SpawnMatterMonster->FinishSpawning(SpawnTransform);
+			AMonsterCharacter* SpawnNormalMonster = GetWorld()->SpawnActorDeferred<AMonsterCharacter>(Data.Monster_BP, SpawnTransform, nullptr, nullptr, SpawnParameters);
+			SpawnNormalMonster->SetMonsterLV(static_cast<int32>(DungeonMonsterLevel) + 1);
+			SpawnNormalMonster->FinishSpawning(SpawnTransform);
+			SpawnNormalMonster->SettingMonsterColor(DungeonElemental);
 			CurrentMonsterCount++;
 		}
 	}
