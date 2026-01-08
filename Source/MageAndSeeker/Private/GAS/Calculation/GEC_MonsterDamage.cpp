@@ -70,8 +70,8 @@ void UGEC_MonsterDamage::Execute_Implementation(const FGameplayEffectCustomExecu
     FGameplayTagContainer DamageTypeTagContainer;
     Spec.GetAllAssetTags(DamageTypeTagContainer);
 
-    float FinalDamage;
-    float ResistanceMultiplier;
+    float FinalDamage = 0.0f;
+    float ResistanceMultiplier = 0.0f;
 
     if (DamageTypeTagContainer.HasTag(MageAndSeekerGameplayTag::Shared_DamageType_Fire))
     {
