@@ -91,5 +91,5 @@ void ABaseProjectile::SendMonsterEvent_Damage(AActor* Monster, AActor* Player)
 	MonsterEventData.Target = Monster;
 	MonsterEventData.EventMagnitude = ChacedSpec.DamageRate;
 
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Monster, MageAndSeekerGameplayTag::Shared_Event_TakeDamage, MonsterEventData);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Player, MageAndSeekerGameplayTag::Shared_Event_TakeDamage, MonsterEventData);
 }

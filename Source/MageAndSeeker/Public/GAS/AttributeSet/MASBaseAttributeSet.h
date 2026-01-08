@@ -20,7 +20,7 @@ class MAGEANDSEEKER_API UMASBaseAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 	
-protected:
+public:
 	UPROPERTY(BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData CurrentHP;
 	UPROPERTY(BlueprintReadOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))
@@ -28,7 +28,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Attack Power", meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData AttackPower;
 
-public:
 	UMASBaseAttributeSet();
 
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)override;
