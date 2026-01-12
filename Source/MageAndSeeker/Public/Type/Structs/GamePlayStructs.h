@@ -17,6 +17,8 @@ struct FBookData
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 BookLevel = 1;
+
+	FBookData() : Type(EElementalType::None), BookLevel(1) {}
 };
 
 USTRUCT(BlueprintType)
@@ -32,6 +34,8 @@ struct FRuneData
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	ERuneApplyType RuneApplyType;
+
+	FRuneData() : RuneID(""), RuneLevel(1), RuneApplyType(ERuneApplyType::None) {}
 };
 
 USTRUCT(BlueprintType)
@@ -55,6 +59,8 @@ struct FRuneCreateData
 	{
 		return RuneID == Other.RuneID && RuneLevel == Other.RuneLevel && RuneApplyType == Other.RuneApplyType;
 	}
+
+	FRuneCreateData() : RuneID(""), RuneLevel(1), RuneApplyType(ERuneApplyType::None), CreateRuneClass(nullptr){}
 };
 
 
@@ -68,6 +74,8 @@ struct FEquipedRunes
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<UMagicRune*> EquipedRunes;
+
+	FEquipedRunes() : Type(EElementalType::None) {}
 };
 
 USTRUCT(BlueprintType)
@@ -96,10 +104,9 @@ struct FProjectileSpec
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float APChargeRate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTag SendToMonsterEventTags;
-
 	static constexpr float BaseManaCost = 2.0f;
 
 	float GetManaCost() const;
+
+	FProjectileSpec() : Count(1), Size(1.0f), ProjectileSpeed(1.0f), CastSpeed(1.0f), ManaCostRate(0.1f), DamageRate(0.1f), APChargeRate(0.1f) {}
 };

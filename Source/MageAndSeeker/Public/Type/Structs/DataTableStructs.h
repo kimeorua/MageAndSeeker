@@ -29,6 +29,8 @@ struct FMagicRuneDataTable : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture2D* Icon;
+
+	FMagicRuneDataTable() : RuneType(EMagicRuneType::None), RuneApplyType(ERuneApplyType::None), Icon(nullptr){}
 };
 
 USTRUCT(BlueprintType)
@@ -41,6 +43,8 @@ struct FMonsterData
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AMonsterCharacter> Monster_BP;
+
+	FMonsterData() : SpwnNum(0), Monster_BP(nullptr) {}
 };
 
 
@@ -51,4 +55,6 @@ struct FMonsterDataTable : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<FMonsterData> MonsterArr;
+
+	FMonsterDataTable() : MonsterArr(TArray<FMonsterData>()) {}
 };

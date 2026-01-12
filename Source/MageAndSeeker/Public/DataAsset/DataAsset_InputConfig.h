@@ -26,6 +26,8 @@ public:
 	{
 		return InputTag.IsValid() && InputAction;
 	}
+
+	FMASInputActionConfig() : InputTag(FGameplayTag::EmptyTag), InputAction(nullptr) {}
 };
 
 UCLASS()

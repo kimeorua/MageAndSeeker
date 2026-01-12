@@ -23,6 +23,8 @@ struct FCreatedRuneData
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     int32 RuneLevel;
+
+    FCreatedRuneData() : RuneID(""), RuneLevel(1) {}
 };
 
 UCLASS()

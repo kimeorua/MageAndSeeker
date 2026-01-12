@@ -121,7 +121,8 @@ void UMageCombatComponent::RuneEffectApply()
 	ProjectileSpec.Size = 1.0f;
 	ProjectileSpec.ManaCostRate = 0.0f;
 	ProjectileSpec.DamageRate = 0.0f;
-	ProjectileSpec.SendToMonsterEventTags.EmptyTag;
+	ProjectileSpec.bIsExtraDamage = false;
+	ProjectileSpec.RnueLevel = 1;
 	ProjectileSpec.APChargeRate = 0.0f;
 
 	ProjectileSpec = MageRuneComponent->RuneApply(CurrentBookData.Type, ProjectileSpec);

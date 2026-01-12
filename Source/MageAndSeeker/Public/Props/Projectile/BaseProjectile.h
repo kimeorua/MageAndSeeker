@@ -50,4 +50,6 @@ private:
 	void SendPlayerEvent(AActor* Player);
 
 	void SendMonsterEvent_Damage(AActor* Monster, AActor* Player);
+
+	void SendMonsterEvent_RuneEffect(AActor* Monster, AActor* Player);
 };

@@ -93,3 +93,11 @@ void ABaseProjectile::SendMonsterEvent_Damage(AActor* Monster, AActor* Player)
 
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Player, MageAndSeekerGameplayTag::Shared_Event_TakeDamage, MonsterEventData);
 }
+
+void ABaseProjectile::SendMonsterEvent_RuneEffect(AActor* Monster, AActor* Player)
+{
+	FGameplayEventData RuneEffectData;
+	RuneEffectData.Instigator = Player;
+	RuneEffectData.Target = Monster;
+	//RuneEffectData.EventTag = ChacedSpec.SendToMonsterEventTags;
+}
