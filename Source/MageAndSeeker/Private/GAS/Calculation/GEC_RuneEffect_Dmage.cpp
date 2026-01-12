@@ -24,7 +24,7 @@ struct FRuneDamageCapture
     }
 };
 
-static const FRuneDamageCapture& GetDamageCapture()
+static const FRuneDamageCapture& GetRuneDamageCapture()
 {
     static FRuneDamageCapture Statics;
     return Statics;
@@ -32,10 +32,10 @@ static const FRuneDamageCapture& GetDamageCapture()
 
 UGEC_RuneEffect_Dmage::UGEC_RuneEffect_Dmage()
 {
-    RelevantAttributesToCapture.Add(GetDamageCapture().CurrentHPDef);
-    RelevantAttributesToCapture.Add(GetDamageCapture().FireResistanceDef);
-    RelevantAttributesToCapture.Add(GetDamageCapture().IceResistanceDef);
-    RelevantAttributesToCapture.Add(GetDamageCapture().LightningResistanceDef);
+    RelevantAttributesToCapture.Add(GetRuneDamageCapture().CurrentHPDef);
+    RelevantAttributesToCapture.Add(GetRuneDamageCapture().FireResistanceDef);
+    RelevantAttributesToCapture.Add(GetRuneDamageCapture().IceResistanceDef);
+    RelevantAttributesToCapture.Add(GetRuneDamageCapture().LightningResistanceDef);
 }
 
 void UGEC_RuneEffect_Dmage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
@@ -50,13 +50,13 @@ void UGEC_RuneEffect_Dmage::Execute_Implementation(const FGameplayEffectCustomEx
     float Damage = Spec.GetSetByCallerMagnitude(MageAndSeekerGameplayTag::Shared_Data_Damage, false, 0.f);
 
     float FireResistance = 0.f;
-    ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetDamageCapture().FireResistanceDef, EvaluateParameters, FireResistance);
+    ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetRuneDamageCapture().FireResistanceDef, EvaluateParameters, FireResistance);
 
     float IceResistance = 0.f;
-    ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetDamageCapture().IceResistanceDef, EvaluateParameters, IceResistance);
+    ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetRuneDamageCapture().IceResistanceDef, EvaluateParameters, IceResistance);
 
     float LightningResistance = 0.f;
-    ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetDamageCapture().LightningResistanceDef, EvaluateParameters, LightningResistance);
+    ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetRuneDamageCapture().LightningResistanceDef, EvaluateParameters, LightningResistance);
 
     float ResistanceMultiplier = 0.0f;
 
