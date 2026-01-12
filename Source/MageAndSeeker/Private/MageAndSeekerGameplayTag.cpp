@@ -40,6 +40,11 @@ namespace MageAndSeekerGameplayTag
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaRecoveyTime, "Mage.Data.ManaRecoveyTime");
 	UE_DEFINE_GAMEPLAY_TAG(Mage_Data_ManaRecoveyAmount, "Mage.Data.ManaRecoveyAmount");
 
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Rune_Explosion, "Mage.Rune.Explosion");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Rune_Frozen, "Mage.Rune.Frozen");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Rune_Thunder, "Mage.Rune.Thunder");
+	UE_DEFINE_GAMEPLAY_TAG(Mage_Rune_Curse, "Mage.Rune.Curse");
+
 	/*Shared Tag*/
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Ability_TakeDamage, "Shared.Ability.TakeDamage");
 

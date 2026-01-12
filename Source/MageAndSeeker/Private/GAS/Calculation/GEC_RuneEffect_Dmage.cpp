@@ -1,46 +1,44 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GAS/Calculation/GEC_MonsterDamage.h"
-#include "GAS/AttributeSet/MASBaseAttributeSet.h"
+#include "GAS/Calculation/GEC_RuneEffect_Dmage.h"
 #include "GAS/AttributeSet/MonsterAttributeSet.h"
+#include "GAS/AttributeSet/MASBaseAttributeSet.h"
 #include "MageAndSeekerGameplayTag.h"
 
-struct FMonsterDamageCapture
+#include "DebugHelper.h"
+
+struct FRuneDamageCapture
 {
     DECLARE_ATTRIBUTE_CAPTUREDEF(CurrentHP)
     DECLARE_ATTRIBUTE_CAPTUREDEF(FireResistance)
     DECLARE_ATTRIBUTE_CAPTUREDEF(IceResistance)
     DECLARE_ATTRIBUTE_CAPTUREDEF(LightningResistance)
-    DECLARE_ATTRIBUTE_CAPTUREDEF(AttackPower)
 
-    FMonsterDamageCapture()
+    FRuneDamageCapture()
     {
         DEFINE_ATTRIBUTE_CAPTUREDEF(UMASBaseAttributeSet, CurrentHP, Target, true);
         DEFINE_ATTRIBUTE_CAPTUREDEF(UMonsterAttributeSet, FireResistance, Target, true);
         DEFINE_ATTRIBUTE_CAPTUREDEF(UMonsterAttributeSet, IceResistance, Target, true);
         DEFINE_ATTRIBUTE_CAPTUREDEF(UMonsterAttributeSet, LightningResistance, Target, true);
-
-        DEFINE_ATTRIBUTE_CAPTUREDEF(UMASBaseAttributeSet, AttackPower, Source, true);
     }
 };
 
-static const FMonsterDamageCapture& GetDamageCapture()
+static const FRuneDamageCapture& GetDamageCapture()
 {
-    static FMonsterDamageCapture Statics;
+    static FRuneDamageCapture Statics;
     return Statics;
 }
 
-UGEC_MonsterDamage::UGEC_MonsterDamage()
+UGEC_RuneEffect_Dmage::UGEC_RuneEffect_Dmage()
 {
     RelevantAttributesToCapture.Add(GetDamageCapture().CurrentHPDef);
-    RelevantAttributesToCapture.Add(GetDamageCapture().AttackPowerDef);
     RelevantAttributesToCapture.Add(GetDamageCapture().FireResistanceDef);
     RelevantAttributesToCapture.Add(GetDamageCapture().IceResistanceDef);
     RelevantAttributesToCapture.Add(GetDamageCapture().LightningResistanceDef);
 }
 
-void UGEC_MonsterDamage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
+void UGEC_RuneEffect_Dmage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
     const FGameplayEffectSpec& EffectSpec = ExecutionParams.GetOwningSpec();
 
@@ -49,7 +47,7 @@ void UGEC_MonsterDamage::Execute_Implementation(const FGameplayEffectCustomExecu
     EvaluateParameters.TargetTags = EffectSpec.CapturedTargetTags.GetAggregatedTags();
 
     const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
-    float DamageRate = Spec.GetSetByCallerMagnitude(MageAndSeekerGameplayTag::Shared_Data_Damage, false, 0.f);
+    float Damage = Spec.GetSetByCallerMagnitude(MageAndSeekerGameplayTag::Shared_Data_Damage, false, 0.f);
 
     float FireResistance = 0.f;
     ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetDamageCapture().FireResistanceDef, EvaluateParameters, FireResistance);
@@ -60,16 +58,10 @@ void UGEC_MonsterDamage::Execute_Implementation(const FGameplayEffectCustomExecu
     float LightningResistance = 0.f;
     ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetDamageCapture().LightningResistanceDef, EvaluateParameters, LightningResistance);
 
-    float BaseDamage = 0.f;
-    ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetDamageCapture().AttackPowerDef, EvaluateParameters, BaseDamage);
-
-    float Damage = BaseDamage + (BaseDamage * DamageRate);
+    float ResistanceMultiplier = 0.0f;
 
     FGameplayTagContainer DamageTypeTagContainer;
     Spec.GetAllAssetTags(DamageTypeTagContainer);
-
-    float FinalDamage = 0.0f;
-    float ResistanceMultiplier = 0.0f;
 
     if (DamageTypeTagContainer.HasTag(MageAndSeekerGameplayTag::Shared_DamageType_Fire))
     {
@@ -79,12 +71,12 @@ void UGEC_MonsterDamage::Execute_Implementation(const FGameplayEffectCustomExecu
     {
         ResistanceMultiplier = 1.f - (IceResistance * 0.01f);
     }
-    else if(DamageTypeTagContainer.HasTag(MageAndSeekerGameplayTag::Shared_DamageType_Lightning))
+    else if (DamageTypeTagContainer.HasTag(MageAndSeekerGameplayTag::Shared_DamageType_Lightning))
     {
         ResistanceMultiplier = 1.f - (LightningResistance * 0.01f);
     }
 
-    FinalDamage = Damage * ResistanceMultiplier;
+    float TotalDamage = Damage * ResistanceMultiplier;
 
-    OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(FMonsterDamageCapture().CurrentHPProperty, EGameplayModOp::Additive, -FinalDamage));
+    OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(FRuneDamageCapture().CurrentHPProperty, EGameplayModOp::Additive, -TotalDamage));
 }

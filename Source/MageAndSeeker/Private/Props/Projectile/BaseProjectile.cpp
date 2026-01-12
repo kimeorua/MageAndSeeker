@@ -38,6 +38,7 @@ void ABaseProjectile::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 	{
 		SendPlayerEvent(Owner);
 		SendMonsterEvent_Damage(OtherActor, Owner);
+		SendMonsterEvent_RuneEffect(OtherActor, Owner);
 
 		Destroy();
 	}
@@ -99,5 +100,18 @@ void ABaseProjectile::SendMonsterEvent_RuneEffect(AActor* Monster, AActor* Playe
 	FGameplayEventData RuneEffectData;
 	RuneEffectData.Instigator = Player;
 	RuneEffectData.Target = Monster;
-	//RuneEffectData.EventTag = ChacedSpec.SendToMonsterEventTags;
+	RuneEffectData.EventMagnitude = ChacedSpec.EffectableRuneLV;
+
+	if (ChacedSpec.DamageTag == MageAndSeekerGameplayTag::Mage_Rune_Explosion)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Player, MageAndSeekerGameplayTag::Mage_Rune_Explosion, RuneEffectData);
+	}
+	else if (ChacedSpec.DamageTag == MageAndSeekerGameplayTag::Mage_Rune_Thunder)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Player, MageAndSeekerGameplayTag::Mage_Rune_Thunder, RuneEffectData);
+	}
+	else
+	{
+		return;
+	}
 }

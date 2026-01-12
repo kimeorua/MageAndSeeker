@@ -104,9 +104,15 @@ struct FProjectileSpec
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float APChargeRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 EffectableRuneLV;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTag DamageTag;
+
 	static constexpr float BaseManaCost = 2.0f;
 
 	float GetManaCost() const;
 
-	FProjectileSpec() : Count(1), Size(1.0f), ProjectileSpeed(1.0f), CastSpeed(1.0f), ManaCostRate(0.1f), DamageRate(0.1f), APChargeRate(0.1f) {}
+	FProjectileSpec() : Count(1), Size(1.0f), ProjectileSpeed(1.0f), CastSpeed(1.0f), ManaCostRate(0.1f), DamageRate(0.1f), APChargeRate(0.1f), EffectableRuneLV(1), DamageTag(FGameplayTag::EmptyTag){}
 };
