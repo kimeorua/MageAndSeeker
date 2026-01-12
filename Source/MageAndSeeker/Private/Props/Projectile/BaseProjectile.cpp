@@ -110,6 +110,10 @@ void ABaseProjectile::SendMonsterEvent_RuneEffect(AActor* Monster, AActor* Playe
 	{
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Player, MageAndSeekerGameplayTag::Mage_Rune_Thunder, RuneEffectData);
 	}
+	else if (ChacedSpec.DamageTag == MageAndSeekerGameplayTag::Mage_Rune_Frozen)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Monster, MageAndSeekerGameplayTag::Mage_Rune_Frozen, RuneEffectData);
+	}
 	else
 	{
 		return;
