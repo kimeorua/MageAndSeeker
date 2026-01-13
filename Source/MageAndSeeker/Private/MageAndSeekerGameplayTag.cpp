@@ -57,7 +57,9 @@ namespace MageAndSeekerGameplayTag
 
 	/*Monster Tag*/
 	UE_DEFINE_GAMEPLAY_TAG(Monster_Data_FrozenTime, "Monster.Data.FrozenTime");
+	UE_DEFINE_GAMEPLAY_TAG(Monster_Data_DebuffAmount, "Monster.Data.DebuffAmount");
 
 	UE_DEFINE_GAMEPLAY_TAG(Monster_Status_Frozen, "Monster.Status.Frozen");
 	UE_DEFINE_GAMEPLAY_TAG(Monster_Status_FrozenCoolDawn, "Monster.Status.FrozenCoolDawn");
+	UE_DEFINE_GAMEPLAY_TAG(Monster_Status_Curse, "Monster.Status.Curse");
 }

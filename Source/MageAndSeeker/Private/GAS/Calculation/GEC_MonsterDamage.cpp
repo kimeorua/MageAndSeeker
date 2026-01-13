@@ -6,6 +6,8 @@
 #include "GAS/AttributeSet/MonsterAttributeSet.h"
 #include "MageAndSeekerGameplayTag.h"
 
+#include "DebugHelper.h"
+
 struct FMonsterDamageCapture
 {
     DECLARE_ATTRIBUTE_CAPTUREDEF(CurrentHP)
@@ -85,6 +87,8 @@ void UGEC_MonsterDamage::Execute_Implementation(const FGameplayEffectCustomExecu
     }
 
     FinalDamage = Damage * ResistanceMultiplier;
+
+    DebugHelper::Print("Damage", FinalDamage);
 
     OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(FMonsterDamageCapture().CurrentHPProperty, EGameplayModOp::Additive, -FinalDamage));
 }

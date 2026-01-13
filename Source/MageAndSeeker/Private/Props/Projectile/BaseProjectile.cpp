@@ -37,8 +37,8 @@ void ABaseProjectile::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 	if (IsValid(OtherActor) && IsValid(Owner))
 	{
 		SendPlayerEvent(Owner);
-		SendMonsterEvent_Damage(OtherActor, Owner);
 		SendMonsterEvent_RuneEffect(OtherActor, Owner);
+		SendMonsterEvent_Damage(OtherActor, Owner);
 
 		Destroy();
 	}
@@ -113,6 +113,10 @@ void ABaseProjectile::SendMonsterEvent_RuneEffect(AActor* Monster, AActor* Playe
 	else if (ChacedSpec.DamageTag == MageAndSeekerGameplayTag::Mage_Rune_Frozen)
 	{
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Monster, MageAndSeekerGameplayTag::Mage_Rune_Frozen, RuneEffectData);
+	}
+	else if (ChacedSpec.DamageTag == MageAndSeekerGameplayTag::Mage_Rune_Curse)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Monster, MageAndSeekerGameplayTag::Mage_Rune_Curse, RuneEffectData);
 	}
 	else
 	{
