@@ -8,6 +8,7 @@
 #include "MonsterUIComponent.generated.h"
 
 class UCharacterHUD;
+class UMonsterDebuffHUD;
 
 UCLASS()
 class MAGEANDSEEKER_API UMonsterUIComponent : public UUIComponent
@@ -16,4 +17,10 @@ class MAGEANDSEEKER_API UMonsterUIComponent : public UUIComponent
 
 public:
 	void BindWidget(UCharacterHUD* UI);
+
+	UFUNCTION(BlueprintCallable)
+	void OnDebuffUpdate(FGameplayTag EffectTag);
+
+private:
+	UMonsterDebuffHUD* DebuffHUD;
 };

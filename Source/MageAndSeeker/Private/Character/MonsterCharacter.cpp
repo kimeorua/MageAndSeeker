@@ -16,6 +16,8 @@
 #include "DataAsset/StartUp/DataAsset_StartUp.h"
 //------------------------ DataAsset ------------------------//
 
+#include "UI/MonsterDebuffHUD.h"
+
 AMonsterCharacter::AMonsterCharacter()
 {
 	MonsterAttributeSet = CreateDefaultSubobject<UMonsterAttributeSet>(TEXT("MonsterAttributeSet"));
@@ -74,12 +76,11 @@ void AMonsterCharacter::InitCharacterStatAndAbility()
 		HPBarWidgetComponent->SetWidgetClass(HPBarWidgetClass);
 		HPBarWidgetComponent->InitWidget();
 	}
-	UCharacterHUD* HPBar =Cast<UCharacterHUD>(HPBarWidgetComponent->GetUserWidgetObject());
+	UMonsterDebuffHUD* MonsterHUD = Cast<UMonsterDebuffHUD>(HPBarWidgetComponent->GetUserWidgetObject());
 
-	if (HPBar && MonsterUIComponent)
+	if (MonsterHUD && MonsterUIComponent)
 	{
-		MonsterUIComponent->InitCharacterUI(this);
-		MonsterUIComponent->BindWidget(HPBar);
+		MonsterUIComponent->BindWidget(MonsterHUD);
 	}
 
 	if (!CharacterStartUpData.IsNull())

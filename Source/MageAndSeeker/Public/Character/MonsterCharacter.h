@@ -22,6 +22,8 @@ public:
 
 	FORCEINLINE void SetMonsterLV(const int32 LV = 1) { MonsterLV = LV; }
 
+	FORCEINLINE UMonsterUIComponent* GetMonsterUIComponent() const { return MonsterUIComponent; }
+
 	void SettingMonsterColor(EDungeonElemental DungeonElemental);
 
 protected:
