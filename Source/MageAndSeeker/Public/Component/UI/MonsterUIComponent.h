@@ -21,6 +21,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnDebuffUpdate(FGameplayTag EffectTag);
 
+	void UIHidden();
+
 private:
 	UMonsterDebuffHUD* DebuffHUD;
 };

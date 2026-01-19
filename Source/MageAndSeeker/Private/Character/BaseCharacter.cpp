@@ -19,6 +19,11 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 	return GetMASAbilitySystemComponent();
 }
 
+void ABaseCharacter::OnCharacterDied()
+{
+
+}
+
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();

@@ -15,6 +15,8 @@ class MAGEANDSEEKER_API UMonsterCombatComponent : public UCombatComponent
 public:
 	virtual void RegisterWeapons_Implementation() override;
 
+	void OnMonsterDied();
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	AEnemyWeapon* EnemyWeapon = nullptr;

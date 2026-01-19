@@ -34,3 +34,9 @@ void UMonsterUIComponent::OnDebuffUpdate(FGameplayTag EffectTag)
 		DebuffHUD->UpdateFrozenIcon();
 	}
 }
+
+void UMonsterUIComponent::UIHidden()
+{
+	if (!DebuffHUD) { return; }
+	DebuffHUD->SetVisibility(ESlateVisibility::Hidden);
+}

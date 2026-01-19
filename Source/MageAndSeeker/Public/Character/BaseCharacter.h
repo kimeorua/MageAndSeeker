@@ -26,6 +26,8 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	// ~End IAbilitySystemInterface
 
+	virtual void OnCharacterDied();
+
 protected:
 	virtual void BeginPlay() override;
 

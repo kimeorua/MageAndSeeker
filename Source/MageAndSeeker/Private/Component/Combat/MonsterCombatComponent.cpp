@@ -13,3 +13,11 @@ void UMonsterCombatComponent::RegisterWeapons_Implementation()
 		EnemyWeapon->AttachToComponent(GetOwningCharacter_Base()->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
 	}
 }
+
+void UMonsterCombatComponent::OnMonsterDied()
+{
+	if (IsValid(EnemyWeapon))
+	{
+		EnemyWeapon->Destroy();
+	}
+}

@@ -4,6 +4,7 @@
 #include "GAS/AttributeSet/MASBaseAttributeSet.h"
 #include "GameplayEffectExtension.h"
 #include "MageAndSeekerFunctionLibrary.h"
+#include "MageAndSeekerGameplayTag.h"
 
 #include "DebugHelper.h"
 
@@ -28,6 +29,11 @@ void UMASBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
     {
         float NewHP = FMath::Clamp(GetCurrentHP(), 0.0f, GetMaxHP());
         SetCurrentHP(NewHP);
+
+        if (GetCurrentHP() <= 0.0f)
+        {
+            UMageAndSeekerFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), MageAndSeekerGameplayTag::Shared_Status_Dead);
+        }
     }
 
     else if (Data.EvaluatedData.Attribute == GetAttackPowerAttribute())

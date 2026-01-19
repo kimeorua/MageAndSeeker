@@ -26,6 +26,12 @@ public:
 
 	void SettingMonsterColor(EDungeonElemental DungeonElemental);
 
+	UFUNCTION(BlueprintCallable)
+	virtual void OnCharacterDied() override;
+
+	UFUNCTION(BlueprintPure)
+	UAnimMontage* GetMonsterDiedAnimation() const;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* NewController) override;
@@ -45,6 +51,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> HPBarWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* DieadMontage;
 
 	virtual void InitCharacterStatAndAbility() override;
 

@@ -55,6 +55,8 @@ namespace MageAndSeekerGameplayTag
 	UE_DEFINE_GAMEPLAY_TAG(Shared_DamageType_Ice, "Shared.DamageType.Ice");
 	UE_DEFINE_GAMEPLAY_TAG(Shared_DamageType_Lightning, "Shared.DamageType.Lightning");
 
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Status_Dead, "Shared.Status.Dead");
+
 	/*Monster Tag*/
 	UE_DEFINE_GAMEPLAY_TAG(Monster_Data_FrozenTime, "Monster.Data.FrozenTime");
 	UE_DEFINE_GAMEPLAY_TAG(Monster_Data_DebuffAmount, "Monster.Data.DebuffAmount");

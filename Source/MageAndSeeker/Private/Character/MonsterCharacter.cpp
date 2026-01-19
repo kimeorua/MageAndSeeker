@@ -59,6 +59,18 @@ void AMonsterCharacter::SettingMonsterColor(EDungeonElemental DungeonElemental)
 	DynMat->SetVectorParameterValue(TEXT("Elemental Color"), Color);
 }
 
+void AMonsterCharacter::OnCharacterDied()
+{
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Ignore);
+	MonsterCombatComponent->OnMonsterDied();
+	MonsterUIComponent->UIHidden();
+}
+
+UAnimMontage* AMonsterCharacter::GetMonsterDiedAnimation() const
+{
+	return DieadMontage ? DieadMontage : nullptr;
+}
+
 void AMonsterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
