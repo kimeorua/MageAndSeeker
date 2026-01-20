@@ -7,6 +7,30 @@
 #include "Type/Enums/GamePlayEnums.h"
 #include "DungeonMakerSubsystem.generated.h"
 
+USTRUCT(BlueprintType)
+struct FDungeonCreateData
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	EDungeonElemental DungeonElemental;
+
+	UPROPERTY()
+	EDungeonDropItem DungeonDropItem;
+
+	UPROPERTY()
+	EDungeonMonsterLevel DungeonMonsterLevel;
+
+	void InitDungeonCreateData(EDungeonElemental Elemental, EDungeonDropItem DropItem, EDungeonMonsterLevel MonsterLevel)
+	{
+		DungeonElemental = Elemental;
+		DungeonDropItem = DropItem;
+		DungeonMonsterLevel = MonsterLevel;
+	}
+
+	FDungeonCreateData() : DungeonElemental(EDungeonElemental::Fire), DungeonDropItem(EDungeonDropItem::BookMaterial), DungeonMonsterLevel(EDungeonMonsterLevel::Level1) {}
+};
+
 class ATargetPoint;
 
 UCLASS(Abstract, Blueprintable)
@@ -20,6 +44,10 @@ public:
 
 	void SpawnMonster(EDungeonElemental DungeonElemental, EDungeonDropItem DungeonDropItem, EDungeonMonsterLevel DungeonMonsterLevel);
 	void MoveToDungeon();
+
+	UFUNCTION(BlueprintCallable)
+	void MonsterCountCheck();
+
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Monster Spawn Table", meta = (AllowPrivateAccess = "true"))
@@ -43,6 +71,14 @@ private:
 
 	void SpawnBossMonster(EDungeonElemental DungeonElemental);
 
+	void DungeonInit(EDungeonMonsterLevel DungeonMonsterLevel);
+
+	void DungeonClear();
+
+	void MovePlayerToStartPoint();
+
+	int32 MaxStageCount;
+
 	int32 CurrentStage;
 
 	int32 CurrentMonsterCount;
@@ -50,5 +86,11 @@ private:
 	ESpawnActorCollisionHandlingMethod SpawnParameters;
 
 	UPROPERTY()
+	FDungeonCreateData DungeonCreateData;
+
+	UPROPERTY()
 	ATargetPoint* DungeonStartPoint;
+
+	UPROPERTY()
+	FTimerHandle DelayTimer;
 };

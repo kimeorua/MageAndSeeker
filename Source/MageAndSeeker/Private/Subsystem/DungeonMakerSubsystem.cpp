@@ -10,6 +10,7 @@
 #include "Character/MonsterCharacter.h"
 #include "Character/BaseCharacter.h"
 #include "Type/Structs/DataTableStructs.h"
+#include "GameFramework/PlayerStart.h"
 
 #include "DebugHelper.h"
 
@@ -29,6 +30,10 @@ void UDungeonMakerSubsystem::Deinitialize()
 
 void UDungeonMakerSubsystem::SpawnMonster(EDungeonElemental DungeonElemental, EDungeonDropItem DungeonDropItem, EDungeonMonsterLevel DungeonMonsterLevel)
 {
+	DungeonInit(DungeonMonsterLevel);
+
+	DungeonCreateData.InitDungeonCreateData(DungeonElemental, DungeonDropItem, DungeonMonsterLevel);
+
 	if (DungeonMonsterLevel == EDungeonMonsterLevel::Boss)
 	{
 		SpawnBossMonster(DungeonElemental);
@@ -54,6 +59,34 @@ void UDungeonMakerSubsystem::MoveToDungeon()
 	Payload.Target = Mage;
 
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Mage, MageAndSeekerGameplayTag::Mage_Event_ModeChange, Payload);
+
+	GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
+}
+
+void UDungeonMakerSubsystem::MonsterCountCheck()
+{
+	CurrentMonsterCount = FMath::Max(CurrentMonsterCount - 1, 0);
+
+	if (CurrentMonsterCount <= 0)
+	{
+		if (CurrentStage < MaxStageCount)
+		{
+			CurrentStage++;
+
+			GetWorld()->GetTimerManager().SetTimer(DelayTimer,[this]()
+				{
+					SpawnNormalMonster(DungeonCreateData.DungeonElemental, DungeonCreateData.DungeonMonsterLevel);
+					SpawnMatterMonster(DungeonCreateData.DungeonDropItem, DungeonCreateData.DungeonMonsterLevel);
+				},
+				0.5f,
+				false
+			);
+		}
+		else
+		{
+			DungeonClear();
+		}
+	}
 }
 
 void UDungeonMakerSubsystem::SpawnNormalMonster(EDungeonElemental DungeonElemental, EDungeonMonsterLevel DungeonMonsterLevel)
@@ -152,4 +185,52 @@ void UDungeonMakerSubsystem::SpawnBossMonster(EDungeonElemental DungeonElemental
 	SpawnMatterMonster->SetMonsterLV();
 	SpawnMatterMonster->FinishSpawning(SpawnTransform);
 	CurrentMonsterCount++;
+}
+
+void UDungeonMakerSubsystem::DungeonInit(EDungeonMonsterLevel DungeonMonsterLevel)
+{
+	switch (DungeonMonsterLevel)
+	{
+	case EDungeonMonsterLevel::Level1:
+		MaxStageCount = 3;
+		break;
+	case EDungeonMonsterLevel::Level2:
+		MaxStageCount = 5;
+		break;
+	case EDungeonMonsterLevel::Level3:
+		MaxStageCount = 7;
+		break;
+	case EDungeonMonsterLevel::Boss:
+		MaxStageCount = 1;
+		break;
+	default:
+		break;
+	}
+}
+
+void UDungeonMakerSubsystem::DungeonClear()
+{
+	DebugHelper::Print("Clear!!");
+	MovePlayerToStartPoint();
+	// TODO : 던전 클리어 UI 출력하기.
+}
+
+
+void UDungeonMakerSubsystem::MovePlayerToStartPoint()
+{
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	APlayerStart* StartPoint = Cast<APlayerStart>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerStart::StaticClass()));
+
+	if (!StartPoint) { return; }
+
+	AMageCharacter* Mage = Cast<AMageCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	Mage->TeleportTo(StartPoint->GetActorLocation(), StartPoint->GetActorRotation());
+
+	FGameplayEventData Payload;
+	Payload.Target = Mage;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Mage, MageAndSeekerGameplayTag::Mage_Event_ModeChange, Payload);
 }
