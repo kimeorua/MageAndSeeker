@@ -59,8 +59,6 @@ void UDungeonMakerSubsystem::MoveToDungeon()
 	Payload.Target = Mage;
 
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Mage, MageAndSeekerGameplayTag::Mage_Event_ModeChange, Payload);
-
-	GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
 }
 
 void UDungeonMakerSubsystem::MonsterCountCheck()
@@ -72,15 +70,7 @@ void UDungeonMakerSubsystem::MonsterCountCheck()
 		if (CurrentStage < MaxStageCount)
 		{
 			CurrentStage++;
-
-			GetWorld()->GetTimerManager().SetTimer(DelayTimer,[this]()
-				{
-					SpawnNormalMonster(DungeonCreateData.DungeonElemental, DungeonCreateData.DungeonMonsterLevel);
-					SpawnMatterMonster(DungeonCreateData.DungeonDropItem, DungeonCreateData.DungeonMonsterLevel);
-				},
-				0.5f,
-				false
-			);
+			OnCountdawnStart.Broadcast();
 		}
 		else
 		{
@@ -233,4 +223,10 @@ void UDungeonMakerSubsystem::MovePlayerToStartPoint()
 	Payload.Target = Mage;
 
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Mage, MageAndSeekerGameplayTag::Mage_Event_ModeChange, Payload);
+}
+
+void UDungeonMakerSubsystem::SpawnNextStage()
+{
+	SpawnNormalMonster(DungeonCreateData.DungeonElemental,DungeonCreateData.DungeonMonsterLevel);
+	SpawnMatterMonster(DungeonCreateData.DungeonDropItem,DungeonCreateData.DungeonMonsterLevel);
 }

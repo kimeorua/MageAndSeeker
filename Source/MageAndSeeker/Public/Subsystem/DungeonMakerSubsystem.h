@@ -7,6 +7,8 @@
 #include "Type/Enums/GamePlayEnums.h"
 #include "DungeonMakerSubsystem.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCountdawnStart);
+
 USTRUCT(BlueprintType)
 struct FDungeonCreateData
 {
@@ -48,6 +50,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MonsterCountCheck();
 
+	UFUNCTION(BlueprintCallable)
+	void SpawnNextStage();
+
+	UPROPERTY()
+	FOnCountdawnStart OnCountdawnStart;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Monster Spawn Table", meta = (AllowPrivateAccess = "true"))
@@ -90,7 +97,4 @@ private:
 
 	UPROPERTY()
 	ATargetPoint* DungeonStartPoint;
-
-	UPROPERTY()
-	FTimerHandle DelayTimer;
 };

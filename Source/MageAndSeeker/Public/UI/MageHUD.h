@@ -18,6 +18,12 @@ class MAGEANDSEEKER_API UMageHUD : public UCharacterHUD
 protected:
 	virtual void NativeConstruct() override;
 
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
+	bool bActivateCountdawn = false;
+
+	float Countdawn;
+
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateAPChange(float Persent);
@@ -33,4 +39,16 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateBookIcon(EElementalType Type);
+
+	UFUNCTION()
+	void StartCountDawn();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateCountDawn(float Count);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void FinishCountdown();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Countdawn")
+	float TotalCount = 5.0f;
 };
